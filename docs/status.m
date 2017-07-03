@@ -1,0 +1,12 @@
+%status
+%
+%git_status_byindex
+%git_status_file
+%git_status_foreach
+%git_status_foreach_ext
+%git_status_init_options
+%git_status_list_entrycount
+%git_status_list_free
+%git_status_list_get_perfdata
+%git_status_list_new
+%git_status_should_ignore

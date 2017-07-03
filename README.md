@@ -1,2 +1,4 @@
 # libgit2_matlab
-Matlab libgit2 bindings
+
+Just getting started. Goal is to provide Matlab bindings for libgit2 as well as some porcelain.
+
