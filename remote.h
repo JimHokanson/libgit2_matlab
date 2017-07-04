@@ -1,6 +1,20 @@
 #include "git2.h"
 #include <stdint.h>
 
+void remote_list(MEX_DEF_INPUT){
+    //
+    //  Calling Form:
+    //  list = mex(1,21,repo)
+    
+    //int git_remote_list(git_strarray *out, git_repository *repo);   
+    
+    git_repository *repo = get_repo_input(prhs[2]);
+    git_strarray remotes = {0};
+    int error = git_remote_list(&remotes,repo);
+    handle_error(error,"libgit:remote:remote_list");
+    set_strarray_out(&plhs[0],&remotes);
+}
+
 void lookup_remote(MEX_DEF_INPUT){
     //
     //  Calling form:
@@ -57,6 +71,9 @@ void remote(MEX_DEF_INPUT)
             //Free Remote
             //mex(1,10,remote_pointer)
             git_remote_free(get_remote_input(prhs[2]));
+            break;
+        case 21:
+            remote_list(MEX_INPUT);
             break;
         case 22:
             lookup_remote(MEX_INPUT);

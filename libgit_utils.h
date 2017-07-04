@@ -48,9 +48,9 @@ void set_repo_output(mxArray **output, git_repository *repo){
     int64_t *p;
     p = (int64_t *) mxGetData(*output);
     *p = (int64_t)repo;
- }
+}
 
-void set_remote_output(mxArray **output,git_remote *remote){   
+void set_remote_output(mxArray **output, git_remote *remote){   
     //
     //  set_remote_output(&plhs[0],remote);
     //
@@ -60,7 +60,24 @@ void set_remote_output(mxArray **output,git_remote *remote){
     int64_t *p;
     p = (int64_t *) mxGetData(*output);
     *p = (int64_t)remote; 
- }
+}
+
+void set_strarray_out(mxArray **output, git_strarray *s){
+    
+    
+//     typedef struct git_strarray {
+// 	char **strings;
+// 	size_t count;
+//     } git_strarray;
+    
+    mxArray *ca = mxCreateCellMatrix(1,s->count);
+    for (size_t i = 0; i < s->count; i++){
+       mxSetCell(ca,i,mxCreateString(s->strings[i]));
+    }
+    *output = ca;
+    
+    git_strarray_free(s);
+}
 
 void handle_error(int error,const char *caller){
    

@@ -29,7 +29,12 @@ classdef remote < handle
     end
     
     methods (Static)
-        %function obj = lookup
+        function list = getList(repo)
+            %
+            %   git.base.remote.getList(repo)
+            
+            list = libgit(1,21,repo.h);
+        end
     end
     
     methods
@@ -37,11 +42,14 @@ classdef remote < handle
             %
             %   obj = git.base.remote(repo,remote_name)
             
+            %TODO: Finish this call
+            %obj.h = git.mex.remote.lookup_remote(repo.h,remote_name);
             obj.h = libgit(1,22,repo.h,remote_name);
             obj.repo = repo;
             obj.remote_name = remote_name;
         end
         function delete(obj)
+            
             libgit(1,10,obj.h);
         end
     end
