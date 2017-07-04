@@ -1,5 +1,6 @@
 #include "git2.h"
 #include <stdint.h>
+#include "libgit_utils.h"
 
 void remote_list(MEX_DEF_INPUT){
     //

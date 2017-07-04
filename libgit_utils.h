@@ -32,6 +32,15 @@ git_remote* get_remote_input(const mxArray *input){
     return *p_remote;
 }
 
+git_reference* get_reference_input(const mxArray *input){
+    //
+    //   git_repository* repo = get_reference_input(prhs[2]);
+    //
+    
+    git_reference **p_ref = (git_reference **)mxGetData(input);
+    return *p_ref;
+}
+
 //Output Handling
 //----------------------------------------------
 //TODO: Make this a macro
@@ -61,6 +70,18 @@ void set_remote_output(mxArray **output, git_remote *remote){
     int64_t *p;
     p = (int64_t *) mxGetData(*output);
     *p = (int64_t)remote; 
+}
+
+void set_reference_output(mxArray **output, git_reference *ref){   
+    //
+    //  set_reference_output(&plhs[0],ref);
+    //
+    
+    *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
+
+    int64_t *p;
+    p = (int64_t *) mxGetData(*output);
+    *p = (int64_t)ref; 
 }
 
 void set_strarray_out(mxArray **output, git_strarray *s){

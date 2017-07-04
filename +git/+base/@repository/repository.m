@@ -7,7 +7,8 @@ classdef repository < handle
         file_path = '/Users/jim/Documents/repos/matlab_git/matlab_standard_library';
         repo = git.base.repository(file_path);
         remote = repo.lookupRemote('origin');
-        list = git.base.remote.getList(repo)
+        list = git.base.remote.getList(repo);
+        ref = git.base.reference(repo,'HEAD');
     %}
     
     properties (Hidden)

@@ -1,6 +1,8 @@
 #include "mex.h"
 #include "repo.h"
 #include "remote.h"
+#include "commit.h"
+#include "reference.h"
 #include "git2.h"
 
 //which install_name_tool
@@ -57,6 +59,10 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
     
     int type = (int) mxGetScalar(prhs[0]);
     
+    //0 repo
+    //1 remote
+    //2 commit
+    //3 reference
     
     switch (type) {
         case 0:
@@ -70,34 +76,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
             break;
         case 2:
             commit(MEX_INPUT);
+            break;
+        case 3:
+            reference(MEX_INPUT);
+            break;
         default:
             mexErrMsgIdAndTxt("libgit:input_1","Input type not recognized");
     }
-    
-    
-//     git_repository *repo = NULL;
-//     int error = git_repository_open(&repo, "/Users/jim/Documents/repos/matlab_git/libgit2_matlab/");
-//     
-//     mexPrintf("Error %d\n",error);
-//     
-//     git_remote *remote = NULL;
-//     error = git_remote_lookup(&remote, repo, "origin");
-//     
-//     const char *url  = git_remote_url(remote);
-//     
-//     mexPrintf("url: %s\n",url);
-//     
-//     
-//     //??? needed
-//     //git_repository_free(repo);
-//     
-//     //free(url)
-//     
-//     //This needs to be freed by the user
-//     //How do we know how many we have????
-//     //
-//     //Need to find a usage example ...
-//     //git_strarray remotes = {0};
-//     //int error = git_remote_list(&remotes, repo);
         
 }

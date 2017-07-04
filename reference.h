@@ -2,29 +2,25 @@
 #include <stdint.h>
 #include "libgit_utils.h"
 
-void lookup_commit(MEX_DEF_INPUT){
+void lookup_reference(MEX_DEF_INPUT){
     //
     //  Calling form:
-    //  remote = mex(1,22,repo,oid);
+    //  ref = mex(1,22,repo,ref_name);
     
-        
-    //int git_commit_lookup(git_commit **commit, git_repository *repo, const git_oid *id);    int error;
+    //int git_reference_lookup(git_reference **out, git_repository *repo, const char *name);
     git_repository *repo = get_repo_input(prhs[2]);
+    const char *ref_name = mxArrayToString(prhs[3]);
     
+    git_reference *ref = NULL;
+    int error = git_reference_lookup(&ref, repo, ref_name);
     
-    const char *remote_name = mxArrayToString(prhs[3]);
+    handle_error(error,"libgit:reference:lookup_reference");
     
-//     git_remote *remote = NULL;
-//     error = git_remote_lookup(&remote, repo, remote_name);
-//     
-//     handle_error(error,"libgit:remote:lookup_remote");
-//     
-//     set_remote_output(&plhs[0],remote);
-//     
-//     mxFree((void *)remote_name);
+    set_reference_output(&plhs[0],ref);
+    mxFree((void *)ref_name);
 }
 
-void commit(MEX_DEF_INPUT)
+void reference(MEX_DEF_INPUT)
 {
     int error;
     int sub_type = (int)mxGetScalar(prhs[1]);
@@ -43,10 +39,12 @@ void commit(MEX_DEF_INPUT)
             break;
         case 10:
             break;
-        case 15:
+        case 13:
             //Free Remote
-            //mex(1,10,remote_pointer)
-            //git_remote_free(get_remote_input(prhs[2]));
+            //mex(3,13,ref_pointer)
+            git_reference_free(get_reference_input(prhs[2]));
+            break;
+        case 15:
             break;
         case 16:
             break;
@@ -55,6 +53,9 @@ void commit(MEX_DEF_INPUT)
             break;
         case 22:
             //lookup_remote(MEX_INPUT);
+            break;
+        case 24:
+            lookup_reference(MEX_INPUT);
             break;
         case 38:
             //get_remote_url(MEX_INPUT);

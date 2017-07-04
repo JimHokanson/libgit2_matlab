@@ -49,7 +49,6 @@ classdef remote < handle
             obj.remote_name = remote_name;
         end
         function delete(obj)
-            
             libgit(1,10,obj.h);
         end
     end
