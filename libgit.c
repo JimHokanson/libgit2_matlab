@@ -1,5 +1,6 @@
 #include "mex.h"
 #include "repo.h"
+#include "remote.h"
 #include "git2.h"
 
 //which install_name_tool
@@ -60,9 +61,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
     switch (type) {
         case 0:
             //repository
-            repo(nlhs, plhs, nrhs, prhs);
+            //repo(nlhs, plhs, nrhs, prhs);
+            repo(MEX_INPUT);
             break;
         case 1:
+            //remote
+            remote(MEX_INPUT);
             break;
         default:
             mexErrMsgIdAndTxt("libgit:input_1","Input type not recognized");

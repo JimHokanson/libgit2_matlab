@@ -1,5 +1,53 @@
-%https://libgit2.github.com/libgit2/#HEAD/group/remote
-%
+classdef remote < handle
+    %
+    %   Class:
+    %   git.base.remote
+    
+    properties (Hidden)
+        h
+    end
+    
+    properties
+        repo
+        remote_name
+    end
+    
+    %Properties
+    %----------
+    %url  - git_remote_set_url
+    %name
+    %pushurl  - git_remote_set_pushurl
+    
+    properties (Dependent)
+        url
+    end
+    
+    methods
+        function value = get.url(obj)
+            value = libgit(1,38,obj.h);
+        end
+    end
+    
+    methods (Static)
+        %function obj = lookup
+    end
+    
+    methods
+        function obj = remote(repo,remote_name)
+            %
+            %   obj = git.base.remote(repo,remote_name)
+            
+            obj.h = libgit(1,22,repo.h,remote_name);
+            obj.repo = repo;
+            obj.remote_name = remote_name;
+        end
+        function delete(obj)
+            libgit(1,10,obj.h);
+        end
+    end
+    
+end
+
 %01 git_remote_add_fetch
 %02 git_remote_add_push
 %03 git_remote_autotag
@@ -14,14 +62,14 @@
 %12 git_remote_download
 %13 git_remote_dup
 %14 git_remote_fetch
-%15 git_remote_free
+%x 15 git_remote_free
 %16 git_remote_get_fetch_refspecs
 %17 git_remote_get_push_refspecs
 %18 git_remote_get_refspec
 %19 git_remote_init_callbacks
 %20 git_remote_is_valid_name
 %21 git_remote_list
-%22 git_remote_lookup
+%x 22 git_remote_lookup
 %23 git_remote_ls
 %24 git_remote_name
 %25 git_remote_owner
@@ -37,4 +85,4 @@
 %35 git_remote_stop
 %36 git_remote_update_tips - update the tips to the new state
 %37 git_remote_upload
-%38 git_remote_url
+%x 38 git_remote_url
