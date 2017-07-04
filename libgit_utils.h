@@ -13,6 +13,7 @@
 
 //Input Handling
 //-----------------------------------------------
+//TODO: Make these macros
 git_repository* get_repo_input(const mxArray *input){
     //
     //   git_repository* repo = get_repo_input(prhs[2]);

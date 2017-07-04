@@ -68,6 +68,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
             //remote
             remote(MEX_INPUT);
             break;
+        case 2:
+            commit(MEX_INPUT);
         default:
             mexErrMsgIdAndTxt("libgit:input_1","Input type not recognized");
     }

@@ -36,6 +36,7 @@ classdef repository < handle
             %   obj = git.base.repository(file_path)
             
             obj.file_path = file_path;
+            %call git.mex.repo
             obj.h = libgit(0,26,file_path);
         end
         function getNamespace(obj)
