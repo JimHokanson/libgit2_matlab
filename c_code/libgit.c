@@ -60,14 +60,100 @@ void shutdown() {
 }
 
 void get_libgit_features(MEX_DEF_INPUT){
-    //int git_libgit2_features();
+    int features = git_libgit2_features();
+    plhs[0] = mxCreateLogicalMatrix(1,3);
+    bool *data = (bool *)mxGetData(plhs[0]);
+    *data = (features & GIT_FEATURE_THREADS) > 0;
+    *(data+1) = (features & GIT_FEATURE_HTTPS) > 0;
+    *(data+2) = (features & GIT_FEATURE_SSH) > 0;
     //GIT_FEATURE_THREADS 
     //GIT_FEATURE_HTTPS 
     //GIT_FEATURE_SSH 
 }
 
-void get_libgit_options(){
+void get_libgit_option(){
+   //https://libgit2.github.com/libgit2/#HEAD/group/libgit2/git_libgit2_opts
     
+    //01  GIT_OPT_GET_MWINDOW_SIZE
+    //02  GIT_OPT_GET_MWINDOW_MAPPED_LIMIT
+    //03  GIT_OPT_GET_SEARCH_PATH
+    //04  GIT_OPT_GET_CACHED_MEMORY
+    //05  GIT_OPT_GET_TEMPLATE_PATH
+    int option = (int)mxGetScalar(prhs[2]);
+    switch (option){
+        case 1:
+            //opts(GIT_OPT_GET_MWINDOW_SIZE, size_t *):
+            //> Get the maximum mmap window size
+            break;
+        case 2:
+            //opts(GIT_OPT_GET_MWINDOW_MAPPED_LIMIT, size_t *):
+            //> Get the maximum memory that will be mapped in total by the library
+            break;
+        case 3:
+            //opts(GIT_OPT_GET_SEARCH_PATH, int level, git_buf *buf)
+            //> Get the search path for a given level of config data.  
+            //"level" must       > be one of `GIT_CONFIG_LEVEL_SYSTEM`, `GIT_CONFIG_LEVEL_GLOBAL`,       
+            //> `GIT_CONFIG_LEVEL_XDG`, or `GIT_CONFIG_LEVEL_PROGRAMDATA`.        
+            //> The search path is written to the `out` buffer.
+            break;
+        case 4:
+            //opts(GIT_OPT_GET_CACHED_MEMORY, ssize_t *current, ssize_t *allowed)
+            //> Get the current bytes in cache and the maximum that would be      > allowed in the cache.
+            break;
+        case 5:
+            //opts(GIT_OPT_GET_TEMPLATE_PATH, git_buf *out)
+            //> Get the default template path.        > The path is written to the `out` buffer.
+            break;
+        default:
+            mexErrMsgIdAndTxt("libgit:input_3","libgit.h, option not recognized");
+    }
+}
+
+void set_libgit_option(){
+   //https://libgit2.github.com/libgit2/#HEAD/group/libgit2/git_libgit2_opts 
+    
+    //01  GIT_OPT_GET_MWINDOW_SIZE
+    //02  GIT_OPT_GET_MWINDOW_MAPPED_LIMIT
+    //03  GIT_OPT_GET_SEARCH_PATH
+    //04  GIT_OPT_SET_CACHE_OBJECT_LIMIT
+    //05  GIT_OPT_SET_CACHE_MAX_SIZE
+    //06  GIT_OPT_ENABLE_CACHING
+    //07  GIT_OPT_SET_TEMPLATE_PATH
+    //08  GIT_OPT_SET_SSL_CERT_LOCATIONS
+    //09  GIT_OPT_SET_USER_AGENT
+    //10  GIT_OPT_ENABLE_STRICT_OBJECT_CREATION
+    //11  GIT_OPT_ENABLE_STRICT_SYMBOLIC_REF_CREATION
+    //12  GIT_OPT_SET_SSL_CIPHERS
+    
+    int option = (int)mxGetScalar(prhs[2]);
+    switch (option){
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        case 5:
+            break;
+        case 6:
+            break;
+        case 7:
+            break;
+        case 8:
+            break;
+        case 9:
+            break;
+        case 10:
+            break;
+        case 11:
+            break;
+        case 12:
+            break;
+        default:
+            mexErrMsgIdAndTxt("libgit:input_3","libgit.h, option not recognized");
+    }
 }
 
 void get_libgit_version(){
@@ -79,11 +165,16 @@ void libgit(MEX_DEF_INPUT){
     switch (sub_type) {
         case 0:
             //features
+            get_libgit_features(MEX_INPUT);
             break;
         case 1:
             //options
+            get_libgit_option(MEX_INPUT);
             break;
         case 2:
+            set_libgit_option(MEX_INPUT);
+            break;
+        case 3:
             //version
             break;
         default:

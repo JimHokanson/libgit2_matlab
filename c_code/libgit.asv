@@ -4,6 +4,7 @@
 #include "commit.h"
 #include "reference.h"
 
+//TODO: point to something that defines this 
 #ifdef _WIN32
 #include "windows/git2.h"
 #else
@@ -59,8 +60,20 @@ void shutdown() {
 }
 
 void get_libgit_features(MEX_DEF_INPUT){
+    int git_libgit2_features();
+    plhs[0] = mxCreateNumericMatrix(1,
+    //GIT_FEATURE_THREADS 
+    //GIT_FEATURE_HTTPS 
+    //GIT_FEATURE_SSH 
+}
+
+void get_libgit_options(){
     
+}
+
+void get_libgit_version(){
     
+}
 
 void libgit(MEX_DEF_INPUT){
     int sub_type = (int)mxGetScalar(prhs[1]);
