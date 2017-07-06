@@ -48,6 +48,23 @@ git_reference* get_reference_input(const mxArray *input){
 //SET_POINTER_OUTPUT(set_repo_output,git_repository)
 //SET_POINTER_OUTPUT(set_remote_output,git_remote)
 
+void set_oid_output(mxArray **output, git_oid *oid){
+    //
+    //  set_oid_output(&plhs[0],oid);
+    //
+    
+    //char *oid_char = &oid[0];
+    //*output = mxCreateString(oid_char);
+    
+//     //unsigned char [20]
+//     //TODO: change this code from pointer to copying char array
+    *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
+
+    int64_t *p;
+    p = (int64_t *) mxGetData(*output);
+    *p = (int64_t)oid;
+}
+
 void set_repo_output(mxArray **output, git_repository *repo){   
     //
     //  set_repo_output(&plhs[0],repo);

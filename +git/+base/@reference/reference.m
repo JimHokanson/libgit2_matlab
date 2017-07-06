@@ -13,41 +13,29 @@ classdef reference < handle
         repo
         ref_name
     end
-%14 git_reference_has_log
-%15 git_reference_is_branch
-%16 git_reference_is_note
-%17 git_reference_is_remote
-%18 git_reference_is_tag
-%19 git_reference_is_valid_name
-
-%26 git_reference_name_to_id => oid (as object) - returns git_oid
-
-
-%27 git_reference_next
-%28 git_reference_next_name
-%29 git_reference_normalize_name
-
-
-%30 git_reference_owner - which repo
-
-%31 git_reference_peel
-%32 git_reference_remove
-%33 git_reference_rename
-%34 git_reference_resolve
-%35 git_reference_set_target
-
-%36 git_reference_shorthand - reference's short name
-
-%37 git_reference_symbolic_create
-%38 git_reference_symbolic_create_matching
-%39 git_reference_symbolic_set_target
-%40 git_reference_symbolic_target
-%41 git_reference_target - returns git_oid pointed
-%42 git_reference_target_peel
-%43 git_reference_type
+    
     properties (Dependent)
-        
-        
+        has_log
+        is_branch
+        is_note
+        is_remote
+        is_tag
+        is_valid_name
+        oid %object
+        owner %pointer to repo
+        shorthand
+    end
+
+    methods
+        function value = get.oid(obj)
+            value = libgit(3,26,obj.repo.h,obj.ref_name);
+        end
+        function value = get.owner(obj)
+            value = obj.repo;
+        end
+        function value = get.shorthand(obj)
+            value = libgit2(3,36,obj.h);
+        end
     end
     
     methods
@@ -89,19 +77,20 @@ end
 %11 git_reference_foreach_glob
 %12 git_reference_foreach_name
 %13 git_reference_free
-%14 git_reference_has_log
-%15 git_reference_is_branch
-%16 git_reference_is_note
-%17 git_reference_is_remote
-%18 git_reference_is_tag
-%19 git_reference_is_valid_name
-%20 git_reference_iterator_free
-%21 git_reference_iterator_glob_new
+
+%x 14 git_reference_has_log
+%x 15 git_reference_is_branch
+%x 16 git_reference_is_note
+%x 17 git_reference_is_remote
+%x 18 git_reference_is_tag
+%x 19 git_reference_is_valid_name
+%x 20 git_reference_iterator_free
+%x 21 git_reference_iterator_glob_new
 %22 git_reference_iterator_new
 %23 git_reference_list
 %x 24 git_reference_lookup
 %25 git_reference_name
-%26 git_reference_name_to_id
+%x 26 git_reference_name_to_id
 %27 git_reference_next
 %28 git_reference_next_name
 %29 git_reference_normalize_name

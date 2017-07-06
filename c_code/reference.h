@@ -25,6 +25,35 @@ void lookup_reference(MEX_DEF_INPUT){
     mxFree((void *)ref_name);
 }
 
+void reference_shorthand(MEX_DEF_INPUT){
+    
+    git_reference *ref = get_reference_input(prhs[2]);
+    
+    //const char * git_reference_shorthand(const git_reference *ref);   
+    
+    const char *shorthand = git_reference_shorthand(ref);
+    
+    plhs[0] = mxCreateString(shorthand);
+}
+
+void reference_name_to_id(MEX_DEF_INPUT){
+    
+    git_repository *repo = get_repo_input(prhs[2]);
+    const char *ref_name = mxArrayToString(prhs[3]);
+    
+    //int git_reference_name_to_id(git_oid *out, git_repository *repo, const char *name);
+    git_oid oid;
+    int error = git_reference_name_to_id(&oid,repo,ref_name);
+    handle_error(error,"libgit:reference:ref_to_id");
+    
+    //oid is type: unsigned char [20]
+    //TODO: I think we might need a memcpy ...?
+    
+    set_oid_output(&plhs[0],oid);
+    
+    mxFree((void *)ref_name);
+}
+
 void reference(MEX_DEF_INPUT)
 {
     int error;
@@ -49,18 +78,51 @@ void reference(MEX_DEF_INPUT)
             //mex(3,13,ref_pointer)
             git_reference_free(get_reference_input(prhs[2]));
             break;
+        case 14:
+            //has_log
+            //int git_reference_has_log(git_repository *repo, const char *refname);
+            break;
         case 15:
+            //is_branch
+            //int git_reference_is_branch(const git_reference *ref);
             break;
         case 16:
+            //is_note
+            //int git_reference_is_note(const git_reference *ref);
+            break;
+        case 17:
+            //int git_reference_is_remote(const git_reference *ref);
+            break;
+        case 18:
+            //int git_reference_is_tag(const git_reference *ref);
+            break;
+        case 19:
+            //int git_reference_is_valid_name(const char *refname);
+            break;
+        case 20:
+            //void git_reference_iterator_free(git_reference_iterator *iter);
             break;
         case 21:
-            //remote_list(MEX_INPUT);
+            //int git_reference_iterator_glob_new(git_reference_iterator **out, 
+            //git_repository *repo, const char *glob);
             break;
         case 22:
-            //lookup_remote(MEX_INPUT);
+            break;
+        case 23:
             break;
         case 24:
             lookup_reference(MEX_INPUT);
+            break;
+        case 25:
+            break;
+        case 26:
+            reference_name_to_id(MEX_INPUT);
+            break;
+        case 36:
+            //reference_shorthand
+            reference_shorthand(MEX_INPUT);
+            break;
+        case 37:
             break;
         case 38:
             //get_remote_url(MEX_INPUT);
