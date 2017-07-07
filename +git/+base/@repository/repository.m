@@ -5,15 +5,20 @@ classdef repository < handle
     
     %{
         file_path = '/Users/jim/Documents/repos/matlab_git/matlab_standard_library';
+        
         file_path = 'G:\repos\matlab_git\mat_std_lib';
+        
         repo = git.base.repository(file_path);
+        
         remote = repo.lookupRemote('origin');
         list = git.base.remote.getList(repo);
         ref = git.base.reference(repo,'HEAD');
+        oid = ref.oid;
+        commit = git.base.commit(repo,oid)
     %}
     
     properties (Hidden)
-        h %pointer for underlying git_repository 
+        h = 0%pointer for underlying git_repository 
     end
     
     properties
@@ -45,7 +50,9 @@ classdef repository < handle
             %TODO
         end
         function delete(obj)
-            libgit(0,7,obj.h);
+            if obj.h ~= 0
+                libgit(0,7,obj.h);
+            end
         end
     end
     

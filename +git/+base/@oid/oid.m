@@ -16,6 +16,44 @@ classdef oid
     end
     
     methods
+        function obj = oid(oid_raw)
+            %
+            %Created in reference
+            %
+            %Where else can we get this from???
+            
+%             git_annotated_commit_id, 
+%             git_blob_id, 
+%             git_commit_id, 
+%             git_commit_parent_id, 
+%             git_commit_tree_id, 
+%             git_filter_source_id, 
+%             git_index_checksum, 
+%             git_indexer_hash, 
+%             git_note_id, 
+%             git_object_id, 
+%             git_odb_object_id, 
+%             git_oid_shorten_new, 
+%             git_packbuilder_hash, 
+%             git_reference_target, 
+%             git_reference_target_peel, 
+%             git_reflog_entry_id_new, 
+%             git_reflog_entry_id_old, 
+%             git_submodule_head_id, 
+%             git_submodule_index_id, 
+%             git_submodule_wd_id, 
+%             git_tag_id, 
+%             git_tag_target_id, 
+%             git_tree_entry_id, 
+%             git_tree_id.
+            
+            
+            %git_reference_name_to_id => repo,ref_name
+            obj.h = oid_raw;
+            
+            
+            
+        end
     end
     
 end

@@ -2,6 +2,7 @@
 #include "repo.h"
 #include "remote.h"
 #include "commit.h"
+#include "oid.h"
 #include "reference.h"
 
 //TODO: point to something that defines this 

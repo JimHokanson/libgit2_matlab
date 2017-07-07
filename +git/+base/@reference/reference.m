@@ -28,7 +28,9 @@ classdef reference < handle
 
     methods
         function value = get.oid(obj)
-            value = libgit(3,26,obj.repo.h,obj.ref_name);
+            temp = libgit(3,26,obj.repo.h,obj.ref_name);
+            %This may change
+            value = git.base.oid(temp);
         end
         function value = get.owner(obj)
             value = obj.repo;

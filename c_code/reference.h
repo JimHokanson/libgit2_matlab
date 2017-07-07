@@ -49,7 +49,7 @@ void reference_name_to_id(MEX_DEF_INPUT){
     //oid is type: unsigned char [20]
     //TODO: I think we might need a memcpy ...?
     
-    set_oid_output(&plhs[0],oid);
+    set_oid_output(&plhs[0],&oid);
     
     mxFree((void *)ref_name);
 }

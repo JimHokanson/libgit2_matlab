@@ -4,6 +4,7 @@
 //#include "git2.h" 
 #include <stdint.h>
 #include "libgit_utils.h"
+#include <string.h>
 
 
 #define MEX_INPUT nlhs, plhs, nrhs, prhs
@@ -41,6 +42,23 @@ git_reference* get_reference_input(const mxArray *input){
     return *p_ref;
 }
 
+git_oid* get_oid_input(const mxArray *input){
+    //
+    //  Input is Matlab managed byte array of oid
+    
+    return (git_oid *)mxGetData(input);
+    
+}
+
+git_commit* get_commit_input(const mxArray *input){
+    //
+    //   git_commit* commit = get_commit_input(prhs[2]);
+    //
+    
+    git_commit **p_ref = (git_commit **)mxGetData(input);
+    return *p_ref;
+}
+
 //Output Handling
 //----------------------------------------------
 //TODO: Make this a macro
@@ -48,21 +66,14 @@ git_reference* get_reference_input(const mxArray *input){
 //SET_POINTER_OUTPUT(set_repo_output,git_repository)
 //SET_POINTER_OUTPUT(set_remote_output,git_remote)
 
-void set_oid_output(mxArray **output, git_oid *oid){
+void set_oid_output(mxArray **output, const git_oid *oid){
     //
     //  set_oid_output(&plhs[0],oid);
     //
     
-    //char *oid_char = &oid[0];
-    //*output = mxCreateString(oid_char);
-    
-//     //unsigned char [20]
-//     //TODO: change this code from pointer to copying char array
-    *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
-
-    int64_t *p;
-    p = (int64_t *) mxGetData(*output);
-    *p = (int64_t)oid;
+    *output = mxCreateNumericMatrix(1,sizeof(*oid),mxUINT8_CLASS,mxREAL);
+    uint8_t *temp = (uint8_t *)mxGetData(*output);
+    memcpy(temp,oid,sizeof(*oid));
 }
 
 void set_repo_output(mxArray **output, git_repository *repo){   
@@ -101,6 +112,18 @@ void set_reference_output(mxArray **output, git_reference *ref){
     *p = (int64_t)ref; 
 }
 
+void set_commit_output(mxArray **output, git_commit *commit){
+    //
+    //  set_reference_output(&plhs[0],commit);
+    //
+    
+    *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
+
+    int64_t *p;
+    p = (int64_t *) mxGetData(*output);
+    *p = (int64_t)commit; 
+}
+
 void set_strarray_out(mxArray **output, git_strarray *s){
     
     
@@ -116,6 +139,24 @@ void set_strarray_out(mxArray **output, git_strarray *s){
     *output = ca;
     
     git_strarray_free(s);
+}
+
+void set_signature_out(mxArray **output, const git_signature *s){
+    //
+    //  set_signature_out(&plhs[0],signature);
+    //
+    
+//     char *	name
+// full name of the author
+// char *	email
+// email of the author
+// git_time	when
+// time when the action happened
+
+    *output = mxCreateNumericMatrix(1,sizeof(*s),mxUINT8_CLASS,mxREAL);
+    uint8_t *temp = (uint8_t *)mxGetData(*output);
+    memcpy(temp,s,sizeof(*s));
+    
 }
 
 void handle_error(int error,const char *caller){
