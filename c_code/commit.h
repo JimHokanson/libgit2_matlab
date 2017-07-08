@@ -63,7 +63,13 @@ void commit_id(MEX_DEF_INPUT){
     set_oid_output(&plhs[0],oid);
 }
 
-
+void commit_create(MEX_DEF_INPUT){
+    //int git_commit_create(git_oid *id, git_repository *repo, 
+    //  const char *update_ref, const git_signature *author, 
+    //  const git_signature *committer, const char *message_encoding, 
+    //  const char *message, const git_tree *tree, 
+    //  size_t parent_count, const git_commit *[] parents);
+}
 
 void lookup_commit(MEX_DEF_INPUT){
     //
@@ -107,12 +113,21 @@ void commit(MEX_DEF_INPUT)
             break;
         case 4:
             //commiter
+            commit_committer(MEX_INPUT);
             break;
         case 5:
             //create
+            //Create new commit in the repository from a list of 
+            //git_object pointers
+            
+            //Started but not yet finished
+            //commit_create(MEX_INPUT);
             break;
         case 6:
             //create_buffer
+            //Create a commit as with git_commit_create() but instead of 
+            //writing it to the objectdb, write the contents of the object 
+            //into a buffer.
             break;
         case 7:
             //git_commit_create_from_callback
@@ -147,9 +162,10 @@ void commit(MEX_DEF_INPUT)
             lookup_commit(MEX_INPUT);
             break;
         case 17:
+            //git_commit_lookup_prefix
             break;
         case 18:
-            // %18 git_commit_message
+            //git_commit_message
             commit_message(MEX_INPUT);
             break;
         case 19:

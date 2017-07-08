@@ -6,10 +6,19 @@ classdef signature
     properties
         full_name
         email
-        author
+        when
     end
     
     methods
+        function obj = signature(s)
+            %
+            %   obj = git.base.signature(s)
+            obj.full_name = s.name;
+            obj.email = s.email;
+            
+            %TODO: Convert to datenum
+            obj.when = s.when;
+        end
     end
     
 end

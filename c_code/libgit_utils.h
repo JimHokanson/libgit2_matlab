@@ -146,18 +146,104 @@ void set_signature_out(mxArray **output, const git_signature *s){
     //  set_signature_out(&plhs[0],signature);
     //
     
-//     char *	name
-// full name of the author
-// char *	email
-// email of the author
-// git_time	when
-// time when the action happened
-
-    *output = mxCreateNumericMatrix(1,sizeof(*s),mxUINT8_CLASS,mxREAL);
-    uint8_t *temp = (uint8_t *)mxGetData(*output);
-    memcpy(temp,s,sizeof(*s));
+// char *	name - full name of the author
+// char *	email - email of the author
+// git_time	when - time when the action happened
+    
+    
+    //TODO: There might be a memory leak with the signature
+    
+    const char *fn[3];
+    fn[0] = "name";
+    fn[1] = "email";
+    fn[2] = "when";
+    
+    *output = mxCreateStructMatrix(1,1,3,fn);
+    
+    mxSetFieldByNumber(*output,0,0,mxCreateString(s->name));
+    mxSetFieldByNumber(*output,0,1,mxCreateString(s->email));
+    mxSetFieldByNumber(*output,0,2,git_time__to_mx(s->when));
     
 }
+
+//-------------------------------------------------------------------------
+
+void set_strarray_out(mxArray **output, git_strarray *s){
+    
+    
+//     typedef struct git_strarray {
+// 	char **strings;
+// 	size_t count;
+//     } git_strarray;
+    
+    mxArray *ca = mxCreateCellMatrix(1,s->count);
+    for (size_t i = 0; i < s->count; i++){
+       mxSetCell(ca,i,mxCreateString(s->strings[i]));
+    }
+    *output = ca;
+    
+    git_strarray_free(s);
+}
+
+mxArray* git_strarray__to_mex(git_strarray *s){
+    
+}
+
+mxArray* git_time__to_mx(git_time t){
+    
+    mxArray *mt = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
+    int64_t *p;
+    int64_t *p2;
+    p = (int64_t *) mxGetData(mt);
+    
+    p2 = (int64_t *)&(s->when);
+    *p = *p2; 
+    
+    return mt;
+}
+
+mxArray* int__to_mx(int v){
+    mxArray *out = mxCreateNumericMatrix(1,1,mxINT32_CLASS,mxREAL);
+    int *data = (int *)mxGetData(out);
+    *data = v;
+    return out;
+}
+
+mxArray* git_remote_callbacks__to_mx(git_remote_callbacks cb){
+    
+    //unsigned int version;
+    //git_transport_message_cb sideband_progress;
+    //int (*completion)(git_remote_completion_type type, void *data);
+    //git_cred_acquire_cb credentials;
+    //git_transport_certificate_check_cb certificate_check;
+    //git_transfer_progress_cb transfer_progress;
+    //int (*update_tips)(const char *refname, const git_oid *a, const git_oid *b, void *data);
+    //git_packbuilder_progress pack_progress;
+    //git_push_transfer_progress push_transfer_progress;
+    //int (*push_update_reference)(const char *refname, const char *status, void *data);
+    //git_push_negotiation push_negotiation;
+    //git_transport_cb transport;
+    //void *payload;
+    
+    //version:      unsigned int
+    //sideband_progress:  git_transport_message_cb  
+    //
+    
+    const char *fn[7];
+    fn[0] = "version";
+    fn[1] = "callbacks";
+    fn[2] = "prune";
+    fn[3] = "update_fetchhead";
+    fn[4] = "download_tags";
+    fn[5] = "proxy_opts";
+    fn[6] = "custom_headers";
+    
+    mxArray *output;
+    *output = mxCreateStructMatrix(1,1,7,fn);
+    
+}
+
+
 
 void handle_error(int error,const char *caller){
    

@@ -16,8 +16,13 @@ classdef commit < handle
         summary
         time
         offset_in_min
-        committer
-        author
+        
+        committer %git.base.signature
+        %person that last applied the patch
+        
+        author %git.base.signature
+        %original author
+        
         header
         tree_id
     end
@@ -29,6 +34,9 @@ classdef commit < handle
         end
         function value = get.encoding(obj)
             value = libgit(2,19,obj.h);
+            if isempty(value)
+                value = 'UTF8';
+            end
         end
         function value = get.message(obj)
             value = libgit(2,18,obj.h);
@@ -43,7 +51,8 @@ classdef commit < handle
             value = [];
         end
         function value = get.committer(obj)
-            value = [];
+            temp = libgit(2,4,obj.h);
+            value = git.base.signature(temp);
         end
         function value = get.author(obj)
             value = [];

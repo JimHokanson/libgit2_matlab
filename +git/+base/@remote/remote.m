@@ -20,6 +20,7 @@ classdef remote < handle
     
     properties (Dependent)
         url
+        connected
     end
     
     methods
@@ -42,11 +43,29 @@ classdef remote < handle
             %
             %   obj = git.base.remote(repo,remote_name)
             
-            %TODO: Finish this call
+            %TODO: Finish this call 
             %obj.h = git.mex.remote.lookup_remote(repo.h,remote_name);
             obj.h = libgit(1,22,repo.h,remote_name);
             obj.repo = repo;
             obj.remote_name = remote_name;
+        end
+        function fetch(obj)
+            git_remote *	remote	the remote to fetch from
+const git_strarray *	refspecs	the refspecs to use for this fetch. Pass NULL or an empty array to use the base refspecs.
+const git_fetch_options *	opts	options to use for this fetch
+const char *	reflog_message	The message to insert into the reflogs. If NULL, the default is "fetch"
+        end
+        %We might not want to expose this, but rather do it implicitly
+        %when fetching or pushing
+        function connect(obj)
+            %
+            %   
+            
+            %   direction GIT_DIRECTION_FETCH or GIT_DIRECTION_PUSH
+            %   callbacks
+            %   proxy options
+            %   custom_headers
+            
         end
         function delete(obj)
             libgit(1,10,obj.h);
