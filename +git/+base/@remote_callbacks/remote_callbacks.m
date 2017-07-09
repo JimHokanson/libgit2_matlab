@@ -20,13 +20,9 @@ classdef remote_callbacks
         % 	 */
         
         credentials  %git_cred_acquire_cb
-        %         	/**
-        % 	 * This will be called if the remote host requires
-        % 	 * authentication in order to connect to it.
-        % 	 *
-        % 	 * Returning GIT_PASSTHROUGH will make libgit2 behave as
-        % 	 * though this field isn't set.
-        % 	 */
+        %This will be called if the remote host requires authentication in
+        %order to connect to it. Returning GIT_PASSTHROUGH will make
+        %libgit2 behave as though this field isn't set.
         
         certificate_check  %git_transport_certificate_check_cb
         %         	/**
@@ -92,6 +88,23 @@ classdef remote_callbacks
     end
     
     methods
+        function obj = remote_callbacks()
+            
+            %Callback process
+            %
+            %   User sets either:
+            %   1) A callback function
+            %   2) Credentials
+            
+            %If credentials, we supply a mex default function
+            %That passes the credentials, do we need to switch on type?
+            %   => I don't think so 
+        end
+        function struct(obj)
+            %
+            %   Write code that converts to struct
+            
+        end
     end
     
 end

@@ -6,9 +6,9 @@ classdef fetch_options
     %   https://libgit2.github.com/libgit2/#HEAD/type/git_fetch_options
         
     properties
-        version %???
+        version 
         
-        callbacks
+        callbacks  %git.base.remote_callbacks
         %Callbacks to use for this fetch operation
         
         prune %git_fetch_prune_t
@@ -31,6 +31,14 @@ classdef fetch_options
     end
     
     methods
+        function obj = fetch_options()
+           %TODO: Call initialize 
+           %obj.callbacks = git.base.remote_callbacks;
+           temp = libgit(1,39);
+        end
+        function s = struct(obj)
+            s = struct;
+        end
     end
     
 end

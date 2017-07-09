@@ -8,6 +8,50 @@
 #include "libgit_utils.h"
 
 
+#ifdef UNUSED
+#elif defined(__GNUC__)
+# define UNUSED(x) UNUSED_ ## x __attribute__((unused))
+#elif defined(__LCLINT__)
+# define UNUSED(x) /*@unused@*/ x
+#else
+# define UNUSED(x) x
+#endif
+
+//TODO: Can we make credentials p
+
+static char *remote_username;
+static char *remote_password;
+
+int default_remote_callback (git_cred **out,
+                    const char * UNUSED(url),
+                    const char * UNUSED(username_from_url),
+                    unsigned int UNUSED(allowed_types),
+                    void * UNUSED(payload))
+{
+    //This callback is meant to handle the case where the user 
+    //specifies their credentials up front.
+    
+    //https://libgit2.github.com/libgit2/#HEAD/group/cred
+
+	int error;
+    
+    //TODO: Eventually allow multiple cred options.
+	error = git_cred_userpass_plaintext_new(out, remote_username, remote_password);
+    
+    //TODO: This might be better in fetch or push. I'm not sure if this
+    //callback would ever be called twice, in which case the second
+    //time the variable would be freed
+    mxFree((void *)remote_username);
+    mxFree((void *)remote_password);
+    
+	return error;
+}
+
+
+
+
+
+
 void remote_add_fetch(MEX_DEF_INPUT){
     //1
     //int git_remote_add_fetch(git_repository *repo, const char *remote, const char *refspec);
@@ -84,30 +128,17 @@ void remote_dup(MEX_DEF_INPUT){
 void remote_fetch(MEX_DEF_INPUT){
     //
     //  Calling Form:
-    //  mex(1,14,remote,refspecs,options,reflog_message)
-    
-    //refspecs - NULL allowed
+    //  mex(1,14,remote) 
     //
-    //options - NULL not allowed
-    //int git_fetch_init_options(git_fetch_options *opts, unsigned int version);
-    //      pass in GIT_FETCH_OPTIONS_VERSION
-    //
-    //reflog_message - NULL allowed
+    //  (remote,refspecs,options,reflog_message)
     
     
-    //The message to insert into the reflogs. 
-    //If NULL, the default is "fetch"
     
+
     //int git_remote_fetch(git_remote *remote, const git_strarray *refspecs, 
     //      const git_fetch_options *opts, const char *reflog_message);
-    
-    const git_remote *remote = get_remote_input(prhs[2]);
-    
-    git_fetch_options opts;
-    git_fetch_init_options(&opts,GIT_FETCH_OPTIONS_VERSION);
-    
-    int error = git_remote_fetch(remote,NULL,opt,NULL);
-    
+    git_remote *remote = get_remote_input(prhs[2]);
+    int error = git_remote_fetch(remote,NULL,NULL,NULL);
 }
 
 void remote_list(MEX_DEF_INPUT){
@@ -121,7 +152,7 @@ void remote_list(MEX_DEF_INPUT){
     git_strarray remotes = {0};
     int error = git_remote_list(&remotes,repo);
     handle_error(error,"libgit:remote:remote_list");
-    set_strarray_out(&plhs[0],&remotes);
+    plhs[0] = git_strarray__to_mx(&remotes,1);
 }
 
 void lookup_remote(MEX_DEF_INPUT){
@@ -158,35 +189,13 @@ void get_remote_url(MEX_DEF_INPUT){
 }
 
 void get_fetch_options(MEX_DEF_INPUT){
+    //
+    // 1,39
     
     git_fetch_options opts;
     git_fetch_init_options(&opts,GIT_FETCH_OPTIONS_VERSION);
-
-    //0 version:            int
-    //1 callbacks:          git_remote_callbacks
-    //2 prune:              git_fetch_prune_t
-    //3 update_fetchhead:   int
-    //4 download_tags:      git_remote_autotag_option_t
-    //5 proxy_opts:         git_proxy_options
-    //6 custom_headers:     git_strarray
-
-    const char *fn[7];
-    fn[0] = "version";
-    fn[1] = "callbacks";
-    fn[2] = "prune";
-    fn[3] = "update_fetchhead";
-    fn[4] = "download_tags";
-    fn[5] = "proxy_opts";
-    fn[6] = "custom_headers";
+    plhs[0] = git_fetch_options__to_mx(&opts);
     
-    mxArray *output;
-    *output = mxCreateStructMatrix(1,1,7,fn);
-    
-    mxSetFieldByNumber(output,0,0,int__to_mx(opts.version));
-    
-    mxSetFieldByNumber(output,0,3,int__to_mx(opts.update_fetchhead));
-    
-    plhs[0] = output;
 }
 
 void remote(MEX_DEF_INPUT)
@@ -236,6 +245,7 @@ void remote(MEX_DEF_INPUT)
             break;
         case 14:
             //git_remote_fetch
+            remote_fetch(MEX_INPUT);
             break;
         case 15:
             //Free Remote
@@ -248,10 +258,16 @@ void remote(MEX_DEF_INPUT)
         case 22:
             lookup_remote(MEX_INPUT);
             break;
+        case 35:
+            //git_remote_stop
+            //
+            //  Only works within network callbacks ...
+            break;
         case 38:
             get_remote_url(MEX_INPUT);
             break;
         case 39:
+            get_fetch_options(MEX_INPUT);
             break;
         default:
             mexErrMsgIdAndTxt("libgit:input_2","remote.h, input sub-type not recognized");
@@ -272,8 +288,8 @@ void remote(MEX_DEF_INPUT)
 // %11 git_remote_disconnect
 // %12 git_remote_download
 // %13 git_remote_dup
-// %14 git_remote_fetch
-// %x 15 git_remote_free
+// x 14 git_remote_fetch
+// x 15 git_remote_free
 // %16 git_remote_get_fetch_refspecs
 // %17 git_remote_get_push_refspecs
 // %18 git_remote_get_refspec
@@ -293,7 +309,7 @@ void remote(MEX_DEF_INPUT)
 // %32 git_remote_set_pushurl
 // %33 git_remote_set_url
 // %34 git_remote_stats - Get the statistics structure that is filled in by the fetch operation.
-// %35 git_remote_stop
+// %35 git_remote_stop 
 // %36 git_remote_update_tips - update the tips to the new state
 // %37 git_remote_upload
 // %x 38 git_remote_url

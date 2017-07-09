@@ -1,4 +1,4 @@
-classdef remote < handle
+classdef remote < sl.obj.display_class
     %
     %   Class:
     %   git.base.remote
@@ -43,18 +43,42 @@ classdef remote < handle
             %
             %   obj = git.base.remote(repo,remote_name)
             
-            %TODO: Finish this call 
+            %TODO: Build in optional parameters
+            %=> particularly things related to fetching
+            
             %obj.h = git.mex.remote.lookup_remote(repo.h,remote_name);
             obj.h = libgit(1,22,repo.h,remote_name);
             obj.repo = repo;
             obj.remote_name = remote_name;
         end
-        function fetch(obj)
-            git_remote *	remote	the remote to fetch from
-const git_strarray *	refspecs	the refspecs to use for this fetch. Pass NULL or an empty array to use the base refspecs.
-const git_fetch_options *	opts	options to use for this fetch
-const char *	reflog_message	The message to insert into the reflogs. If NULL, the default is "fetch"
+        function options = getFetchOptions(obj)
+            options = git.base.fetch_options;
         end
+        function fetch(obj,varargin)
+            %
+            %
+            %   Optional Inputs
+            %   ---------------
+            %   refspecs : cellstr
+            %   options : git.base.fetch_options
+            %   reflog_message : 
+            
+            in.refspecs = {};
+            in.options = [];
+            in.reflog_message = '';
+            in = sl.in.processVarargin(in,varargin);
+            %TODO: 
+            
+            %git.base.fetch_options
+            %       git.base.remote_callbacks
+            
+            %(remote,refspecs,options,reflog_message) 
+            
+            libgit(1,14,obj.h);
+        
+        
+        end
+        
         %We might not want to expose this, but rather do it implicitly
         %when fetching or pushing
         function connect(obj)
@@ -67,6 +91,8 @@ const char *	reflog_message	The message to insert into the reflogs. If NULL, the
             %   custom_headers
             
         end
+    end
+    methods (Hidden)
         function delete(obj)
             libgit(1,10,obj.h);
         end

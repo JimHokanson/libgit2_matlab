@@ -3,8 +3,8 @@
 
 //#include "git2.h" 
 #include <stdint.h>
-#include "libgit_utils.h"
 #include <string.h>
+#include "c_to_mx.h"
 
 
 #define MEX_INPUT nlhs, plhs, nrhs, prhs
@@ -124,23 +124,8 @@ void set_commit_output(mxArray **output, git_commit *commit){
     *p = (int64_t)commit; 
 }
 
-void set_strarray_out(mxArray **output, git_strarray *s){
-    
-    
-//     typedef struct git_strarray {
-// 	char **strings;
-// 	size_t count;
-//     } git_strarray;
-    
-    mxArray *ca = mxCreateCellMatrix(1,s->count);
-    for (size_t i = 0; i < s->count; i++){
-       mxSetCell(ca,i,mxCreateString(s->strings[i]));
-    }
-    *output = ca;
-    
-    git_strarray_free(s);
-}
 
+//TODO: Move into c_to_mx
 void set_signature_out(mxArray **output, const git_signature *s){
     //
     //  set_signature_out(&plhs[0],signature);
@@ -168,80 +153,11 @@ void set_signature_out(mxArray **output, const git_signature *s){
 
 //-------------------------------------------------------------------------
 
-void set_strarray_out(mxArray **output, git_strarray *s){
-    
-    
-//     typedef struct git_strarray {
-// 	char **strings;
-// 	size_t count;
-//     } git_strarray;
-    
-    mxArray *ca = mxCreateCellMatrix(1,s->count);
-    for (size_t i = 0; i < s->count; i++){
-       mxSetCell(ca,i,mxCreateString(s->strings[i]));
-    }
-    *output = ca;
-    
-    git_strarray_free(s);
-}
 
-mxArray* git_strarray__to_mex(git_strarray *s){
-    
-}
 
-mxArray* git_time__to_mx(git_time t){
-    
-    mxArray *mt = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
-    int64_t *p;
-    int64_t *p2;
-    p = (int64_t *) mxGetData(mt);
-    
-    p2 = (int64_t *)&(s->when);
-    *p = *p2; 
-    
-    return mt;
-}
 
-mxArray* int__to_mx(int v){
-    mxArray *out = mxCreateNumericMatrix(1,1,mxINT32_CLASS,mxREAL);
-    int *data = (int *)mxGetData(out);
-    *data = v;
-    return out;
-}
 
-mxArray* git_remote_callbacks__to_mx(git_remote_callbacks cb){
-    
-    //unsigned int version;
-    //git_transport_message_cb sideband_progress;
-    //int (*completion)(git_remote_completion_type type, void *data);
-    //git_cred_acquire_cb credentials;
-    //git_transport_certificate_check_cb certificate_check;
-    //git_transfer_progress_cb transfer_progress;
-    //int (*update_tips)(const char *refname, const git_oid *a, const git_oid *b, void *data);
-    //git_packbuilder_progress pack_progress;
-    //git_push_transfer_progress push_transfer_progress;
-    //int (*push_update_reference)(const char *refname, const char *status, void *data);
-    //git_push_negotiation push_negotiation;
-    //git_transport_cb transport;
-    //void *payload;
-    
-    //version:      unsigned int
-    //sideband_progress:  git_transport_message_cb  
-    //
-    
-    const char *fn[7];
-    fn[0] = "version";
-    fn[1] = "callbacks";
-    fn[2] = "prune";
-    fn[3] = "update_fetchhead";
-    fn[4] = "download_tags";
-    fn[5] = "proxy_opts";
-    fn[6] = "custom_headers";
-    
-    mxArray *output;
-    *output = mxCreateStructMatrix(1,1,7,fn);
-    
-}
+
 
 
 
