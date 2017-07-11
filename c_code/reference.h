@@ -13,7 +13,7 @@ void lookup_reference(MEX_DEF_INPUT){
     //  ref = mex(1,22,repo,ref_name);
     
     //int git_reference_lookup(git_reference **out, git_repository *repo, const char *name);
-    git_repository *repo = get_repo_input(prhs[2]);
+    git_repository *repo = mx_to_git_repo(prhs[2]);
     const char *ref_name = mxArrayToString(prhs[3]);
     
     git_reference *ref = NULL;
@@ -38,7 +38,7 @@ void reference_shorthand(MEX_DEF_INPUT){
 
 void reference_name_to_id(MEX_DEF_INPUT){
     
-    git_repository *repo = get_repo_input(prhs[2]);
+    git_repository *repo = mx_to_git_repo(prhs[2]);
     const char *ref_name = mxArrayToString(prhs[3]);
     
     //int git_reference_name_to_id(git_oid *out, git_repository *repo, const char *name);
@@ -49,7 +49,7 @@ void reference_name_to_id(MEX_DEF_INPUT){
     //oid is type: unsigned char [20]
     //TODO: I think we might need a memcpy ...?
     
-    set_oid_output(&plhs[0],&oid);
+    plhs[0] = git_oid__to_mx(&oid);
     
     mxFree((void *)ref_name);
 }

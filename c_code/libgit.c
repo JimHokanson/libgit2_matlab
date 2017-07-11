@@ -1,9 +1,4 @@
 #include "mex.h"
-#include "repo.h"
-#include "remote.h"
-#include "commit.h"
-#include "oid.h"
-#include "reference.h"
 
 //TODO: point to something that defines this 
 #ifdef _WIN32
@@ -11,6 +6,12 @@
 #else
 #include "mac_os/git2.h"
 #endif
+
+#include "repo.h"
+#include "remote.h"
+#include "commit.h"
+#include "oid.h"
+#include "reference.h"
 
 
 //which install_name_tool
@@ -226,12 +227,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
     
     int type = (int) mxGetScalar(prhs[0]);
     
-    //0 repo
-    //1 remote
-    //2 commit
-    //3 reference
-    //4 libgit
-    //5 oid
+    //00 repo
+    //01 remote
+    //02 commit
+    //03 reference
+    //04 libgit
+    //05 oid
     
     switch (type) {
         case 0:

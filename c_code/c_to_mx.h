@@ -15,6 +15,30 @@ mxArray* uint32__to_mx(unsigned int v){
 }
 
 //=========================================================================
+mxArray* git_oid__to_mx(const git_oid *oid){
+   
+    mxArray *output = mxCreateNumericMatrix(1,sizeof(*oid),mxUINT8_CLASS,mxREAL);
+    uint8_t *temp = (uint8_t *)mxGetData(output);
+    memcpy(temp,oid,sizeof(*oid));
+    return output; 
+}
+
+mxArray* git_time__to_mx(git_time t){
+    
+    //git_time  => int64
+    
+    mxArray *mt = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
+    int64_t *p;
+    int64_t *p2;
+    p = (int64_t *) mxGetData(mt);
+    
+    p2 = (int64_t *)&(t);
+    *p = *p2; 
+    
+    return mt;
+}
+
+//=========================================================================
 mxArray* git_strarray__to_mx(git_strarray *s,int free_git){
     
     //     typedef struct git_strarray {
@@ -34,20 +58,44 @@ mxArray* git_strarray__to_mx(git_strarray *s,int free_git){
     return output;
 }
 
-mxArray* git_time__to_mx(git_time t){
+// mxArray* git_remote__to_mx(const git_remote *r){
+//     
+// }
+
+mxArray* git_remote_head__to_mx(const git_remote_head **refs, size_t size){
+//     int	local
+//     git_oid	oid
+//     git_oid	loid
+//     char *	name
+//     char *	symref_target
     
-    //git_time  => int64
+//     void mxSetFieldByNumber(mxArray *pm, mwIndex index, int fieldnumber, mxArray *pvalue);
     
-    mxArray *mt = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
-    int64_t *p;
-    int64_t *p2;
-    p = (int64_t *) mxGetData(mt);
+        const git_remote_head *ref;
     
-    p2 = (int64_t *)&(t);
-    *p = *p2; 
-    
-    return mt;
+        const char *fn[5];
+        fn[0] = "local";
+        fn[1] = "oid";
+        fn[2] = "loid";
+        fn[3] = "name";
+        fn[4] = "symref_target";
+        
+        mxArray *output;
+        output = mxCreateStructMatrix(1,size,5,fn);
+        
+        for (size_t i = 0; i < size; i++){
+            ref = refs[i];
+            mxSetFieldByNumber(output,i,0,int32__to_mx(ref->local));
+            mxSetFieldByNumber(output,i,1,git_oid__to_mx(&ref->oid));
+            mxSetFieldByNumber(output,i,2,git_oid__to_mx(&ref->loid));
+            mxSetFieldByNumber(output,i,3,mxCreateString(ref->name));
+            mxSetFieldByNumber(output,i,4,mxCreateString(ref->symref_target));
+        }
+        
+        return output;
 }
+
+
 
 mxArray* git_signature__to_mx(const git_signature *s){
     
@@ -65,6 +113,8 @@ mxArray* git_signature__to_mx(const git_signature *s){
     
     return output;
 }
+
+
 
 //=========================================================================
 

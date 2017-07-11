@@ -60,7 +60,7 @@ void commit_id(MEX_DEF_INPUT){
     //const git_oid * git_commit_id(const git_commit *commit);
     git_commit* commit = get_commit_input(prhs[2]);
     const git_oid *oid = git_commit_id(commit);
-    set_oid_output(&plhs[0],oid);
+    plhs[0] = git_oid__to_mx(oid);
 }
 
 void commit_create(MEX_DEF_INPUT){
@@ -78,7 +78,7 @@ void lookup_commit(MEX_DEF_INPUT){
     
         
     //int git_commit_lookup(git_commit **commit, git_repository *repo, const git_oid *id);    int error;
-    git_repository *repo = get_repo_input(prhs[2]);
+    git_repository *repo = mx_to_git_repo(prhs[2]);
     const git_oid *oid = get_oid_input(prhs[3]);
     git_commit *commit = NULL;
     int error = git_commit_lookup(&commit,repo,oid);

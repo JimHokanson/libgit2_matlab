@@ -1,3 +1,5 @@
+//  libgit_utils.h
+
 #ifndef LIBGIT_UTILS_H
 #define LIBGIT_UTILS_H
 
@@ -5,6 +7,7 @@
 #include <stdint.h>
 #include <string.h>
 #include "c_to_mx.h"
+#include "mx_to_c.h"
 
 
 #define MEX_INPUT nlhs, plhs, nrhs, prhs
@@ -14,24 +17,7 @@
 
 //Input Handling
 //-----------------------------------------------
-//TODO: Make these macros
-git_repository* get_repo_input(const mxArray *input){
-    //
-    //   git_repository* repo = get_repo_input(prhs[2]);
-    //
-    
-    git_repository **p_repo = (git_repository **)mxGetData(input);
-    return *p_repo;
-}
 
-git_remote* get_remote_input(const mxArray *input){
-    //
-    //   git_remote* repo = get_remote_input(prhs[2]);
-    //
-    
-    git_remote **p_remote = (git_remote **)mxGetData(input);
-    return *p_remote;
-}
 
 git_reference* get_reference_input(const mxArray *input){
     //
@@ -66,15 +52,6 @@ git_commit* get_commit_input(const mxArray *input){
 //SET_POINTER_OUTPUT(set_repo_output,git_repository)
 //SET_POINTER_OUTPUT(set_remote_output,git_remote)
 
-void set_oid_output(mxArray **output, const git_oid *oid){
-    //
-    //  set_oid_output(&plhs[0],oid);
-    //
-    
-    *output = mxCreateNumericMatrix(1,sizeof(*oid),mxUINT8_CLASS,mxREAL);
-    uint8_t *temp = (uint8_t *)mxGetData(*output);
-    memcpy(temp,oid,sizeof(*oid));
-}
 
 void set_repo_output(mxArray **output, git_repository *repo){   
     //

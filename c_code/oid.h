@@ -17,7 +17,6 @@ void oid(MEX_DEF_INPUT)
     
     switch (sub_type) {
         case 0:
-            //repository
             break;
         case 1:
             break;

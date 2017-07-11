@@ -67,7 +67,8 @@ classdef remote < sl.obj.display_class
             in.options = [];
             in.reflog_message = '';
             in = sl.in.processVarargin(in,varargin);
-            %TODO: 
+            
+            %TODO: Support optional inputs 
             
             %git.base.fetch_options
             %       git.base.remote_callbacks
