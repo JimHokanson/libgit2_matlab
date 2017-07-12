@@ -1,4 +1,4 @@
-classdef repository < handle
+classdef repository < sl.obj.display_class
     %
     %   Class:
     %   git.base.repository
@@ -47,8 +47,15 @@ classdef repository < handle
             obj.h = libgit(0,30,file_path);
         end
         function getNamespace(obj)
+            %x 
             %TODO
         end
+        function list = getRemoteList(obj)
+            %x Get list of remotes.
+            list = libgit(1,21,obj.h);
+        end
+    end
+    methods (Hidden)
         function delete(obj)
             if obj.h ~= 0
                 libgit(0,8,obj.h);

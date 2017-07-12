@@ -96,9 +96,15 @@ void repository_free(MEX_DEF_INPUT){
 void repository_get_namespace(MEX_DEF_INPUT){
     //9
     //
+    //  namespace = mex(0,9,repo);
+    //
     //Get the currently active namespace for this repository
     //
     //const char * git_repository_get_namespace(git_repository *repo);
+    
+    git_repository* repo = mx_to_git_repo(prhs[2]);
+    const char *name = git_repository_get_namespace(repo);
+    plhs[0] = mxCreateString(name);
 }
 
 void repository_hashfile(MEX_DEF_INPUT){
@@ -108,6 +114,8 @@ void repository_hashfile(MEX_DEF_INPUT){
     //
     //int git_repository_hashfile(git_oid *out, git_repository *repo, 
     //          const char *path, git_otype type, const char *as_path);
+    
+    
 }
 
 void repository_head(MEX_DEF_INPUT){
@@ -116,18 +124,39 @@ void repository_head(MEX_DEF_INPUT){
     //Retrieve and resolve the reference pointed at by HEAD.
     //
     //int git_repository_head(git_reference **out, git_repository *repo);
+    
+    git_repository* repo = mx_to_git_repo(prhs[2]);
+    git_reference *out;
+    int error = git_repository_head(&out,repo);
+    handle_error(error,"libgit:repo:repository_head"); 
+    plhs[0] = git_reference__to_mx(out);
+    
 }
 
 void repository_head_detached(MEX_DEF_INPUT){
     //12
     //
+    //  out = mex(0,12,repo);
+    //
     //Check if a repository's HEAD is detached
     //
     //int git_repository_head_detached(git_repository *repo);
+    
+    //TODO: handle possible error code
+    //=> 1 - yes
+    //=> 0 - no
+    
+    
+    git_repository* repo = mx_to_git_repo(prhs[2]);
+    int shallow = git_repository_is_empty(repo);
+    handle_error(shallow,"libgit:repo:repository_head_detached"); 
+    plhs[0] = int32__to_mx(shallow);
 }
 
 void repository_head_for_worktree(MEX_DEF_INPUT){
     //13
+    //
+    //  out = mex(0,13,repo,worktree_name)
     //
     //Retrieve the referenced HEAD for the worktree
     //
@@ -141,6 +170,11 @@ void repository_head_unborn(MEX_DEF_INPUT){
     //Check if the current branch is unborn
     //
     //int git_repository_head_unborn(git_repository *repo);
+    
+    git_repository* repo = mx_to_git_repo(prhs[2]);
+    int out = repository_head_unborn(repo);
+    handle_error(out,"libgit:repo:repository_head_unborn"); 
+    plhs[0] = int32__to_mx(out);
 }
 
 void repository_ident(MEX_DEF_INPUT){
@@ -155,9 +189,18 @@ void repository_ident(MEX_DEF_INPUT){
 void repository_index(MEX_DEF_INPUT){
     //16
     //
+    //    index = mex(0,16,repo);
+    //
     //Get the Index file for this repository.
     //
     //int git_repository_index(git_index **out, git_repository *repo);
+    
+    git_repository* repo = mx_to_git_repo(prhs[2]);
+    git_index *out = NULL:
+    int error = git_repository_index(&out,repo);
+    handle_error(error,"libgit:repo:repository_index"); 
+    plhs[0] = get_index__to_mx(out);
+    
 }
 
 void repository_init(MEX_DEF_INPUT){
@@ -199,25 +242,44 @@ void repository_is_bare(MEX_DEF_INPUT){
 void repository_is_empty(MEX_DEF_INPUT){
     //21
     //
+    //  empty = mex(0,21,repo);
+    //
     //Check if a repository is empty
     //
     //int git_repository_is_empty(git_repository *repo);
+    
+    git_repository* repo = mx_to_git_repo(prhs[2]);
+    int empty = git_repository_is_empty(repo);
+    plhs[0] = int32__to_mx(empty);
 }
 
 void repository_is_shallow(MEX_DEF_INPUT){
     //22
     //
+    //  shallow = mex(0,22,repo);
+    //
     //Determine if the repository was a shallow clone
     //
     //int git_repository_is_shallow(git_repository *repo);
+    
+    git_repository* repo = mx_to_git_repo(prhs[2]);
+    int shallow = git_repository_is_empty(repo);
+    plhs[0] = int32__to_mx(shallow);
 }
 
 void repository_is_worktree(MEX_DEF_INPUT){
     //23
     //
+    //  worktree = mex(0,23,repo)
+    //
     //Check if a repository is a linked work tree
     //
     //int git_repository_is_worktree(git_repository *repo);
+    
+    git_repository* repo = mx_to_git_repo(prhs[2]);
+    int worktree = git_repository_is_empty(repo);
+    plhs[0] = int32__to_mx(worktree);
+    
 }
 
 void repository_item_path(MEX_DEF_INPUT){
@@ -245,6 +307,10 @@ void repository_message(MEX_DEF_INPUT){
     //Retrieve git's prepared message
     //
     //int git_repository_message(git_buf *out, git_repository *repo);
+    
+    
+    
+    
 }
 
 void repository_message_remove(MEX_DEF_INPUT){
@@ -283,7 +349,7 @@ void repository_open(MEX_DEF_INPUT){
     
     const char *file_path = mxArrayToString(prhs[2]);
     error = git_repository_open(&repo,file_path);
-    handle_error(error,"libgit:repo:open_repo");
+    handle_error(error,"libgit:repo:repository_open");
 
     mxFree((void *)file_path);    
     set_repo_output(&plhs[0],repo);
@@ -497,21 +563,27 @@ void repo(MEX_DEF_INPUT)
 //             break;
         case 2:
             //git_repository_commondir
+            repository_commondir(MEX_INPUT);
             break;
         case 3:
             //git_repository_config
+            repository_config(MEX_INPUT);
             break;
         case 4:
             //git_repository_config_snapshot
+            repository_config_snapshot(MEX_INPUT);
             break;
         case 5:
             //git_repository_detach_head
+            repository_detach_head(MEX_INPUT);
             break;
         case 6:
             //git_repository_discover
+            repository_discover(MEX_INPUT);
             break;
         case 7:
             //git_repository_fetchhead_foreach
+            repository_fetchhead_foreach(MEX_INPUT);
             break;
         case 8:
             //git_repository_free
@@ -519,42 +591,55 @@ void repo(MEX_DEF_INPUT)
             break;
         case 9:
             //git_repository_get_namespace
+            repository_get_namespace(MEX_INPUT);
             break;
         case 10:
             //git_repository_hashfile
+            repository_hashfile(MEX_INPUT);
             break;
         case 11:
             //git_repository_head
+            repository_head(MEX_INPUT);
             break;
         case 12:
             //git_repository_head_detached
+            repository_head_detached(MEX_INPUT);
             break;
         case 13:
             //git_repository_head_for_worktree
+            repository_head_for_worktree(MEX_INPUT);
             break;
         case 14:
             //git_repository_head_unborn
+            repository_head_unborn(MEX_INPUT);
             break;
         case 15:
             //git_repository_ident
+            repository_ident(MEX_INPUT);
             break;
         case 16:
             //git_repository_index
+            repository_index(MEX_INPUT);
             break;
         case 17:
             //git_repository_init
+            repository_init(MEX_INPUT);
             break;
         case 18:
             //git_repository_init_ext
+            repository_init_ext(MEX_INPUT);
             break;
         case 19:
             //git_repository_init_init_options
+            repository_init_init_options(MEX_INPUT);
             break;
         case 20:
             //git_repository_is_bare
+            repository_is_bare(MEX_INPUT);
             break;
         case 21:
             //git_repository_is_empty
+            repository_is_empty(MEX_INPUT);
             break;
         case 22:
             //git_repository_is_shallow

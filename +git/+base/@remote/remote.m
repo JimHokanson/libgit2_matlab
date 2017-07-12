@@ -30,12 +30,6 @@ classdef remote < sl.obj.display_class
     end
     
     methods (Static)
-        function list = getList(repo)
-            %
-            %   git.base.remote.getList(repo)
-            
-            list = libgit(1,21,repo.h);
-        end
     end
     
     methods
@@ -121,7 +115,7 @@ end
 %18 git_remote_get_refspec
 %19 git_remote_init_callbacks
 %20 git_remote_is_valid_name
-%21 git_remote_list
+%REPO x 21 git_remote_list
 %x 22 git_remote_lookup
 %23 git_remote_ls
 %24 git_remote_name

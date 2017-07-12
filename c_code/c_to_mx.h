@@ -39,28 +39,37 @@ mxArray* git_time__to_mx(git_time t){
 }
 
 //=========================================================================
-mxArray* git_strarray__to_mx(git_strarray *s,int free_git){
-    
-    //     typedef struct git_strarray {
-    //          char **strings;
-    //          size_t count;
-    //     } git_strarray;
-    
-    mxArray *output = mxCreateCellMatrix(1,s->count);
-    for (size_t i = 0; i < s->count; i++){
-       mxSetCell(output,i,mxCreateString(s->strings[i]));
-    }
-    
-    if (free_git){
-        git_strarray_free(s);
-    }
-    
-    return output;
-}
+
 
 // mxArray* git_remote__to_mx(const git_remote *r){
 //     
 // }
+
+mxArray* get_index__to_mx(git_index *out){   
+    //
+    //  plhs[0] = get_index__to_mx(out)
+    //
+    
+    mxArray *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
+
+    int64_t *p;
+    p = (int64_t *) mxGetData(output);
+    *p = (int64_t)out; 
+    return output;
+}
+
+mxArray* git_reference__to_mx(git_reference *ref){   
+    //
+    //  plhs[0] = get_reference__to_mx(ref)
+    //
+    
+    mxArray *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
+
+    int64_t *p;
+    p = (int64_t *) mxGetData(output);
+    *p = (int64_t)ref; 
+    return output;
+}
 
 mxArray* git_remote_head__to_mx(const git_remote_head **refs, size_t size){
 //     int	local
@@ -95,8 +104,6 @@ mxArray* git_remote_head__to_mx(const git_remote_head **refs, size_t size){
         return output;
 }
 
-
-
 mxArray* git_signature__to_mx(const git_signature *s){
     
     const char *fn[3];
@@ -110,6 +117,25 @@ mxArray* git_signature__to_mx(const git_signature *s){
     mxSetFieldByNumber(output,0,0,mxCreateString(s->name));
     mxSetFieldByNumber(output,0,1,mxCreateString(s->email));
     mxSetFieldByNumber(output,0,2,git_time__to_mx(s->when));
+    
+    return output;
+}
+
+mxArray* git_strarray__to_mx(git_strarray *s,int free_git){
+    
+    //     typedef struct git_strarray {
+    //          char **strings;
+    //          size_t count;
+    //     } git_strarray;
+    
+    mxArray *output = mxCreateCellMatrix(1,s->count);
+    for (size_t i = 0; i < s->count; i++){
+       mxSetCell(output,i,mxCreateString(s->strings[i]));
+    }
+    
+    if (free_git){
+        git_strarray_free(s);
+    }
     
     return output;
 }
