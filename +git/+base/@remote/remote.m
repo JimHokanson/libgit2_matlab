@@ -1,4 +1,4 @@
-classdef remote < handle
+classdef remote < sl.obj.display_class
     %
     %   Class:
     %   git.base.remote
@@ -20,6 +20,7 @@ classdef remote < handle
     
     properties (Dependent)
         url
+        connected
     end
     
     methods
@@ -29,12 +30,6 @@ classdef remote < handle
     end
     
     methods (Static)
-        function list = getList(repo)
-            %
-            %   git.base.remote.getList(repo)
-            
-            list = libgit(1,21,repo.h);
-        end
     end
     
     methods
@@ -42,12 +37,57 @@ classdef remote < handle
             %
             %   obj = git.base.remote(repo,remote_name)
             
-            %TODO: Finish this call
+            %TODO: Build in optional parameters
+            %=> particularly things related to fetching
+            
             %obj.h = git.mex.remote.lookup_remote(repo.h,remote_name);
             obj.h = libgit(1,22,repo.h,remote_name);
             obj.repo = repo;
             obj.remote_name = remote_name;
         end
+        function options = getFetchOptions(obj)
+            options = git.base.fetch_options;
+        end
+        function fetch(obj,varargin)
+            %
+            %
+            %   Optional Inputs
+            %   ---------------
+            %   refspecs : cellstr
+            %   options : git.base.fetch_options
+            %   reflog_message : 
+            
+            in.refspecs = {};
+            in.options = [];
+            in.reflog_message = '';
+            in = sl.in.processVarargin(in,varargin);
+            
+            %TODO: Support optional inputs 
+            
+            %git.base.fetch_options
+            %       git.base.remote_callbacks
+            
+            %(remote,refspecs,options,reflog_message) 
+            
+            libgit(1,14,obj.h);
+        
+        
+        end
+        
+        %We might not want to expose this, but rather do it implicitly
+        %when fetching or pushing
+        function connect(obj)
+            %
+            %   
+            
+            %   direction GIT_DIRECTION_FETCH or GIT_DIRECTION_PUSH
+            %   callbacks
+            %   proxy options
+            %   custom_headers
+            
+        end
+    end
+    methods (Hidden)
         function delete(obj)
             libgit(1,10,obj.h);
         end
@@ -75,7 +115,7 @@ end
 %18 git_remote_get_refspec
 %19 git_remote_init_callbacks
 %20 git_remote_is_valid_name
-%21 git_remote_list
+%REPO x 21 git_remote_list
 %x 22 git_remote_lookup
 %23 git_remote_ls
 %24 git_remote_name

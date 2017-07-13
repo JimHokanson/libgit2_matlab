@@ -1,8 +1,4 @@
 #include "mex.h"
-#include "repo.h"
-#include "remote.h"
-#include "commit.h"
-#include "reference.h"
 
 //TODO: point to something that defines this 
 #ifdef _WIN32
@@ -10,6 +6,12 @@
 #else
 #include "mac_os/git2.h"
 #endif
+
+#include "repo.h"
+#include "remote.h"
+#include "commit.h"
+#include "oid.h"
+#include "reference.h"
 
 
 //which install_name_tool
@@ -71,7 +73,7 @@ void get_libgit_features(MEX_DEF_INPUT){
     //GIT_FEATURE_SSH 
 }
 
-void get_libgit_option(){
+void get_libgit_option(MEX_DEF_INPUT){
    //https://libgit2.github.com/libgit2/#HEAD/group/libgit2/git_libgit2_opts
     
     //01  GIT_OPT_GET_MWINDOW_SIZE
@@ -87,29 +89,36 @@ void get_libgit_option(){
             break;
         case 2:
             //opts(GIT_OPT_GET_MWINDOW_MAPPED_LIMIT, size_t *):
-            //> Get the maximum memory that will be mapped in total by the library
+            //> Get the maximum memory that will be mapped in 
+            //total by the library
             break;
         case 3:
             //opts(GIT_OPT_GET_SEARCH_PATH, int level, git_buf *buf)
             //> Get the search path for a given level of config data.  
-            //"level" must       > be one of `GIT_CONFIG_LEVEL_SYSTEM`, `GIT_CONFIG_LEVEL_GLOBAL`,       
-            //> `GIT_CONFIG_LEVEL_XDG`, or `GIT_CONFIG_LEVEL_PROGRAMDATA`.        
+            //"level" must be one of 
+            //      `GIT_CONFIG_LEVEL_SYSTEM`, 
+            //      `GIT_CONFIG_LEVEL_GLOBAL`,       
+            //      `GIT_CONFIG_LEVEL_XDG`, or 
+            //      `GIT_CONFIG_LEVEL_PROGRAMDATA`.   
+            //  
             //> The search path is written to the `out` buffer.
             break;
         case 4:
             //opts(GIT_OPT_GET_CACHED_MEMORY, ssize_t *current, ssize_t *allowed)
-            //> Get the current bytes in cache and the maximum that would be      > allowed in the cache.
+            //> Get the current bytes in cache and the maximum that would be      
+            //  allowed in the cache.
             break;
         case 5:
             //opts(GIT_OPT_GET_TEMPLATE_PATH, git_buf *out)
-            //> Get the default template path.        > The path is written to the `out` buffer.
+            //> Get the default template path.       
+            //> The path is written to the `out` buffer.
             break;
         default:
             mexErrMsgIdAndTxt("libgit:input_3","libgit.h, option not recognized");
     }
 }
 
-void set_libgit_option(){
+void set_libgit_option(MEX_DEF_INPUT){
    //https://libgit2.github.com/libgit2/#HEAD/group/libgit2/git_libgit2_opts 
     
     //01  GIT_OPT_GET_MWINDOW_SIZE
@@ -156,11 +165,22 @@ void set_libgit_option(){
     }
 }
 
-void get_libgit_version(){
+void get_libgit_version(MEX_DEF_INPUT){
+    int major;
+    int minor;
+    int rev;
+    //void git_libgit2_version(int *major, int *minor, int *rev);
+    git_libgit2_version(&major, &minor, &rev);
+    plhs[0] = mxCreateNumericMatrix(1,3,mxINT32_CLASS,0);
+    int *data = (int *)mxGetData(plhs[0]);
+    *data = major;
+    *(data+1) = minor;
+    *(data+2) = rev;
     
 }
 
 void libgit(MEX_DEF_INPUT){
+    
     int sub_type = (int)mxGetScalar(prhs[1]);
     switch (sub_type) {
         case 0:
@@ -176,6 +196,7 @@ void libgit(MEX_DEF_INPUT){
             break;
         case 3:
             //version
+            get_libgit_version(MEX_INPUT);
             break;
         default:
             mexErrMsgIdAndTxt("libgit:input_2","libgit.h, input sub-type not recognized");
@@ -206,11 +227,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
     
     int type = (int) mxGetScalar(prhs[0]);
     
-    //0 repo
-    //1 remote
-    //2 commit
-    //3 reference
-    //4 libgit
+    //00 repo
+    //01 remote
+    //02 commit
+    //03 reference
+    //04 libgit
+    //05 oid
     
     switch (type) {
         case 0:
@@ -229,7 +251,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
             reference(MEX_INPUT);
             break;
         case 4:
-            
+            libgit(MEX_INPUT);
+            break;
+        case 5:
+            oid(MEX_INPUT);
+            break;
         default:
             mexErrMsgIdAndTxt("libgit:input_1","Input type not recognized");
     }

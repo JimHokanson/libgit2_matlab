@@ -41,7 +41,7 @@ GIT_EXTERN(int) git_repository_new(git_repository **out);
  * deallocation. `git_repository_free` already performs this operation
  * before deallocation the repo.
  */
-GIT_EXTERN(void) git_repository__cleanup(git_repository *repo);
+v
 
 /**
  * Update the filesystem config settings for an open repository

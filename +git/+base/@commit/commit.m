@@ -9,17 +9,67 @@ classdef commit < handle
         h
     end
     
-    properties
-        repo
-        commit_name
+    properties (Dependent)
+        oid
+        encoding
+        message
+        summary
+        time
+        offset_in_min
+        
+        committer %git.base.signature
+        %person that last applied the patch
+        
+        author %git.base.signature
+        %original author
+        
+        header
+        tree_id
     end
     
     methods
-        function obj = commit(repo,commit_name)
+        function value = get.oid(obj)
+            temp = libgit(2,15,obj.h);
+            value = git.base.oid(temp);
+        end
+        function value = get.encoding(obj)
+            value = libgit(2,19,obj.h);
+            if isempty(value)
+                value = 'UTF8';
+            end
+        end
+        function value = get.message(obj)
+            value = libgit(2,18,obj.h);
+        end
+        function value = get.summary(obj)
+            value = libgit(2,27,obj.h);
+        end
+        function value = get.time(obj)
+            value = [];
+        end
+        function value = get.offset_in_min(obj)
+            value = [];
+        end
+        function value = get.committer(obj)
+            temp = libgit(2,4,obj.h);
+            value = git.base.signature(temp);
+        end
+        function value = get.author(obj)
+            value = [];
+        end
+        function value = get.tree_id(obj)
+            value = [];
+        end
+    end
+    
+    methods
+        function obj = commit(repo,oid)
+            %
+            %   obj = git.base.commit(ref)  TODO
+            %
+            %   obj = git.base.commit(repo,oid)
             
-            obj.h = libgit(2,22,repo.h,commit_name);
-            obj.repo = repo;
-            obj.commit_name = commit_name; 
+            obj.h = libgit(2,16,repo.h,oid.h);
         end
     end
     methods
