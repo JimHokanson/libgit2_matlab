@@ -3,6 +3,8 @@
 //https://libgit2.github.com/libgit2/#HEAD/group/blame
 
 void blame_buffer(MEX_DEF_INPUT){
+    //1
+    //
     //Get blame data for a file that has been modified in memory. The 
     //reference parameter is a pre-calculated blame for the in-odb history 
     //of the file. This means that once a file blame is completed //
@@ -12,7 +14,8 @@ void blame_buffer(MEX_DEF_INPUT){
 }
 
 void blame_file(MEX_DEF_INPUT){
-    //1
+    //2
+    //
     //Get the blame for a single file.
     //
     //int git_blame_file(git_blame **out, git_repository *repo, const char *path, git_blame_options *options);
@@ -20,12 +23,16 @@ void blame_file(MEX_DEF_INPUT){
 
 void blame_free(MEX_DEF_INPUT){
     //2
+    //
+    //
+    //
     //void git_blame_free(git_blame *blame);
     
 }
 
 void blame_get_hunk_byindex(MEX_DEF_INPUT){
     //3
+    //
     //Gets the blame hunk at the given index.
     //
    //const git_blame_hunk * git_blame_get_hunk_byindex(git_blame *blame, uint32_t index); 
@@ -33,6 +40,7 @@ void blame_get_hunk_byindex(MEX_DEF_INPUT){
 
 void blame_get_hunk_byline(MEX_DEF_INPUT){
     //4
+    //
     //Gets the hunk that relates to the given line number in the newest commit.
     //
     //const git_blame_hunk * git_blame_get_hunk_byline(git_blame *blame, size_t lineno);
@@ -41,6 +49,7 @@ void blame_get_hunk_byline(MEX_DEF_INPUT){
 
 void blame_get_hunk_count(MEX_DEF_INPUT){
     //5
+    //
     //Gets the number of hunks that exist in the blame structure.
     //
     //uint32_t git_blame_get_hunk_count(git_blame *blame);
@@ -48,6 +57,7 @@ void blame_get_hunk_count(MEX_DEF_INPUT){
 
 void blame_init_options(MEX_DEF_INPUT){
     //6
+    //
     //Initializes a git_blame_options with default values. 
     //Equivalent to creating an instance with GIT_BLAME_OPTIONS_INIT.
     //int git_blame_init_options(git_blame_options *opts, unsigned int version);

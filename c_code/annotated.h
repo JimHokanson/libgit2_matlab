@@ -7,34 +7,52 @@
 
 void annotated_commit_free(MEX_DEF_INPUT){
     //1
+    //
+    //
+    //
     //void git_annotated_commit_free(git_annotated_commit *commit);
 }
 
 void annotated_commit_from_fetchhead(MEX_DEF_INPUT){
     //2
+    //
+    //
+    //
     //int git_annotated_commit_from_fetchhead(git_annotated_commit **out, 
     //git_repository *repo, const char *branch_name, const char *remote_url, const git_oid *id);
 }
 
 void annotated_commit_from_ref(MEX_DEF_INPUT){
     //3
+    //
+    //
+    //
     //int git_annotated_commit_from_ref(git_annotated_commit **out, git_repository *repo, const git_reference *ref);
     
 }
 
 void annotated_commit_from_revspec(MEX_DEF_INPUT){
     //4
+    //
+    //
+    //
     //int git_annotated_commit_from_revspec(git_annotated_commit **out, 
     //git_repository *repo, const char *revspec);
 }
 
 void annotated_commit_id(MEX_DEF_INPUT){
     //5
+    //
+    //
+    //
     //const git_oid * git_annotated_commit_id(const git_annotated_commit *commit);
 }
 
 void annotated_commit_lookup(MEX_DEF_INPUT){
     //6
+    //
+    //
+    //
     //int git_annotated_commit_lookup(git_annotated_commit **out, git_repository *repo, const git_oid *id);
 }
 
