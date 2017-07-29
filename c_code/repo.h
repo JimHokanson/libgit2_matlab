@@ -172,7 +172,7 @@ void repository_head_unborn(MEX_DEF_INPUT){
     //int git_repository_head_unborn(git_repository *repo);
     
     git_repository* repo = mx_to_git_repo(prhs[2]);
-    int out = repository_head_unborn(repo);
+    int out = git_repository_head_unborn(repo);
     handle_error(out,"libgit:repo:repository_head_unborn"); 
     plhs[0] = int32__to_mx(out);
 }
@@ -196,10 +196,10 @@ void repository_index(MEX_DEF_INPUT){
     //int git_repository_index(git_index **out, git_repository *repo);
     
     git_repository* repo = mx_to_git_repo(prhs[2]);
-    git_index *out = NULL:
+    git_index *out = NULL;
     int error = git_repository_index(&out,repo);
     handle_error(error,"libgit:repo:repository_index"); 
-    plhs[0] = get_index__to_mx(out);
+    plhs[0] = git_index__to_mx(out);
     
 }
 

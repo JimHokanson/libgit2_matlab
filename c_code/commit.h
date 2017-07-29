@@ -1,9 +1,3 @@
-#ifdef _WIN32
-#include "windows/git2.h"
-#else
-#include "mac_os/git2.h"
-#endif
-
 #include <stdint.h>
 #include "libgit_utils.h"
 
@@ -20,6 +14,10 @@ void commit_amend(MEX_DEF_INPUT){
 }
 
 void commit_author(MEX_DEF_INPUT){
+    //2
+    //
+    //
+    //
     //const git_signature * git_commit_author(const git_commit *commit);
     git_commit* commit = get_commit_input(prhs[2]);
     const git_signature *s = git_commit_author(commit);
@@ -54,6 +52,15 @@ void commit_create(MEX_DEF_INPUT){
 
 void commit_create_buffer(MEX_DEF_INPUT){
     //6
+    //
+    //Create a commit and write it into a buffer
+    //
+    //int git_commit_create_buffer(git_buf *out, git_repository *repo, 
+    //      const git_signature *author, const git_signature *committer, 
+    //      const char *message_encoding, const char *message, 
+    //      const git_tree *tree, size_t parent_count, const git_commit *[] parents);
+
+
 }
 
 void commit_create_from_callback(MEX_DEF_INPUT){

@@ -25,6 +25,10 @@ classdef reference < handle
         owner %pointer to repo
         shorthand
     end
+    
+
+    
+    
 
     methods
         function value = get.oid(obj)
@@ -37,6 +41,21 @@ classdef reference < handle
         end
         function value = get.shorthand(obj)
             value = libgit2(3,36,obj.h);
+        end
+    end
+    
+    
+    %Constructors
+    %-------------------------------------------------------------------
+    methods (Static)
+        %TODO: Implement these
+        function fromRepoAndName()
+            
+        end
+    end
+    methods (Static,Hidden)
+        function fromRefPointer(h)
+            
         end
     end
     
@@ -60,6 +79,7 @@ classdef reference < handle
             libgit(3,13,obj.h);
         end
     end
+    %-------------------------------------------------------------------
     
 end
 

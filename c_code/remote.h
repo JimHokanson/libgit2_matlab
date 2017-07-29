@@ -1,13 +1,9 @@
-#ifdef _WIN32
-#include "windows/git2.h"
-#else
-#include "mac_os/git2.h"
-#endif
 
 #include <stdint.h>
 #include "libgit_utils.h"
 
 
+//For callbacks to mark parameters as unused
 #ifdef UNUSED
 #elif defined(__GNUC__)
 # define UNUSED(x) UNUSED_ ## x __attribute__((unused))
@@ -30,6 +26,8 @@ int default_remote_callback (git_cred **out,
 {
     //This callback is meant to handle the case where the user 
     //specifies their credentials up front.
+    //
+    //TODO: Document usage
     
     //https://libgit2.github.com/libgit2/#HEAD/group/cred
 
@@ -82,6 +80,14 @@ void remote_connect(MEX_DEF_INPUT){
     //The transport is selected based on the URL. The direction argument is 
     //due to a limitation of the git protocol (over TCP or SSH) which 
     //starts up a specific binary which can only do the one or the other.
+    
+    //Inputs
+    //----------------------
+    //remote
+    //direction : GIT_DIRECTION_FETCH
+    //remote_callbacks : git_remote_callbacks
+    //proxy_options : git_proxy_options
+    //custom_headers : git_strarray
     
     git_remote *remote = mx_to_git_remote(prhs[2]);
     int error = git_remote_connect(remote,GIT_DIRECTION_FETCH,NULL,NULL,NULL);

@@ -15,6 +15,9 @@ classdef repository < sl.obj.display_class
         ref = git.base.reference(repo,'HEAD');
         oid = ref.oid;
         commit = git.base.commit(repo,oid)
+    
+        b = git.base.branch_iterator(repo);
+        
     %}
     
     properties (Hidden)
@@ -46,12 +49,23 @@ classdef repository < sl.obj.display_class
             %call git.mex.repo
             obj.h = libgit(0,30,file_path);
         end
+    end
+    methods
+        function d = getCommonDir(obj)
+            d = libgit(0,2,obj.h);
+        end
+        function c = getConfig(obj)
+            c = [];
+            %c = libgit(0,3,obj.h);
+        end
         function getNamespace(obj)
             %x 
             %TODO
         end
         function list = getRemoteList(obj)
             %x Get list of remotes.
+            %
+            %   Note: 1 is for remotes
             list = libgit(1,21,obj.h);
         end
     end

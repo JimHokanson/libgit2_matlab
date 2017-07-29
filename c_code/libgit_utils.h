@@ -3,7 +3,12 @@
 #ifndef LIBGIT_UTILS_H
 #define LIBGIT_UTILS_H
 
-//#include "git2.h" 
+#ifdef _WIN32
+#include "windows/git2.h"
+#else
+#include "mac_os/git2.h"
+#endif
+
 #include <stdint.h>
 #include <string.h>
 #include "c_to_mx.h"

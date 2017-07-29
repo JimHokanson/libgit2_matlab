@@ -1,5 +1,8 @@
 //c_to_mx.h
 
+
+
+//=========================================================================
 mxArray* int32__to_mx(int v){
     mxArray *out = mxCreateNumericMatrix(1,1,mxINT32_CLASS,mxREAL);
     int *data = (int *)mxGetData(out);
@@ -21,6 +24,25 @@ mxArray* git_oid__to_mx(const git_oid *oid){
     uint8_t *temp = (uint8_t *)mxGetData(output);
     memcpy(temp,oid,sizeof(*oid));
     return output; 
+}
+
+mxArray* git_strarray__to_mx(git_strarray *s,int free_git){
+    
+    //     typedef struct git_strarray {
+    //          char **strings;
+    //          size_t count;
+    //     } git_strarray;
+    
+    mxArray *output = mxCreateCellMatrix(1,s->count);
+    for (size_t i = 0; i < s->count; i++){
+       mxSetCell(output,i,mxCreateString(s->strings[i]));
+    }
+    
+    if (free_git){
+        git_strarray_free(s);
+    }
+    
+    return output;
 }
 
 mxArray* git_time__to_mx(git_time t){
@@ -45,9 +67,22 @@ mxArray* git_time__to_mx(git_time t){
 //     
 // }
 
-mxArray* get_index__to_mx(git_index *out){   
+mxArray* git_branch_iterator__to_mx(git_branch_iterator *out){
     //
-    //  plhs[0] = get_index__to_mx(out)
+    //  plhs[0] = git_branch_iterator__to_mx(out);
+
+    mxArray *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
+
+    int64_t *p;
+    p = (int64_t *) mxGetData(output);
+    *p = (int64_t)out; 
+    return output;
+    
+}
+
+mxArray* git_index__to_mx(git_index *out){   
+    //
+    //  plhs[0] = git_index__to_mx(out)
     //
     
     mxArray *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
@@ -121,28 +156,36 @@ mxArray* git_signature__to_mx(const git_signature *s){
     return output;
 }
 
-mxArray* git_strarray__to_mx(git_strarray *s,int free_git){
-    
-    //     typedef struct git_strarray {
-    //          char **strings;
-    //          size_t count;
-    //     } git_strarray;
-    
-    mxArray *output = mxCreateCellMatrix(1,s->count);
-    for (size_t i = 0; i < s->count; i++){
-       mxSetCell(output,i,mxCreateString(s->strings[i]));
-    }
-    
-    if (free_git){
-        git_strarray_free(s);
-    }
-    
-    return output;
-}
+
 
 
 
 //=========================================================================
+mxArray* git_status_options__to_mx(git_status_options *so){
+    
+    
+    //0 version: unsigned int
+    //1 show: git_status_show_t
+    //2 flags: unsigned
+    //3 pathspec: git_strarray
+    
+    const char *fn[4];
+    fn[0] = "version";                
+    fn[1] = "show";    
+    fn[2] = "flags";
+    fn[3] = "pathspec";
+    
+    mxArray *output;
+    output = mxCreateStructMatrix(1,1,4,fn);
+    mxSetFieldByNumber(output,0,0,uint32__to_mx(so->version));
+    mxSetFieldByNumber(output,0,1,int32__to_mx(so->show));
+    mxSetFieldByNumber(output,0,2,uint32__to_mx(so->flags));
+    
+    //TODO: Not sure if I should clear the strarray
+    mxSetFieldByNumber(output,0,3,git_strarray__to_mx(&(so->pathspec),false));
+    return output;
+    
+}
 
 mxArray* git_proxy_options__to_mx(git_proxy_options *po){
     

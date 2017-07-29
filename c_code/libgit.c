@@ -7,11 +7,13 @@
 #include "mac_os/git2.h"
 #endif
 
+#include "branch.h"
 #include "repo.h"
 #include "remote.h"
 #include "commit.h"
 #include "oid.h"
 #include "reference.h"
+#include "status.h"
 
 
 //which install_name_tool
@@ -233,6 +235,70 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
     //03 reference
     //04 libgit
     //05 oid
+    //
+    //6 annotated
+    //7 attr
+    //8 blame
+    //9 blob
+    //10 branch
+    //11 buf
+    //12 checkout
+    //13 cherrypick
+    //14 clone
+    //x commit
+    //15 config
+    //16 cred
+    //17 describe
+    //18 diff
+    //19 fetch
+    //20 filter
+    //21 giterr
+    //22 graph
+    //23 hashsig
+    //24 ignore
+    //25 index
+    //26 indexer
+    //27 libgit2
+    //28 mempack
+    //29 merge
+    //30 message
+    //31 note
+    //32 object
+    //33 odb
+    //34 oid
+    //35 oidarray
+    //36 openssl
+    //37 packbuilder
+    //38 patch
+    //39 pathspec
+    //40 proxy
+    //41 push
+    //42 rebase
+    //43 refdb
+    //44 reference
+    //45 reflog
+    //46 refspec
+    //47 remote
+    //48 repository
+    //49 reset
+    //50 revert
+    //51 revparse
+    //52 revwalk
+    //53 signature
+    //54 smart
+    //55 stash
+    //56 status
+    //57 strarray
+    //58 stream
+    //59 submodule
+    //60 tag
+    //61 time
+    //62 trace
+    //63 transport
+    //64 tree
+    //65 treebuilder
+    //66 worktree
+    
     
     switch (type) {
         case 0:
@@ -255,6 +321,189 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
             break;
         case 5:
             oid(MEX_INPUT);
+            break;
+        case 6:
+            //annotead(MEX_INPUT);
+            break;
+        case 7:
+            //attr(MEX_INPUT);
+            break;
+        case 8:
+            //blame(MEX_INPUT);
+            break;
+        case 9:
+            //blob(MEX_INPUT);
+            break;
+        case 10:
+            branch(MEX_INPUT);
+            break;
+        case 11:
+            //buf(MEX_INPUT);
+            break;
+        case 12:
+            //checkout(MEX_INPUT);
+            break;
+        case 13:
+            //cherrypick(MEX_INPUT);
+            break;
+        case 14:
+            //clone(MEX_INPUT);
+            break;
+        case 15:
+            //config(MEX_INPUT);
+            break;
+        case 16:
+            //cred(MEX_INPUT);
+            break;
+        case 17:
+            //describe(MEX_INPUT);
+            break;
+        case 18:
+            //diff(MEX_INPUT);
+            break;
+        case 19:
+            //fetch(MEX_INPUT);
+            break;
+        case 20:
+            //filter(MEX_INPUT);
+            break;
+        case 21:
+            //giterr(MEX_INPUT);
+            break;
+        case 22:
+            //graph(MEX_INPUT);
+            break;
+        case 23:
+            //hashsig(MEX_INPUT);
+            break;
+        case 24:
+            //ignore(MEX_INPUT);
+            break;
+        case 25:
+            //index(MEX_INPUT);
+            break;
+        case 26:
+            //indexer(MEX_INPUT);
+            break;
+        case 27:
+            //libgit2(MEX_INPUT);
+            break;
+        case 28:
+            //mempack(MEX_INPUT);
+            break;
+        case 29:
+            //merge(MEX_INPUT);
+            break;
+        case 30:
+            //message(MEX_INPUT);
+            break;
+        case 31:
+            //note(MEX_INPUT);
+            break;
+        case 32:
+            //object(MEX_INPUT);
+            break;
+        case 33:
+            //odb(MEX_INPUT);
+            break;
+        case 34:
+            //oid(MEX_INPUT);
+            break;
+        case 35:
+            //oidarray(MEX_INPUT);
+            break;
+        case 36:
+            //openssl(MEX_INPUT);
+            break;
+        case 37:
+            //packbuilder(MEX_INPUT);
+            break;
+        case 38:
+            //patch(MEX_INPUT);
+            break;
+        case 39:
+            //pathspec(MEX_INPUT);
+            break;
+        case 40:
+            //proxy(MEX_INPUT);
+            break;
+        case 41:
+            //push(MEX_INPUT);
+            break;
+        case 42:
+            //rebase((MEX_INPUT);
+            break;
+        case 43:
+            //refdb(MEX_INPUT);
+            break;
+        case 44:
+            //reference(MEX_INPUT);
+            break;
+        case 45:
+            //reflog(MEX_INPUT);
+            break;
+        case 46:
+            //refspec(MEX_INPUT);
+            break;
+        case 47:
+            //remote(MEX_INPUT);
+            break;
+        case 48:
+            //repository(MEX_INPUT);
+            break;
+        case 49:
+            //reset(MEX_INPUT);
+            break;
+        case 50:
+            //revert(MEX_INPUT);
+            break;
+        case 51:
+            //revparse(MEX_INPUT);
+            break;
+        case 52:
+            //revwalk(MEX_INPUT);
+            break;
+        case 53:
+            //signature(MEX_INPUT);
+            break;
+        case 54:
+            //smart(MEX_INPUT);
+            break;
+        case 55:
+            //stash(MEX_INPUT);
+            break;
+        case 56:
+            status(MEX_INPUT);
+            break;
+        case 57:
+            //strarray(MEX_INPUT);
+            break;
+        case 58:
+            //stream(MEX_INPUT);
+            break;
+        case 59:
+            //submodule(MEX_INPUT);
+            break;
+        case 60:
+            //tag(MEX_INPUT);
+            break;
+        case 61:
+            //time(MEX_INPUT);
+            break;
+        case 62:
+            //trace(MEX_INPUT);
+            break;
+        case 63:
+            //transport(MEX_INPUT);
+            break;
+        case 64:
+            //tree(MEX_INPUT);
+            break;
+        case 65:
+            //treebuilder(MEX_INPUT);
+            break;
+        case 66:
+            //worktree(MEX_INPUT);
             break;
         default:
             mexErrMsgIdAndTxt("libgit:input_1","Input type not recognized");
