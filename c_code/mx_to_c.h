@@ -50,6 +50,17 @@ git_repository* mx_to_git_repo(const mxArray *input){
     return *p_repo;
 }
 
+git_status_list* mx_to_status_list(const mxArray *input){
+    //
+    //   git_status_list* list = mx_to_status_list(prhs[2]);
+    //
+    
+    //TODO: Add pointer check (not 0)
+    
+    git_status_list **p_list = (git_status_list **)mxGetData(input);
+    return *p_list;
+}
+
 git_strarray mx_to_git_strarray(const mxArray *input){
     
 //     typedef struct git_strarray {
@@ -78,6 +89,8 @@ git_strarray mx_to_git_strarray(const mxArray *input){
     return s; 
 }
 
+
+
 void mx_to_git_status_options(const mxArray *input,git_status_options *s){
    
     //unsigned int      version;
@@ -96,8 +109,7 @@ void mx_to_git_status_options(const mxArray *input,git_status_options *s){
     temp = mxGetFieldByNumber(input,0,2);
     s->flags = mx_to_uint32(temp);
     temp = mxGetFieldByNumber(input,0,3);
-    
-    s->pathspec = NULL;
+    s->pathspec = mx_to_git_strarray(temp);
     
 }
 

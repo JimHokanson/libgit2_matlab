@@ -80,6 +80,31 @@ mxArray* git_branch_iterator__to_mx(git_branch_iterator *out){
     
 }
 
+mxArray* git_diff_perfdata__to_mx(git_diff_perfdata *s){
+    //
+    //  plhs[0] = git_diff_perfdata__to_mx(out);
+    //
+    //typedef struct {
+    //      unsigned int version;
+    //      size_t stat_calls; /**< Number of stat() calls performed */
+    //      size_t oid_calculations; /**< Number of ID calculations */
+    // } git_diff_perfdata;
+    
+    const char *fn[3];
+    fn[0] = "version";
+    fn[1] = "stat_calls";
+    fn[2] = "oid_calculations";
+    
+    mxArray *output;
+    output = mxCreateStructMatrix(1,1,3,fn);
+    
+    //JAH TODO: At this point
+    
+    //mxSetFieldByNumber(output,0,0,mxCreateString(s->name));
+    //mxSetFieldByNumber(output,0,1,mxCreateString(s->email));
+    //mxSetFieldByNumber(output,0,2,git_time__to_mx(s->when));      
+}
+
 mxArray* git_index__to_mx(git_index *out){   
     //
     //  plhs[0] = git_index__to_mx(out)
@@ -156,10 +181,19 @@ mxArray* git_signature__to_mx(const git_signature *s){
     return output;
 }
 
-
-
-
-
+mxArray* git_status_list__to_mx(git_status_list *s){
+    //
+    //  plhs[0] = git_status_list__to_mx(out);
+    //
+    
+    mxArray *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
+    
+    int64_t *p;
+    p = (int64_t *) mxGetData(output);
+    *p = (int64_t)s; 
+    return output;
+}
+        
 //=========================================================================
 mxArray* git_status_options__to_mx(git_status_options *so){
     

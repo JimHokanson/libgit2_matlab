@@ -69,23 +69,36 @@ void status_list_entrycount(MEX_DEF_INPUT){
 void status_list_free(MEX_DEF_INPUT){
     //7
     //
+    //  mex(56,7,status_list);
+    //
     //Free an existing status list
     //
     //void git_status_list_free(git_status_list *statuslist);
 
+    git_status_list* list = mx_to_status_list(prhs[2]);
+    git_status_list_free(list);
 
 }
 
 void status_list_get_perfdata(MEX_DEF_INPUT){
     //8
     //
+    //  mex(56,8,status_list);
+    //
     //Get performance data for diffs from a git_status_list
     //
     //int git_status_list_get_perfdata(git_diff_perfdata *out, 
     //      const git_status_list *status);
     
+    
+    
+    const git_status_list* status = mx_to_status_list(prhs[2]);
+    git_diff_perfdata out;
+    int error = git_status_list_get_perfdata(&out, status);
+    handle_error(error,"libgit:status:list_get_perfdata"); 
 
-
+    //JAH: At this point
+    //plhs[0] = git_diff_perfdata__to_mx(out)
 }
 
 void status_list_new(MEX_DEF_INPUT){
@@ -93,22 +106,29 @@ void status_list_new(MEX_DEF_INPUT){
     //
     //  mex(56,9,repo,*opts)
     //
-    //Gather file status information and populate the git_status_list.
+    //  Gather file status information and populate the git_status_list.
     //
     //int git_status_list_new(git_status_list **out, git_repository *repo, 
     //      const git_status_options *opts);
     
-    nlhs, plhs, nrhs, prhs
+    //nlhs, plhs, nrhs, prhs
             
-    git_status_options opts = NULL;
+    int error;
+    git_repository *repo; 
+    git_status_options opts;
     if (nrhs == 4){
-        
+        mx_to_git_status_options(prhs[3],&opts);
     }else if(nrhs == 3){
-        
+        error = git_status_init_options(&opts,GIT_STATUS_OPTIONS_VERSION);
     }else{
-        //Throw error
+        mexErrMsgIdAndTxt("libgit:status:list_new","Incorrect # of inputs");
     }
+    repo = mx_to_git_repo(prhs[3]);
     
+    git_status_list *out = NULL;
+    error = git_status_list_new(&out, repo, &opts);
+    handle_error(error,"libgit:status:list_new"); 
+    plhs[0] = git_status_list__to_mx(out);
 }
 
 void status_should_ignore(MEX_DEF_INPUT){

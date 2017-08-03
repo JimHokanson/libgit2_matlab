@@ -45,10 +45,7 @@ int default_remote_callback (git_cred **out,
 	return error;
 }
 
-
-
-
-
+//=========================================================================
 
 void remote_add_fetch(MEX_DEF_INPUT){
     //1
@@ -139,10 +136,14 @@ void remote_create_with_fetchspec(MEX_DEF_INPUT){
 void remote_default_branch(MEX_DEF_INPUT){
     //9
     //
+    //  mex(1,9,remote);
+    //
     //Retrieve the name of the remote's default branch
     //
     //int git_remote_default_branch(git_buf *out, git_remote *remote);
 
+    git_remote *remote = mx_to_git_remote(prhs[2]);
+    
 }
 
 void remote_delete(MEX_DEF_INPUT){
@@ -161,6 +162,8 @@ void remote_disconnect(MEX_DEF_INPUT){
     //Disconnect from the remote
     //
     //void git_remote_disconnect(git_remote *remote);
+    
+    git_remote *remote = mx_to_git_remote(prhs[2]);
 
 
 }
@@ -186,14 +189,17 @@ void remote_download(MEX_DEF_INPUT){
 void remote_dup(MEX_DEF_INPUT){
     //13
     //
-    //Create a copy of an existing remote. All internal strings are also duplicated. Callbacks are not duplicated.
+    //  Create a copy of an existing remote. All internal strings are 
+    //  also duplicated. 
+    //  Callbacks are not duplicated.
     //
-    //int git_remote_dup(git_remote **dest, git_remote *source);
+    //  int git_remote_dup(git_remote **dest, git_remote *source);
 
 
 }
 
 void remote_fetch(MEX_DEF_INPUT){
+    //14 - HALF DONE
     //
     //  Calling Form:
     //  mex(1,14,remote) 
@@ -203,24 +209,41 @@ void remote_fetch(MEX_DEF_INPUT){
     //int git_remote_fetch(git_remote *remote, const git_strarray *refspecs, 
     //      const git_fetch_options *opts, const char *reflog_message);
     git_remote *remote = mx_to_git_remote(prhs[2]);
+    
+    //TODO: Suport options
+    //
+    //  refspecs
+    //  fetch_options
+    //  reflog_message
+    
+    
     int error = git_remote_fetch(remote,NULL,NULL,NULL);
 }
 
 void remote_free(MEX_DEF_INPUT){
+    //15 - DONE
     //
-  	//Free Remote
-	//mex(1,15,remote_pointer)
+  	//  Free Remote
+	//  mex(1,15,remote_pointer)
+    //
+    
 	git_remote_free(mx_to_git_remote(prhs[2]));
 }
 
 void remote_get_fetch_refspecs(MEX_DEF_INPUT){
     //16
     //
+    //  mex(1,16,remote);
+    //
     //Get the remote's list of fetch refspecs
     //
-    //int git_remote_get_fetch_refspecs(git_strarray *array, const git_remote *remote);
-
-
+    //  int git_remote_get_fetch_refspecs(git_strarray *array, 
+    //              const git_remote *remote);
+    
+    git_remote *remote = mx_to_git_remote(prhs[2]);
+    git_strarray array;
+    int error = git_remote_get_fetch_refspecs(&array,remote);
+    git_strarray__to_mx(&array,true);
 }
 
 void remote_get_push_refspecs(MEX_DEF_INPUT){
@@ -228,7 +251,8 @@ void remote_get_push_refspecs(MEX_DEF_INPUT){
     //
     //Get the remote's list of push refspecs
     //
-    //int git_remote_get_push_refspecs(git_strarray *array, const git_remote *remote);
+    //  int git_remote_get_push_refspecs(git_strarray *array, 
+    //              const git_remote *remote);
 
 
 }
@@ -238,13 +262,16 @@ void remote_get_refspec(MEX_DEF_INPUT){
     //
     //Get a refspec from the remote
     //
-    //const git_refspec * git_remote_get_refspec(const git_remote *remote, size_t n);
+    //  const git_refspec * git_remote_get_refspec(const git_remote *remote, 
+    //              size_t n);
 
 
 }
 
 void remote_init_callbacks(MEX_DEF_INPUT){
     //19
+    //
+    //      mex(1,19,...)
     //
     //Initializes a git_remote_callbacks with default values. Equivalent to 
     //creating an instance with GIT_REMOTE_CALLBACKS_INIT.
@@ -284,9 +311,10 @@ void remote_list(MEX_DEF_INPUT){
 }
 
 void remote_lookup(MEX_DEF_INPUT){
+    //22
     //
-    //  Calling form:
     //  remote = mex(1,22,repo,remote_name);
+    //
     
         
     //int git_remote_lookup(git_remote **out, git_repository *repo, const char *name);
@@ -338,19 +366,25 @@ void remote_ls(MEX_DEF_INPUT){
 void remote_name(MEX_DEF_INPUT){
     //24
     //
-    //Get the remote's name
+    //      name = (1,24,remote)
+    //
+    //      Get the remote's name
     //
     //const char * git_remote_name(const git_remote *remote);
 
-
+    git_remote *remote = mx_to_git_remote(prhs[2]);
+    const char * remote_name = git_remote_name(remote);
+    plhs[0] = mxCreateString(remote_name);
 }
 
 void remote_owner(MEX_DEF_INPUT){
     //25
     //
-    //Get the remote's repository
+    //      mex(1,25,...)
     //
-    //git_repository * git_remote_owner(const git_remote *remote);
+    //      Get the remote's repository
+    //
+    //      git_repository * git_remote_owner(const git_remote *remote);
 
 
 }
