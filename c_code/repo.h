@@ -22,12 +22,14 @@
 // }
 
 void repository_commondir(MEX_DEF_INPUT){
-    //2
+    //2 - DONE
     //
     //  dir = mex(0,2,repo)
     //
     //Get the path of the shared common directory for this repository
     //const char * git_repository_commondir(git_repository *repo);
+    
+    //TODO: Error checking ...
     
     git_repository *repo = mx_to_git_repo(prhs[2]);
     plhs[0] = mxCreateString(git_repository_commondir(repo));
@@ -341,6 +343,8 @@ void repository_odb(MEX_DEF_INPUT){
 void repository_open(MEX_DEF_INPUT){
     //30
     //
+    //  Open a git repository.
+    //
     //  repo = mex(0,30,file_path)
     
     //TODO: Verify file_path
@@ -351,7 +355,10 @@ void repository_open(MEX_DEF_INPUT){
     error = git_repository_open(&repo,file_path);
     handle_error(error,"libgit:repo:repository_open");
 
-    mxFree((void *)file_path);    
+    mxFree((void *)file_path);   
+    
+    //TODO: Change calling format 
+    //plhs[0] = git_repository__to_mx(repo);
     set_repo_output(&plhs[0],repo);
 }
 

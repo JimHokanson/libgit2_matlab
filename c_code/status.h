@@ -5,18 +5,37 @@
 void status_byindex(MEX_DEF_INPUT){
     //1
     //
+    //  status_entry = mex(56,1,list,index)
+    //
     //Get a pointer to one of the entries in the status list.
     //
-    //const git_status_entry * git_status_byindex(git_status_list *statuslist, size_t idx);
+    //const git_status_entry * git_status_byindex(
+    //                              git_status_list *statuslist, size_t idx);
 
+    
+    git_status_list* list = mx_to_status_list(prhs[2]);
+    size_t index = (size_t)mxGetScalar(prhs[3]);
+    const git_status_entry *entry = git_status_byindex(list,index);
+    if (entry == 0){
+        mexErrMsgIdAndTxt("libgit:status:byindex","Index out of range");
+    }
+            
+    plhs[0] = git_status_entry__to_mx(entry);
+    
+    //Pointer to the entry; NULL if out of bounds
+    //The entry is not modifiable and should not be freed.
+    
 }
 
 void status_file(MEX_DEF_INPUT){
     //2
     //
+    //  status_flags = mex(56,2,repo,path);
+    //
     //Get file status for a single file.
     //
-    //int git_status_file(unsigned int *status_flags, git_repository *repo, const char *path);
+    //int git_status_file(unsigned int *status_flags, 
+    //                              git_repository *repo, const char *path);
 
 
 }
@@ -26,7 +45,9 @@ void status_foreach(MEX_DEF_INPUT){
     //
     //Gather file statuses and run a callback for each one.
     //
-    //int git_status_foreach(git_repository *repo, git_status_cb callback, void *payload);
+    //int git_status_foreach(git_repository *repo, 
+    //              git_status_cb callback, void *payload); 
+    //
 }
 
 void status_foreach_ext(MEX_DEF_INPUT){
@@ -34,13 +55,14 @@ void status_foreach_ext(MEX_DEF_INPUT){
     //
     //Gather file status information and run callbacks as requested.
     //
-    //int git_status_foreach_ext(git_repository *repo, const git_status_options *opts, 
-    //  git_status_cb callback, void *payload);
+    //int git_status_foreach_ext(git_repository *repo, 
+    //          const git_status_options *opts, git_status_cb callback, void *payload);
+    //  
 
 }
 
 void status_init_options(MEX_DEF_INPUT){
-    //5
+    //5 - DONE
     //
     //  mex(56,5)
     //
@@ -57,17 +79,25 @@ void status_init_options(MEX_DEF_INPUT){
 }
 
 void status_list_entrycount(MEX_DEF_INPUT){
-    //6
+    //6 - DONE
+    //
+    //  count = cmex(56,6,status_list)
     //
     //Gets the count of status entries in this list.
     //
     //size_t git_status_list_entrycount(git_status_list *statuslist);
 
+    git_status_list *list = mx_to_status_list(prhs[2]);
+    size_t entry_count = git_status_list_entrycount(list);
+    
+    //What does this return when this is not accurate
+    
+    plhs[0] = sizet__to_mx(entry_count);
 
 }
 
 void status_list_free(MEX_DEF_INPUT){
-    //7
+    //7 - DONE
     //
     //  mex(56,7,status_list);
     //
@@ -75,7 +105,7 @@ void status_list_free(MEX_DEF_INPUT){
     //
     //void git_status_list_free(git_status_list *statuslist);
 
-    git_status_list* list = mx_to_status_list(prhs[2]);
+    git_status_list *list = mx_to_status_list(prhs[2]);
     git_status_list_free(list);
 
 }
@@ -91,14 +121,16 @@ void status_list_get_perfdata(MEX_DEF_INPUT){
     //      const git_status_list *status);
     
     
+    //  This requires adding files in the 'sys' folder.
     
-    const git_status_list* status = mx_to_status_list(prhs[2]);
-    git_diff_perfdata out;
-    int error = git_status_list_get_perfdata(&out, status);
-    handle_error(error,"libgit:status:list_get_perfdata"); 
-
-    //JAH: At this point
-    //plhs[0] = git_diff_perfdata__to_mx(out)
+    
+// //     const git_status_list* status = mx_to_status_list(prhs[2]);
+// //     git_diff_perfdata out;
+// //     int error = git_status_list_get_perfdata(&out, status);
+// //     handle_error(error,"libgit:status:list_get_perfdata"); 
+// // 
+// //     //JAH: At this point
+// //     plhs[0] = git_diff_perfdata__to_mx(out);
 }
 
 void status_list_new(MEX_DEF_INPUT){
@@ -115,17 +147,18 @@ void status_list_new(MEX_DEF_INPUT){
             
     int error;
     git_repository *repo; 
-    git_status_options opts;
+    git_status_options opts; //=GIT_STATUS_OPTIONS_INIT;
+    git_status_list *out;
+    
     if (nrhs == 4){
         mx_to_git_status_options(prhs[3],&opts);
     }else if(nrhs == 3){
         error = git_status_init_options(&opts,GIT_STATUS_OPTIONS_VERSION);
+        handle_error(error,"libgit:status:list_new"); 
     }else{
         mexErrMsgIdAndTxt("libgit:status:list_new","Incorrect # of inputs");
     }
-    repo = mx_to_git_repo(prhs[3]);
-    
-    git_status_list *out = NULL;
+    repo = mx_to_git_repo(prhs[2]);
     error = git_status_list_new(&out, repo, &opts);
     handle_error(error,"libgit:status:list_new"); 
     plhs[0] = git_status_list__to_mx(out);

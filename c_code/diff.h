@@ -49,6 +49,10 @@ void diff_commit_as_email(MEX_DEF_INPUT){
     //4
     //
     //Create an e-mail ready patch for a commit.
+    //
+    //int git_diff_commit_as_email(git_buf *out, git_repository *repo, 
+    //      git_commit *commit, size_t patch_no, size_t total_patches, 
+    //      git_diff_format_email_flags_t flags, const git_diff_options *diff_opts);
 
 
 }
@@ -58,12 +62,16 @@ void diff_find_init_options(MEX_DEF_INPUT){
     //
     //Initializes a git_diff_find_options with default values. Equivalent 
     //to creating an instance with GIT_DIFF_FIND_OPTIONS_INIT.
+    //
+    //int git_diff_find_init_options(git_diff_find_options *opts, unsigned int version);
 }
 
 void diff_find_similar(MEX_DEF_INPUT){
     //6
     //
     //Transform a diff marking file renames, copies, etc.
+    //
+    //int git_diff_find_similar(git_diff *diff, const git_diff_find_options *options);
 
 
 }
@@ -72,28 +80,57 @@ void git_diff_foreach(MEX_DEF_INPUT){
     //7
     //
     //Loop over all deltas in a diff issuing callbacks.
+    //
+    //int git_diff_foreach(git_diff *diff, git_diff_file_cb file_cb, 
+    //      git_diff_binary_cb binary_cb, git_diff_hunk_cb hunk_cb, 
+    //      git_diff_line_cb line_cb, void *payload);
 
 
 }
 
 void diff_format_email(MEX_DEF_INPUT){
     //8
+    //
+    //git_diff_format_email
+    //
+    //Create an e-mail ready patch from a diff.
+    //
+    //int git_diff_format_email(git_buf *out, git_diff *diff, 
+    //      const git_diff_format_email_options *opts);
 }
 
 void diff_format_email_init_options(MEX_DEF_INPUT){
     //9
+    //
+    //Initializes a git_diff_format_email_options with default values.
+    //
+    //int git_diff_format_email_init_options(git_diff_format_email_options *opts, 
+    //          unsigned int version);
 }
 
 void diff_free(MEX_DEF_INPUT){
     //10
+    //
+    //Deallocate a diff.
+    //
+    //void git_diff_free(git_diff *diff);
 }
 
 void diff_from_buffer(MEX_DEF_INPUT){
     //11
+    //
+    //Read the contents of a git patch file into a git_diff object.
+    //
+    //int git_diff_from_buffer(git_diff **out, const char *content, size_t content_len);
 }
 
 void diff_get_delta(MEX_DEF_INPUT){
     //12
+    //
+    //Return the diff delta for an entry in the diff list
+    //
+    //const git_diff_delta * git_diff_get_delta(const git_diff *diff, size_t idx);
+
 }
 
 void diff_get_perfdata(MEX_DEF_INPUT){
@@ -102,38 +139,89 @@ void diff_get_perfdata(MEX_DEF_INPUT){
 
 void diff_get_stats(MEX_DEF_INPUT){
     //14
+    //
+    //Accumulate diff statistics for all patches.
+    //
+    //int git_diff_get_stats(git_diff_stats **out, git_diff *diff);
+    
 }
 
 void diff_index_to_index(MEX_DEF_INPUT){
     //15
+    //
+    //Create a diff with the difference between two index objects.
+    //
+    //int git_diff_index_to_index(git_diff **diff, git_repository *repo, 
+    //      git_index *old_index, git_index *new_index, const git_diff_options *opts);
+
 }
 
 void diff_index_to_workdir(MEX_DEF_INPUT){
     //16
+    //
+    //Create a diff between the repository index and the workdir directory.
+    //
+    //int git_diff_index_to_workdir(git_diff **diff, git_repository *repo, 
+    //      git_index *index, const git_diff_options *opts);
+
 }
 
 void diff_init_options(MEX_DEF_INPUT){
     //17
+    //
+    //Initializes a git_diff_options with default values. Equivalent to creating an instance with GIT_DIFF_OPTIONS_INIT.
+    //
+    //int git_diff_init_options(git_diff_options *opts, unsigned int version);
+
 }
 
 void diff_is_sorted_icase(MEX_DEF_INPUT){
     //18
+    //
+    //Check if deltas are sorted case sensitively or insensitively.
+    //
+    //int git_diff_is_sorted_icase(const git_diff *diff);
+
+
 }
 
 void diff_merge(MEX_DEF_INPUT){
     //19
+    //
+    //Merge one diff into another.
+    //
+    //int git_diff_merge(git_diff *onto, const git_diff *from);
+
 }
 
 void diff_num_deltas(MEX_DEF_INPUT){
     //20
+    //
+    //Query how many diff records are there in a diff.
+    //
+    //size_t git_diff_num_deltas(const git_diff *diff);
+
+
 }
 
 void diff_num_deltas_of_type(MEX_DEF_INPUT){
     //21
+    //
+    //Query how many diff deltas are there in a diff filtered by type.
+    //
+    //size_t git_diff_num_deltas_of_type(const git_diff *diff, git_delta_t type);
+
+
 }
 
 void diff_print(MEX_DEF_INPUT){
     //22
+    //
+    //Iterate over a diff generating formatted text output.
+    //
+    //int git_diff_print(git_diff *diff, git_diff_format_t format, 
+    //          git_diff_line_cb print_cb, void *payload);
+
 }
 
 void diff_print_callback__to_buf(MEX_DEF_INPUT){

@@ -49,11 +49,17 @@ int default_remote_callback (git_cred **out,
 
 void remote_add_fetch(MEX_DEF_INPUT){
     //1
+    //
+    //Add a fetch refspec to the remote's configuration
+    //
     //int git_remote_add_fetch(git_repository *repo, const char *remote, const char *refspec);
 }
 
 void remote_add_push(MEX_DEF_INPUT){
     //2
+    //
+    //Add a push refspec to the remote's configuration
+    //
     //int git_remote_add_push(git_repository *repo, const char *remote, const char *refspec);
 }
 
@@ -95,7 +101,7 @@ void remote_connect(MEX_DEF_INPUT){
 void remote_connected(MEX_DEF_INPUT){
     //5
     //
-    //
+    // connected = mex(1,5)
     //
     //int git_remote_connected(const git_remote *remote);
     
@@ -159,12 +165,14 @@ void remote_delete(MEX_DEF_INPUT){
 void remote_disconnect(MEX_DEF_INPUT){
     //11
     //
+    //  
+    //
     //Disconnect from the remote
     //
     //void git_remote_disconnect(git_remote *remote);
     
     git_remote *remote = mx_to_git_remote(prhs[2]);
-
+    git_remote_disconnect(remote);
 
 }
 
@@ -327,6 +335,7 @@ void remote_lookup(MEX_DEF_INPUT){
     
     handle_error(error,"libgit:remote:remote_lookup");
     
+    //TODO: Change format
     set_remote_output(&plhs[0],remote);
     
     mxFree((void *)remote_name);
@@ -380,11 +389,15 @@ void remote_name(MEX_DEF_INPUT){
 void remote_owner(MEX_DEF_INPUT){
     //25
     //
-    //      mex(1,25,...)
+    //  repo = mex(1,25,remote)
     //
     //      Get the remote's repository
     //
     //      git_repository * git_remote_owner(const git_remote *remote);
+
+    git_repository *repo;
+    git_remote *remote = mx_to_git_remote(prhs[2]);
+    repo = git_remote_owner(remote);
 
 
 }

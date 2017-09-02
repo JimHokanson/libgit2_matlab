@@ -4,38 +4,89 @@
 
 void index_add(MEX_DEF_INPUT){
     //1
+    //
+    //Add or update an index entry from an in-memory struct
+    //
+    //int git_index_add(git_index *index, const git_index_entry *source_entry);
+
+
 }
 
 void index_add_all(MEX_DEF_INPUT){
     //2
+    //
+    //Add or update index entries matching files in the working directory.
+    //
+    //int git_index_add_all(git_index *index, const git_strarray *pathspec, 
+    //      unsigned int flags, git_index_matched_path_cb callback, void *payload);
+
 }
 
 void index_add_bypath(MEX_DEF_INPUT){
     //3
+    //
+    //Add or update an index entry from a file on disk
+    //
+    //int git_index_add_bypath(git_index *index, const char *path);
+    
+
 }
 
 void index_add_frombuffer(MEX_DEF_INPUT){
     //4
+    //
+    //Add or update an index entry from a buffer in memory
+    //
+    //int git_index_add_frombuffer(git_index *index, const git_index_entry *entry, 
+    //      const void *buffer, size_t len);
+
+    
 }
 
 void index_caps(MEX_DEF_INPUT){
     //5
+    //
+    //Read index capabilities flags.
+    //
+    //int git_index_caps(const git_index *index);
+
+
 }
 
 void index_checksum(MEX_DEF_INPUT){
     //6
+    //
+    //Get the checksum of the index
+    //
+    //const git_oid * git_index_checksum(git_index *index);
+
 }
 
 void index_clear(MEX_DEF_INPUT){
     //7
+    //
+    //Clear the contents (all the entries) of an index object.
+    //
+    //int git_index_clear(git_index *index);
+    
 }
 
 void index_conflict_add(MEX_DEF_INPUT){
     //8
+    //
+    //Add or update index entries to represent a conflict. Any staged entries that exist at the given paths will be removed.
+    //
+    //int git_index_conflict_add(git_index *index, const git_index_entry *ancestor_entry, 
+    //      const git_index_entry *our_entry, const git_index_entry *their_entry);
 }
 
 void index_conflict_cleanup(MEX_DEF_INPUT){
     //9
+    //
+    //Remove all conflicts in the index (entries with a stage greater than 0).
+    //
+    //int git_index_conflict_cleanup(git_index *index);
+
 }
 
 void index_conflict_get(MEX_DEF_INPUT){
@@ -96,6 +147,11 @@ void index_has_conflicts(MEX_DEF_INPUT){
 
 void index_new(MEX_DEF_INPUT){
     //24
+    //
+    //Create an in-memory index object.
+    //
+    //int git_index_new(git_index **out);
+
 }
 
 void index_open(MEX_DEF_INPUT){

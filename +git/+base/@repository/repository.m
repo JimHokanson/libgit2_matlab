@@ -8,7 +8,12 @@ classdef repository < sl.obj.display_class
         file_path = 'G:\repos\matlab_git\mat_std_lib';
         
         file_path = '/Users/jim/Documents/repos/matlab_git/matlab_standard_library';
+        
+        file_path = '/Users/jim/Documents/repos/matlab_git/libgit2_matlab';
         repo = git.base.repository(file_path);
+    
+        stat_list = git.base.status_list.fromRepo(repo);
+    
         
         remote = repo.lookupRemote('origin');
         list = git.base.remote.getList(repo);
@@ -67,6 +72,9 @@ classdef repository < sl.obj.display_class
             %
             %   Note: 1 is for remotes
             list = libgit(1,21,obj.h);
+        end
+        function list = getReferenceList(obj)
+            list = libgit(3,23,obj.h);
         end
     end
     methods (Hidden)

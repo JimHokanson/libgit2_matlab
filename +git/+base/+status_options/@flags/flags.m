@@ -42,9 +42,7 @@ classdef flags < handle
     
     methods (Static)
         function str = toString(value)
-            str = '';
-            %TODO: Use meta to get propertis and convert bits
-            %to property strings
+            str = git.utils.enumToString('git.base.status_options.flags',value);
         end
     end
     

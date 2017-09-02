@@ -8,7 +8,9 @@ classdef status_options < handle
         show %git.base.status_options.status_show
 
         flags %git.base.status_options.flags
+        
         pathspec %cellstr
+        %TODO: Document this property
     end
     
     methods
