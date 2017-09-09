@@ -87,7 +87,11 @@ void repository_fetchhead_foreach(MEX_DEF_INPUT){
 
 void repository_free(MEX_DEF_INPUT){
     //8
+    //
+    //  mex(0,8,repo)
+    //
     //  Free repository
+    //
             //  mex(0,8,repo_pointer)
             //TODO: Verify repo pointer
             //TODO: Check for input not being zero
@@ -123,6 +127,8 @@ void repository_hashfile(MEX_DEF_INPUT){
 void repository_head(MEX_DEF_INPUT){
     //11
     //
+    //  reference = mex(0,11,repo)
+    //
     //Retrieve and resolve the reference pointed at by HEAD.
     //
     //int git_repository_head(git_reference **out, git_repository *repo);
@@ -138,21 +144,16 @@ void repository_head(MEX_DEF_INPUT){
 void repository_head_detached(MEX_DEF_INPUT){
     //12
     //
-    //  out = mex(0,12,repo);
+    //  detached = mex(0,12,repo);
     //
     //Check if a repository's HEAD is detached
     //
     //int git_repository_head_detached(git_repository *repo);
     
-    //TODO: handle possible error code
-    //=> 1 - yes
-    //=> 0 - no
-    
-    
     git_repository* repo = mx_to_git_repo(prhs[2]);
-    int shallow = git_repository_is_empty(repo);
-    handle_error(shallow,"libgit:repo:repository_head_detached"); 
-    plhs[0] = int32__to_mx(shallow);
+    int response = git_repository_head_detached(repo);
+    handle_error(response,"libgit:repo:repository_head_detached"); 
+    plhs[0] = int32__to_mx(response);
 }
 
 void repository_head_for_worktree(MEX_DEF_INPUT){
@@ -169,14 +170,16 @@ void repository_head_for_worktree(MEX_DEF_INPUT){
 void repository_head_unborn(MEX_DEF_INPUT){
     //14
     //
+    //  unborn = mex(0,14,repo)
+    //
     //Check if the current branch is unborn
     //
     //int git_repository_head_unborn(git_repository *repo);
     
     git_repository* repo = mx_to_git_repo(prhs[2]);
-    int out = git_repository_head_unborn(repo);
-    handle_error(out,"libgit:repo:repository_head_unborn"); 
-    plhs[0] = int32__to_mx(out);
+    int response = git_repository_head_unborn(repo);
+    handle_error(response,"libgit:repo:repository_head_unborn"); 
+    plhs[0] = int32__to_mx(response);
 }
 
 void repository_ident(MEX_DEF_INPUT){
@@ -202,7 +205,6 @@ void repository_index(MEX_DEF_INPUT){
     int error = git_repository_index(&out,repo);
     handle_error(error,"libgit:repo:repository_index"); 
     plhs[0] = git_index__to_mx(out);
-    
 }
 
 void repository_init(MEX_DEF_INPUT){
@@ -310,9 +312,6 @@ void repository_message(MEX_DEF_INPUT){
     //
     //int git_repository_message(git_buf *out, git_repository *repo);
     
-    
-    
-    
 }
 
 void repository_message_remove(MEX_DEF_INPUT){
@@ -347,7 +346,7 @@ void repository_open(MEX_DEF_INPUT){
     //
     //  repo = mex(0,30,file_path)
     
-    //TODO: Verify file_path
+    //TODO: Verify file_path as char
     int error;
     git_repository *repo = NULL;
     
@@ -357,9 +356,7 @@ void repository_open(MEX_DEF_INPUT){
 
     mxFree((void *)file_path);   
     
-    //TODO: Change calling format 
-    //plhs[0] = git_repository__to_mx(repo);
-    set_repo_output(&plhs[0],repo);
+    plhs[0] = git_repository__to_mx(repo);
 }
 
 void repository_open_bare(MEX_DEF_INPUT){

@@ -11,6 +11,7 @@
 #include "repo.h"
 #include "remote.h"
 #include "commit.h"
+#include "object.h"
 #include "oid.h"
 #include "reference.h"
 #include "status.h"
@@ -401,7 +402,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
             //note(MEX_INPUT);
             break;
         case 32:
-            //object(MEX_INPUT);
+            object(MEX_INPUT);
             break;
         case 33:
             //odb(MEX_INPUT);

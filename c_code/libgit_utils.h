@@ -41,15 +41,6 @@ git_oid* get_oid_input(const mxArray *input){
     
 }
 
-git_commit* get_commit_input(const mxArray *input){
-    //
-    //   git_commit* commit = get_commit_input(prhs[2]);
-    //
-    
-    git_commit **p_ref = (git_commit **)mxGetData(input);
-    return *p_ref;
-}
-
 //Output Handling
 //----------------------------------------------
 //TODO: Make this a macro
@@ -81,31 +72,6 @@ void set_remote_output(mxArray **output, git_remote *remote){
     p = (int64_t *) mxGetData(*output);
     *p = (int64_t)remote; 
 }
-
-void set_reference_output(mxArray **output, git_reference *ref){   
-    //
-    //  set_reference_output(&plhs[0],ref);
-    //
-    
-    *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
-
-    int64_t *p;
-    p = (int64_t *) mxGetData(*output);
-    *p = (int64_t)ref; 
-}
-
-void set_commit_output(mxArray **output, git_commit *commit){
-    //
-    //  set_reference_output(&plhs[0],commit);
-    //
-    
-    *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
-
-    int64_t *p;
-    p = (int64_t *) mxGetData(*output);
-    *p = (int64_t)commit; 
-}
-
 
 //TODO: Move into c_to_mx
 void set_signature_out(mxArray **output, const git_signature *s){

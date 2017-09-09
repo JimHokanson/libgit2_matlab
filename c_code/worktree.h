@@ -2,7 +2,7 @@
 
 //https://libgit2.github.com/libgit2/#HEAD/group/config
 
-void config(MEX_DEF_INPUT)
+void worktree(MEX_DEF_INPUT)
 {
         
     int sub_type = (int)mxGetScalar(prhs[1]);
@@ -33,73 +33,23 @@ void config(MEX_DEF_INPUT)
             break;
         case 13:
             break;
-        case 14:
-            break;
-        case 15:
-            break;
-        case 16:
-            break;
-        case 17:
-            break;
-        case 18:
-            break;
-        case 19:
-            break;
-        case 20:
-            break;
-        case 21:
-            break;
-        case 22:
-            break;
-        case 23:
-            break;
-        case 24:
-            break;
-        case 25:
-            break;
-        case 26:
-            break;
-        case 27:
-            break;
-        case 28:
-            break;
-        case 29:
-            break;
-        case 30:          
-            break;
-        case 31:
-            break;
-        case 32:
-            break;
-        case 33:
-            break;
-        case 34:
-            break;
-        case 35:
-            break;
-        case 36:
-            break;
-        case 37:
-            break;
-        case 38:
-            break;
-        case 39:
-            break;
-        case 40:
-            break;
-        case 41:
-            break;
-        case 42:
-            break;
-        case 43:
-            break;
-        case 44:
-            break;
-        case 45:
-            break;
-        case 46:
-            break;
         default:
-            mexErrMsgIdAndTxt("libgit:input_2","config.h, input sub-type not recognized");
+            mexErrMsgIdAndTxt("libgit:input_2","worktree.h, input sub-type not recognized");
     }
 }
+
+//1 git_worktree_add
+//2 git_worktree_add_init_options
+//3 git_worktree_free
+//4 git_worktree_is_locked
+//5 git_worktree_is_prunable
+//6 git_worktree_list
+//7 git_worktree_lock
+//8 git_worktree_lookup
+//9 git_worktree_open_from_repository
+//10 git_worktree_prune
+//11 git_worktree_prune_init_options
+//12 git_worktree_unlock
+//13 git_worktree_validate
+
+

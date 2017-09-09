@@ -217,11 +217,10 @@ void reference_lookup(MEX_DEF_INPUT){
     
     git_reference *ref = NULL;
     int error = git_reference_lookup(&ref, repo, ref_name);
-    
+    mxFree((void *)ref_name);
     handle_error(error,"libgit:reference:reference_lookup");
     
-    set_reference_output(&plhs[0],ref);
-    mxFree((void *)ref_name);
+    plhs[0] = git_reference__to_mx(ref);
 }
 
 void reference_name(MEX_DEF_INPUT){
@@ -233,9 +232,7 @@ void reference_name(MEX_DEF_INPUT){
     //  const char * git_reference_name(const git_reference *ref);
 
     git_reference *ref = get_reference_input(prhs[2]);
-
     const char *str = git_reference_name(ref);
-    
     plhs[0] = string__to_mx(str);
 
 }

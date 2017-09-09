@@ -9,6 +9,13 @@
 #endif
 
 
+#define RETURN_POINTER \
+    mxArray *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL); \
+    int64_t *p; \
+    p = (int64_t *) mxGetData(output); \
+    *p = (int64_t)out; \
+    return output;
+
 //=========================================================================
 mxArray* string__to_mx(const char *s){
     return mxCreateString(s);
@@ -98,22 +105,6 @@ mxArray* git_time__to_mx(git_time t){
 //=========================================================================
 
 
-// mxArray* git_remote__to_mx(const git_remote *r){
-//     
-// }
-
-mxArray* git_branch_iterator__to_mx(git_branch_iterator *out){
-    //
-    //  plhs[0] = git_branch_iterator__to_mx(out);
-
-    mxArray *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
-
-    int64_t *p;
-    p = (int64_t *) mxGetData(output);
-    *p = (int64_t)out; 
-    return output;
-    
-}
 
 //https://stackoverflow.com/questions/45646167/use-of-undeclared-identifier-git-diff-perfdata-with-libgit2
 //
@@ -141,31 +132,48 @@ mxArray* git_branch_iterator__to_mx(git_branch_iterator *out){
 // // //     //mxSetFieldByNumber(output,0,1,mxCreateString(s->email));
 // // //     //mxSetFieldByNumber(output,0,2,git_time__to_mx(s->when));      
 // // // }
+mxArray* git_branch_iterator__to_mx(git_branch_iterator *out){
+    //  plhs[0] = git_branch_iterator__to_mx(out);
 
-mxArray* git_index__to_mx(git_index *out){   
-    //
-    //  plhs[0] = git_index__to_mx(out)
-    //
-    
-    mxArray *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
-
-    int64_t *p;
-    p = (int64_t *) mxGetData(output);
-    *p = (int64_t)out; 
-    return output;
+    RETURN_POINTER;   
 }
 
-mxArray* git_reference__to_mx(git_reference *ref){   
+mxArray* git_commit__to_mx(git_commit *out){
+    //  plhs[0] = git_commit__to_mx(out);
+    
+    RETURN_POINTER;
+}
+
+mxArray* git_index__to_mx(git_index *out){   
+    //  plhs[0] = git_index__to_mx(out)
+    
+    RETURN_POINTER;
+}
+
+mxArray* git_object__to_mx(git_object *out){   
+    //  plhs[0] = git_object__to_mx(out)
+    
+    RETURN_POINTER;
+}
+
+mxArray* git_reference__to_mx(git_reference *out){   
+    //  plhs[0] = git_reference__to_mx(ref)
+    
+    RETURN_POINTER;
+}
+
+mxArray* git_repository__to_mx(git_repository *out){
+    //  plhs[0] = git_repository__to_mx(ref)
+    
+    RETURN_POINTER;    
+}
+
+mxArray* git_status_list__to_mx(git_status_list *out){
     //
-    //  plhs[0] = get_reference__to_mx(ref)
+    //  plhs[0] = git_status_list__to_mx(out);
     //
     
-    mxArray *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
-
-    int64_t *p;
-    p = (int64_t *) mxGetData(output);
-    *p = (int64_t)ref; 
-    return output;
+    RETURN_POINTER;
 }
 
 mxArray* git_remote_head__to_mx(const git_remote_head **refs, size_t size){
@@ -344,18 +352,7 @@ mxArray* git_status_entry__to_mx(const git_status_entry *s){
     
 }
 
-mxArray* git_status_list__to_mx(git_status_list *s){
-    //
-    //  plhs[0] = git_status_list__to_mx(out);
-    //
-    
-    mxArray *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
-    
-    int64_t *p;
-    p = (int64_t *) mxGetData(output);
-    *p = (int64_t)s; 
-    return output;
-}
+
         
 //=========================================================================
 mxArray* git_status_options__to_mx(git_status_options *so){

@@ -2,7 +2,7 @@
 
 //https://libgit2.github.com/libgit2/#HEAD/group/config
 
-void config(MEX_DEF_INPUT)
+void revwalk(MEX_DEF_INPUT)
 {
         
     int sub_type = (int)mxGetScalar(prhs[1]);

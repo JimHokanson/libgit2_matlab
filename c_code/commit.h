@@ -19,23 +19,23 @@ void commit_author(MEX_DEF_INPUT){
     //
     //
     //const git_signature * git_commit_author(const git_commit *commit);
-    git_commit* commit = get_commit_input(prhs[2]);
+    git_commit* commit = mx_to_git_commit(prhs[2]);
     const git_signature *s = git_commit_author(commit);
     set_signature_out(&plhs[0],s);
 }
 
 void commit_body(MEX_DEF_INPUT){
     //const char * git_commit_body(git_commit *commit);
-    git_commit* commit = get_commit_input(prhs[2]);
+    git_commit* commit = mx_to_git_commit(prhs[2]);
     const char *body = git_commit_body(commit);
-    plhs[0] = mxCreateString(body);
+    plhs[0] = string__to_mx(body);
 }
 
 void commit_committer(MEX_DEF_INPUT){
     //4
     //
     //const git_signature * git_commit_committer(const git_commit *commit);
-    git_commit* commit = get_commit_input(prhs[2]);
+    git_commit* commit = mx_to_git_commit(prhs[2]);
     const git_signature *s = git_commit_committer(commit);
     set_signature_out(&plhs[0],s);
 }
@@ -65,14 +65,25 @@ void commit_create_buffer(MEX_DEF_INPUT){
 
 void commit_create_from_callback(MEX_DEF_INPUT){
     //7
+    //
+    //int git_commit_create_from_callback(git_oid *id, git_repository *repo, const char *update_ref, const git_signature *author, const git_signature *committer, const char *message_encoding, const char *message, const git_oid *tree, git_commit_parent_callback parent_cb, void *parent_payload);
 }
 
 void commit_create_from_ids(MEX_DEF_INPUT){
     //8
+    //
+    //Create new commit in the repository from a list of git_oid values.
+    //
+    //int git_commit_create_from_ids(git_oid *id, git_repository *repo, const char *update_ref, const git_signature *author, const git_signature *committer, const char *message_encoding, const char *message, const git_oid *tree, size_t parent_count, const git_oid *[] parents);
+
 }
 
 void commit_create_v(MEX_DEF_INPUT){
     //9
+    //
+    //Create new commit in the repository using a variable argument list.
+
+
 }
 
 void commit_create_with_signature(MEX_DEF_INPUT){
@@ -85,25 +96,40 @@ void commit_dup(MEX_DEF_INPUT){
 
 void commit_extract_signature(MEX_DEF_INPUT){
     //12
+    //
+    //Extract the signature from a commit
+    //
+    //int git_commit_extract_signature(git_buf *signature, git_buf *signed_data, git_repository *repo, git_oid *commit_id, const char *field);
+
 }
 
 void commit_free(MEX_DEF_INPUT){
     //13
     //
     //  Calling form:
-    //  commit = mex(2,13,repo,oid);
-    git_commit *commit = get_commit_input(prhs[2]);
+    //  commit = mex(2,13,commit);
+    
+    //TODO: Change this calling format
+    git_commit *commit = mx_to_git_commit(prhs[2]);
+    
+    //TODO: Make the actual free call
 }
 
 void commit_header_field(MEX_DEF_INPUT){
     //14
+    //
+    //Get an arbitrary header field
+    //
+    //int git_commit_header_field(git_buf *out, const git_commit *commit, const char *field);
+
 }
 
 void commit_id(MEX_DEF_INPUT){
     //15
     //
     //const git_oid * git_commit_id(const git_commit *commit);
-    git_commit* commit = get_commit_input(prhs[2]);
+    
+    git_commit* commit = mx_to_git_commit(prhs[2]);
     const git_oid *oid = git_commit_id(commit);
     plhs[0] = git_oid__to_mx(oid);
 }
@@ -114,59 +140,130 @@ void commit_lookup(MEX_DEF_INPUT){
     //
     //  Calling form:
     //  commit = mex(2,22,repo,oid);
+    //  
+    //int git_commit_lookup(git_commit **commit, git_repository *repo, const git_oid *id);
     
-        
-    //int git_commit_lookup(git_commit **commit, git_repository *repo, const git_oid *id);    int error;
     git_repository *repo = mx_to_git_repo(prhs[2]);
     const git_oid *oid = get_oid_input(prhs[3]);
     git_commit *commit = NULL;
     int error = git_commit_lookup(&commit,repo,oid);
-    
-    handle_error(error,"libgit:remote:lookup_remote");
-    set_commit_output(&plhs[0],commit);
+    handle_error(error,"libgit:commit:commit_lookup");    
+    plhs[0] = git_commit__to_mx(commit);
 }
 
 void commit_lookup_prefix(MEX_DEF_INPUT){
     //17
+    //
+    //Lookup a commit object from a repository, given a prefix of its identifier (short id).
+    //
+    //int git_commit_lookup_prefix(git_commit **commit, git_repository *repo, const git_oid *id, size_t len);
+    //
+    //  size_t len - length of the short identifier ...
+    //
+
 }
 
 void commit_message(MEX_DEF_INPUT){
     //18
     //
+    //Get the full message of a commit.
+    //
+    //  message = mex(2,18,commit);
+    //
     //const char * git_commit_message(const git_commit *commit);
-    git_commit* commit = get_commit_input(prhs[2]);
-    const char *body = git_commit_message(commit);
-    plhs[0] = mxCreateString(body);
+    
+    if (nrhs != 3){
+        mexErrMsgIdAndTxt("libgit:commit:commit_message","Incorrect # of inputs, 3 expected");
+    }
+    
+    git_commit* commit = mx_to_git_commit(prhs[2]);
+    const char *body = git_commit_message(commit);    
+    plhs[0] = string__to_mx(body);
 }
 
 void commit_message_encoding(MEX_DEF_INPUT){
     //19
     //
+    //  encoding = mex(2,19,commit);
+    //
+    //Get the encoding for the message of a commit, as a string representing a standard encoding name.
+    //
+    //  If null, then UTF-8
+    //
     //const char * git_commit_message_encoding(const git_commit *commit);
-    git_commit* commit = get_commit_input(prhs[2]);
-    const char *body = git_commit_message_encoding(commit);
-    plhs[0] = mxCreateString(body);
+    
+    git_commit* commit = mx_to_git_commit(prhs[2]);
+    const char *encoding = git_commit_message_encoding(commit);
+    plhs[0] = string__to_mx(encoding);
 }
 
 void commit_message_raw(MEX_DEF_INPUT){
     //20
     //
+    //Get the full raw message of a commit.
+    //
+    //  message = mex(2,20,commit)
+    //
     //const char * git_commit_message_raw(const git_commit *commit);
-    git_commit* commit = get_commit_input(prhs[2]);
+    
+    git_commit* commit = mx_to_git_commit(prhs[2]);
     const char *body = git_commit_message_raw(commit);
-    plhs[0] = mxCreateString(body);
+    plhs[0] = string__to_mx(body);
 }
 
 void commit_nth_gen_ancestor(MEX_DEF_INPUT){
     //21
+    //
+    //  ancestor = mex(2,21,commit,n)
+    //
+    //Get the commit object that is the <n
+    //
+    //int git_commit_nth_gen_ancestor(git_commit **ancestor, const git_commit *commit, unsigned int n);
+    
+    if (nrhs != 4){
+        mexErrMsgIdAndTxt("libgit:commit:nth_gen_ancestor","Incorrect # of inputs, 4 expected");
+    }
+    
+    git_commit* commit = mx_to_git_commit(prhs[2]);
+    git_commit* ancestor = NULL;
+    
+    if (!mxIsClass(prhs[3],"double")){
+    	mexErrMsgIdAndTxt("libgit:commit:nth_gen_ancestor","4th input must be of type double");
+    }
+    
+    double n = mxGetScalar(prhs[3]);
+    int error = git_commit_nth_gen_ancestor(&ancestor,commit,(unsigned int)n);
+    handle_error(error,"libgit:commit:nth_gen_ancestor");
+    plhs[0] = git_commit__to_mx(ancestor);
 }
 
 void commit_owner(MEX_DEF_INPUT){
     //22
+    //
+    //  repo = mex(2,22,commit)
+    //
+    //Get the repository that contains the commit.
+    //
+    //git_repository * git_commit_owner(const git_commit *commit);
+
+    if (nrhs != 4){
+        mexErrMsgIdAndTxt("libgit:commit:commit_owner","Incorrect # of inputs, 3 expected");
+    }
+    
+    git_commit* commit = mx_to_git_commit(prhs[2]);
+    
+    git_repository* repo = git_commit_owner(commit);
+    
+    //TODO: Can this throw an error? repo be null?
+    plhs[0] = git_repository__to_mx(repo);
 }
 
 void commit_parent(MEX_DEF_INPUT){
     //23
+    //
+    //Get the specified parent of the commit.
+
+
 }
 
 void commit_parent_id(MEX_DEF_INPUT){
@@ -185,9 +282,9 @@ void commit_summary(MEX_DEF_INPUT){
     //27
     //
     //const char * git_commit_summary(git_commit *commit);
-    git_commit* commit = get_commit_input(prhs[2]);
+    git_commit* commit = mx_to_git_commit(prhs[2]);
     const char *summary = git_commit_summary(commit);
-    plhs[0] = mxCreateString(summary);
+    plhs[0] = string__to_mx(summary);
 }
 
 void commit_time(MEX_DEF_INPUT){
@@ -214,7 +311,7 @@ void commit_tree_id(MEX_DEF_INPUT){
 
 void commit(MEX_DEF_INPUT)
 {
-    int error;
+    int response;
     int sub_type = (int)mxGetScalar(prhs[1]);
     
     switch (sub_type) {

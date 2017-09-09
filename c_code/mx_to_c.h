@@ -20,6 +20,27 @@ git_branch_iterator* mx_to_git_branch_iterator(const mxArray *input){
     git_branch_iterator **i = (git_branch_iterator **)mxGetData(input);
     return *i;
 }
+
+git_oid* mx_to_git_oid(const mxArray *input){
+    //oid is a byte array
+    
+    //size_t mxGetN(const mxArray *pm);
+
+    git_oid *data = (git_oid *)mxGetData(input);
+    git_oid *temp;
+    temp = mxMalloc(sizeof(*temp));
+    memcpy(temp,data,sizeof(*temp));
+    
+    return temp;
+    
+    //c to mx code
+    //
+    //mxArray *output = mxCreateNumericMatrix(1,sizeof(*oid),mxUINT8_CLASS,mxREAL);
+    //uint8_t *temp = (uint8_t *)mxGetData(output);
+    //memcpy(temp,oid,sizeof(*oid));
+    //return output; 
+    
+}
     
 git_reference* mx_to_git_ref(const mxArray *input){
     //
@@ -87,6 +108,27 @@ git_strarray mx_to_git_strarray(const mxArray *input){
     s.count = count;
     
     return s; 
+}
+
+git_otype mx_to_git_otype(const mxArray *input){
+
+    //verify double
+    
+    if (~mxIsClass(input,"double")){
+        mexErrMsgIdAndTxt("libgit2:mx_to_git_otype",
+                "Input type for object type was not double as expected");
+    }
+    
+    return (git_otype)mxGetScalar(input);
+}
+
+git_commit* mx_to_git_commit(const mxArray *input){
+    //
+    //   git_commit* commit = mx_to_git_commit(prhs[2]);
+    //
+    
+    git_commit **p_ref = (git_commit **)mxGetData(input);
+    return *p_ref;
 }
 
 

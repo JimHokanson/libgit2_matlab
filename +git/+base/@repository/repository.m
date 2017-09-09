@@ -50,6 +50,7 @@ classdef repository < sl.obj.display_class
             %
             %   obj = git.base.repository(file_path)
             
+            %TODO: Change this
             obj.file_path = file_path;
             %call git.mex.repo
             obj.h = libgit(0,30,file_path);
@@ -74,7 +75,18 @@ classdef repository < sl.obj.display_class
             list = libgit(1,21,obj.h);
         end
         function list = getReferenceList(obj)
+            %
+            %   Output
+            %   ------
+            %   list : cellstr
+            %   
+            
             list = libgit(3,23,obj.h);
+        end
+        function ref = getReference(obj,name)
+            %git.base.reference
+            
+            ref = git.base.reference.fromRepoAndName(obj,name);
         end
     end
     methods (Hidden)

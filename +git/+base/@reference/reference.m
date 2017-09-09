@@ -21,24 +21,34 @@ classdef reference < handle
         is_remote
         is_tag
         is_valid_name
-        oid %object
-        owner %pointer to repo
         shorthand
     end
     
-
+%     properties
+%         oid %object
+%         owner %pointer to repo
+%     end
+    
+    methods
+        function value = get.has_log(obj)
+            
+        end
+        function value = get.is_branch(obj)
+            
+        end
+    end
     
     
 
     methods
-        function value = get.oid(obj)
-            temp = libgit(3,26,obj.repo.h,obj.ref_name);
-            %This may change
-            value = git.base.oid(temp);
-        end
-        function value = get.owner(obj)
-            value = obj.repo;
-        end
+%         function value = get.oid(obj)
+%             temp = libgit(3,26,obj.repo.h,obj.ref_name);
+%             %This may change
+%             value = git.base.oid(temp);
+%         end
+%         function value = get.owner(obj)
+%             value = obj.repo;
+%         end
         function value = get.shorthand(obj)
             value = libgit2(3,36,obj.h);
         end
@@ -48,19 +58,22 @@ classdef reference < handle
     %Constructors
     %-------------------------------------------------------------------
     methods (Static)
-        %TODO: Implement these
-        function fromRepoAndName()
+        function ref = fromRepoAndName(repo,ref_name)
+            %
+            %   ref = git.base.reference.fromRepoAndName(repo,ref_name)
             
+            h = libgit(3,24,repo.h,ref_name);
+            ref = git.base.reference(h);
         end
     end
     methods (Static,Hidden)
-        function fromRefPointer(h)
-            
+        function ref = fromRefPointer(h)
+            ref = git.base.reference(h);
         end
     end
     
     methods
-        function obj = reference(repo,ref_name)
+        function obj = reference(h)
             %
             %   obj = git.base.reference(repo,ref_name)
             %
@@ -69,9 +82,7 @@ classdef reference < handle
             %   ref_name : string
             %       e.g. HEAD, refs/heads/master, refs/tags/v0.1.0, 
             
-            obj.h = libgit(3,24,repo.h,ref_name);
-            obj.repo = repo;
-            obj.ref_name = ref_name;
+            obj.h = h;
         end
     end
     methods
