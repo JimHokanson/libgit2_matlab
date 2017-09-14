@@ -58,18 +58,29 @@ classdef commit < handle
             value = [];
         end
         function value = get.tree_id(obj)
-            value = [];
+            value = libgit(2,31,obj.h);
+        end
+    end
+    
+    methods (Static)
+        function commit = fromRepoAndID(repo,oid)
+            h = libgit(2,16,repo.h,oid.h);
+            commit = git.base.commit(h);
         end
     end
     
     methods
-        function obj = commit(repo,oid)
+        function obj = commit(commit_h)
             %
             %   obj = git.base.commit(ref)  TODO
             %
             %   obj = git.base.commit(repo,oid)
             
-            obj.h = libgit(2,16,repo.h,oid.h);
+            obj.h = commit_h;
+        end
+        function tree = getTree(obj)
+            tree_h = libgit(2,30,obj.h);
+            tree = git.base.tree(tree_h);
         end
     end
     methods

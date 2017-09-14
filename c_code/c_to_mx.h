@@ -59,8 +59,9 @@ mxArray* git_off_t__to_mx(git_off_t t){
 }
 
 mxArray* git_oid__to_mx(const git_oid *oid){
-    //
     //  oid is a byte array
+    
+    //TODO: Check for null
    
     mxArray *output = mxCreateNumericMatrix(1,sizeof(*oid),mxUINT8_CLASS,mxREAL);
     uint8_t *temp = (uint8_t *)mxGetData(output);
@@ -169,12 +170,20 @@ mxArray* git_repository__to_mx(git_repository *out){
 }
 
 mxArray* git_status_list__to_mx(git_status_list *out){
-    //
     //  plhs[0] = git_status_list__to_mx(out);
     //
     
     RETURN_POINTER;
 }
+
+mxArray* git_tree_list__to_mx(git_tree *out){
+    //  plhs[0] = git_tree_list__to_mx(out);
+    //
+    
+    RETURN_POINTER;
+}
+
+//-------------------------------------------------------------------------
 
 mxArray* git_remote_head__to_mx(const git_remote_head **refs, size_t size){
 //     int	local

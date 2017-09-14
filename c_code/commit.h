@@ -212,11 +212,13 @@ void commit_message_raw(MEX_DEF_INPUT){
 }
 
 void commit_nth_gen_ancestor(MEX_DEF_INPUT){
-    //21
+    //21 - Get the commit object that is the <nth generation ancestor of the 
+    //  named commit object, following only the first parents. The returned 
+    //  commit has to be freed by the caller.
     //
     //  ancestor = mex(2,21,commit,n)
     //
-    //Get the commit object that is the <n
+    //
     //
     //int git_commit_nth_gen_ancestor(git_commit **ancestor, const git_commit *commit, unsigned int n);
     
@@ -238,16 +240,14 @@ void commit_nth_gen_ancestor(MEX_DEF_INPUT){
 }
 
 void commit_owner(MEX_DEF_INPUT){
-    //22
+    //22 - Get the repository that contains the commit.
     //
     //  repo = mex(2,22,commit)
-    //
-    //Get the repository that contains the commit.
     //
     //git_repository * git_commit_owner(const git_commit *commit);
 
     if (nrhs != 4){
-        mexErrMsgIdAndTxt("libgit:commit:commit_owner","Incorrect # of inputs, 3 expected");
+        mexErrMsgIdAndTxt("libgit:commit:commit_owner","Incorrect # of inputs, 4 expected");
     }
     
     git_commit* commit = mx_to_git_commit(prhs[2]);
@@ -259,23 +259,90 @@ void commit_owner(MEX_DEF_INPUT){
 }
 
 void commit_parent(MEX_DEF_INPUT){
-    //23
+    //23 - Get the specified parent of the commit.
     //
-    //Get the specified parent of the commit.
-
-
+    //  commit = mex(2,23,commit,n)
+    //
+    //
+    //int git_commit_parent(git_commit **out, const git_commit *commit, unsigned int n);
+    //
+    // n - from 0 to parentcount
+    
+    
+    if (nrhs != 4){
+        mexErrMsgIdAndTxt("libgit:commit:commit_parent","Incorrect # of inputs, 4 expected");
+    }
+    
+    if (!mxIsClass(prhs[3],"double")){
+    	mexErrMsgIdAndTxt("libgit:commit:commit_parent","4th input must be of type double");
+    }
+    
+    double n = mxGetScalar(prhs[3]);
+    
+    git_commit* commit = mx_to_git_commit(prhs[2]);
+    git_commit* parent;
+    int response = git_commit_parent(&parent, commit, (unsigned int) n);
+    handle_error(response,"libgit:commit:commit_parent");
+    plhs[0] = git_commit__to_mx(parent);
 }
 
 void commit_parent_id(MEX_DEF_INPUT){
-    //24
+    //24 - Get the oid of a specified parent for a commit. This is different 
+    //from git_commit_parent, which will attempt to load the parent commit 
+    //from the ODB.
+    //
+    //  id = mex(2,24,commit,n);  
+    //
+    //
+    //const git_oid * git_commit_parent_id(const git_commit *commit, unsigned int n);
+
+    if (nrhs != 4){
+        mexErrMsgIdAndTxt("libgit:commit:commit_parent_id","Incorrect # of inputs, 4 expected");
+    }
+    
+    git_commit* commit = mx_to_git_commit(prhs[2]);
+
+    
+    if (!mxIsClass(prhs[3],"double")){
+    	mexErrMsgIdAndTxt("libgit:commit:commit_parent_id","4th input must be of type double");
+    }
+    
+    double n = mxGetScalar(prhs[3]);
+    
+    const git_oid* id = git_commit_parent_id(commit,(unsigned int)n);
+    
+    if (!id){
+        mexErrMsgIdAndTxt("libgit:commit:commit_parent_id","Error detected in retrieving parent id, null id returned");
+    }
+    
+    plhs[0] = git_oid__to_mx(id);
 }
 
 void commit_parentcount(MEX_DEF_INPUT){
-    //25
+    //25 - Get the number of parents of this commit
+    //
+    //  count = mex(2,25,commit);
+    //
+    //unsigned int git_commit_parentcount(const git_commit *commit);
+    
+    if (nrhs != 3){
+        mexErrMsgIdAndTxt("libgit:commit:commit_parentcount","Incorrect # of inputs, 3 expected");
+    }
+    
+    git_commit* commit = mx_to_git_commit(prhs[2]);
+    
+    unsigned int count = git_commit_parentcount(commit);
+
+    plhs[0] = uint32__to_mx((uint32_t)count);
+
 }
 
 void commit_raw_header(MEX_DEF_INPUT){
-    //26
+    //26 - Get the full raw text of the commit header.
+    //
+    //const char * git_commit_raw_header(const git_commit *commit);
+    
+    
 }
 
 void commit_summary(MEX_DEF_INPUT){
@@ -288,19 +355,74 @@ void commit_summary(MEX_DEF_INPUT){
 }
 
 void commit_time(MEX_DEF_INPUT){
-    //28
+    //28 - Get the commit time (i.e. committer time) of a commit.
+    //
+    //git_time_t git_commit_time(const git_commit *commit);
+
+
 }
 
 void commit_time_offset(MEX_DEF_INPUT){
-    //29
+    //29 - Get the commit timezone offset (i.e. committer's preferred timezone) of a commit.
+    //
+    //int git_commit_time_offset(const git_commit *commit);
+    //
+    
+    if (nrhs != 3){
+        mexErrMsgIdAndTxt("libgit:commit:commit_time_offset","Incorrect # of inputs, 3 expected");
+    }
+    
+    git_commit* commit = mx_to_git_commit(prhs[2]);
+    
+    int response = git_commit_time_offset(commit);
+    //What about an error?
+    
+    plhs[0] = int32__to_mx(response);
+
 }
 
 void commit_tree(MEX_DEF_INPUT){
-    //30
+    //30 - Get the tree pointed to by a commit.
+    //
+    //  tree = mex(2,30,commit); 
+    //
+    //int git_commit_tree(git_tree **tree_out, const git_commit *commit);
+
+    if (nrhs != 3){
+        mexErrMsgIdAndTxt("libgit:commit:commit_tree","Incorrect # of inputs, 3 expected");
+    }
+    
+    git_commit* commit = mx_to_git_commit(prhs[2]);
+    
+    git_tree *tree_out;
+    
+    int response =  git_commit_tree(&tree_out, const git_commit *commit);
+    handle_error(response,"libgit:commit:commit_tree");
+
+    plhs[0] = git_tree_list__to_mx(tree_out);
 }
 
 void commit_tree_id(MEX_DEF_INPUT){
-    //31
+    //31 - Get the id of the tree pointed to by a commit. This differs from 
+    //git_commit_tree in that no attempts are made to fetch an object 
+    //from the ODB.
+    //
+    //  tree_id = mex(2,31,commit); 
+    //
+    //const git_oid * git_commit_tree_id(const git_commit *commit);
+    
+    if (nrhs != 3){
+        mexErrMsgIdAndTxt("libgit:commit:commit_tree_id","Incorrect # of inputs, 3 expected");
+    }
+    
+    git_commit* commit = mx_to_git_commit(prhs[2]);
+    
+    const git_oid * tree_id = git_commit_tree_id(commit);
+    
+    //How is an error indicated?
+    
+    plhs[0] = git_oid__to_mx(tree_id)
+
 }
 
 
