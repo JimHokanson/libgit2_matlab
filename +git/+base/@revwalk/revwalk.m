@@ -19,6 +19,9 @@ classdef revwalk
 % //     ++count;
 
 
+%push - root
+%hide - stop point
+
     %{
         repo = git.base.repository(file_path);
 
@@ -31,9 +34,14 @@ classdef revwalk
         id1 = ref1.oid;
         id2 = ref2.oid;
 
+        %How many ahead is the remote
         walk = repo.getRevWalker();
         walk.pushRef('refs/remotes/origin/master');
         walk.hideRef('refs/heads/master');
+
+        %How many ahead is the local copy?
+        walk.hideRef('refs/remotes/origin/master');
+        walk.pushRef('refs/heads/master');
 
         
         %Test

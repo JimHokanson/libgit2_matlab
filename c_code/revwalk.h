@@ -131,11 +131,20 @@ void revwalk_next(MEX_DEF_INPUT){
     //
     //int git_revwalk_next(git_oid *out, git_revwalk *walk);
     //
+    //  0 if the next commit was found; GIT_ITEROVER if there are no commits left to iterate
+    //
     //  The output may be null, which we indicate by an empty array.
             
     git_revwalk * walk = mx_to_git_revwalk(prhs[2]);
     git_oid out;
     int response = git_revwalk_next(&out, walk);
+    
+    
+    //TODO: Check for 0 as well, in case we get a 3rd option ...
+    if (response == GIT_ITEROVER){
+        plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
+        return;
+    }
     plhs[0] = git_oid_or_null__to_mx(&out);
 }
 void revwalk_push(MEX_DEF_INPUT){
