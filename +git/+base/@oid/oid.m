@@ -16,11 +16,18 @@ classdef oid
     end
     
     methods
+        function value = get.raw(obj)
+            value = obj.h;
+        end
+    end
+    
+    methods
         function obj = oid(oid_raw)
             %
             %   obj = git.base.oid(oid_raw)
             %
-            %Created in reference
+            
+            %   Created in reference
             %
             %Where else can we get this from???
             

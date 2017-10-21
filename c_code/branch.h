@@ -198,9 +198,9 @@ void branch_next(MEX_DEF_INPUT){
     int response = git_branch_next(&out, &out_type, iter);  
 
     if (response == GIT_ITEROVER){
-        plhs[0] = mxCreateDoubleScalar(0);
+        plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
         if (nlhs == 2){
-           plhs[0] = mxCreateDoubleScalar(0); 
+           plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL); 
         }
     }
     

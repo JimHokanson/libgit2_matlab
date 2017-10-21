@@ -58,11 +58,10 @@ classdef reference < handle
             value = libgit(3,36,obj.h);
         end
         function value = get.oid(obj)
-            value = [];
-            %obj = git.base.oid(oid_raw)
             
-            %Why can't get this from the ref handle?
-            %id = libgit(3,26,repo,ref_name)
+            oid_raw = libgit(3,41,obj.h);
+            value = git.base.oid(oid_raw);
+           
         end
     end
     

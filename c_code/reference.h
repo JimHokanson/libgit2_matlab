@@ -354,6 +354,15 @@ void reference_symbolic_target(MEX_DEF_INPUT){
 }
 void reference_target(MEX_DEF_INPUT){
     //41
+    //
+    //  libgit(3,41,ref)
+    //
+    //const git_oid * git_reference_target(const git_reference *ref);
+    
+    git_reference *ref = get_reference_input(prhs[2]);
+    const git_oid * oid = git_reference_target(ref);
+    plhs[0] = git_oid_or_null__to_mx(oid);
+
 }
 void reference_target_peel(MEX_DEF_INPUT){
     //42

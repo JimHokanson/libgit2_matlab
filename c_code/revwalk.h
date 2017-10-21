@@ -7,6 +7,17 @@
 //https://libgit2.github.com/docs/guides/101-samples/#revwalk
 //https://libgit2.github.com/libgit2/#HEAD/group/revwalk
 
+// git_revwalk *walker;
+// git_revwalk_new(&walker, repo);
+// git_revwalk_push_ref(walker, "refs/remotes/origin/master");
+// git_revwalk_hide_ref(walker, "refs/heads/master");
+// 
+// git_oid id;
+// int count = 0;
+// while (!git_revwalk_next(&id, walker))
+//     ++count;
+
+
 //pushing - marks starting points
 //hiding - marks stopping points
 
@@ -237,7 +248,7 @@ void revwalk_repository(MEX_DEF_INPUT){
 void revwalk_reset(MEX_DEF_INPUT){
     //15 - Done
     //
-    //  mex(52,15,walk)
+    //  libgit(52,15,walk)
     //
     //  Reset the revision walker for reuse.
     //

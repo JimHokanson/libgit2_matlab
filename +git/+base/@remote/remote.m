@@ -42,6 +42,8 @@ classdef remote < sl.obj.display_class
         %fromReference()
         %
         function obj = fromRepo(repo,remote_name)
+            %
+            %   -3 : Incorrect remote name
             h = libgit(1,22,repo.h,remote_name);
             obj = git.base.remote(h);
         end

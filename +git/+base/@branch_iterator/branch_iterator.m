@@ -41,7 +41,7 @@ classdef branch_iterator
             %       1 - remote
             
             [h,out_type] = libgit(10,10,obj.h); %#ok<PROP>
-            if h == 0 %#ok<PROP>
+            if isempty(h) %#ok<PROP>
                 ref = [];
             else
                 ref = git.base.reference(h); %#ok<PROP>

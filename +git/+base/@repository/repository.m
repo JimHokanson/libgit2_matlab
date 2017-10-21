@@ -113,7 +113,16 @@ classdef repository < sl.obj.display_class
             
             ref = git.base.reference.fromRepoAndName(obj,name);
         end
+        function walker = getRevWalker(obj)
+            walker = git.base.revwalk.fromRepo(obj);
+        end
     end
+    
+    
+    methods
+        
+    end
+    
     methods (Hidden)
         function delete(obj)
             if obj.h ~= 0
