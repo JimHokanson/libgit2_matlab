@@ -70,6 +70,7 @@ void branch_iterator_free(MEX_DEF_INPUT){
 void branch_iterator_new(MEX_DEF_INPUT){
     //6
     //
+    //      0  1   2   3   
     //  mex(10,6,repo,flags)
     //
     //Create an iterator which loops over the requested branches.
@@ -78,16 +79,21 @@ void branch_iterator_new(MEX_DEF_INPUT){
     //
     //https://libgit2.github.com/libgit2/#HEAD/group/branch/git_branch_iterator_new
     //
-    //Filtering flags for the branch listing. Valid values are 
-    //  GIT_BRANCH_LOCAL, 
-    //  GIT_BRANCH_REMOTE or 
-    //  GIT_BRANCH_ALL.
+    //  Filtering flags for the branch listing. Valid values are 
+    //      GIT_BRANCH_LOCAL, 
+    //      GIT_BRANCH_REMOTE or 
+    //      GIT_BRANCH_ALL.
     
     git_branch_t list_flags;
     
     if (nrhs == 3){
         list_flags = GIT_BRANCH_ALL;
     }else{
+        
+        if (!mxIsClass(prhs[3],"double")){
+            mexErrMsgIdAndTxt("libgit:branch:branch_lookup","Type must be a double");
+        }
+        
         switch((int)mxGetScalar(prhs[3])){
             case 0:
                 list_flags = GIT_BRANCH_LOCAL;
@@ -113,11 +119,36 @@ void branch_iterator_new(MEX_DEF_INPUT){
 
 void branch_lookup(MEX_DEF_INPUT){
     //7
+    //          0  1  2    3          4
+    //  libgit2(10,7,repo,branch_name,branch_type);
+    //
+    //  0 - local
+    //  1 - remote
+    //
     //
     //Lookup a branch by its name in a repository.
     //
     //int git_branch_lookup(git_reference **out, git_repository *repo, 
     //      const char *branch_name, git_branch_t branch_type);
+    
+    //GIT_BRANCH_LOCAL or GIT_BRANCH_REMOTE
+    
+    
+    if (nrhs != 5){
+        mexErrMsgIdAndTxt("libgit:branch:branch_lookup","Five inputs are required");
+    }else if (!mxIsClass(prhs[4],"double")){
+        mexErrMsgIdAndTxt("libgit:branch:branch_lookup","Type must be a double");
+    }
+    
+    git_repository *repo = mx_to_git_repo(prhs[2]);
+    const char * branch_name = mx_to_char(prhs[3]);
+    git_branch_t branch_type = mx_to_git_branch_type(prhs[4]);
+    git_reference *out;
+    int response = git_branch_lookup(&out,repo,branch_name,branch_type);
+    handle_error(response,"libgit:branch:branch_lookup"); 
+    plhs[0] = git_reference__to_mx(out);
+
+    
 }
 
 void branch_move(MEX_DEF_INPUT){
@@ -156,6 +187,30 @@ void branch_next(MEX_DEF_INPUT){
     //GIT_BRANCH_LOCAL
     //GIT_BRANCH_REMOTE
     //GIT_BRANCH_ALL
+    
+    if (!(nlhs == 1 || nlhs == 2)){
+        mexErrMsgIdAndTxt("libgit:branch:branch_next","1 or 2 outputs needed");
+    }
+    
+    git_branch_iterator * iter =  mx_to_git_branch_iterator(prhs[2]);
+    git_reference *out;
+    git_branch_t out_type;
+    int response = git_branch_next(&out, &out_type, iter);  
+
+    if (response == GIT_ITEROVER){
+        plhs[0] = mxCreateDoubleScalar(0);
+        if (nlhs == 2){
+           plhs[0] = mxCreateDoubleScalar(0); 
+        }
+    }
+    
+    handle_error(response,"libgit:branch:branch_next"); 
+
+    plhs[0] = git_reference__to_mx(out);
+    
+    if (nlhs == 2){
+        plhs[1] = mxCreateDoubleScalar((double)out_type);
+    }
     
 }
 

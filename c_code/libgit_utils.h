@@ -49,29 +49,7 @@ git_oid* get_oid_input(const mxArray *input){
 //SET_POINTER_OUTPUT(set_remote_output,git_remote)
 
 
-void set_repo_output(mxArray **output, git_repository *repo){   
-    //
-    //  set_repo_output(&plhs[0],repo);
-    //
-    
-    *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
 
-    int64_t *p;
-    p = (int64_t *) mxGetData(*output);
-    *p = (int64_t)repo;
-}
-
-void set_remote_output(mxArray **output, git_remote *remote){   
-    //
-    //  set_remote_output(&plhs[0],remote);
-    //
-    
-    *output = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
-
-    int64_t *p;
-    p = (int64_t *) mxGetData(*output);
-    *p = (int64_t)remote; 
-}
 
 //TODO: Move into c_to_mx
 void set_signature_out(mxArray **output, const git_signature *s){

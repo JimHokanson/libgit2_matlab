@@ -5,36 +5,64 @@ classdef reference < handle
     %
     %   https://libgit2.github.com/docs/guides/101-samples/#references
     
+    %{
+    repo = git.base.repository(file_path);
+    ref_list = repo.getReferenceList;
+    ref = git.base.reference.fromRepoAndName(repo,ref_list{3});
+    %}
+    
     properties (Hidden)
         h
     end
     
     properties
-        repo
-        ref_name
+
     end
     
     properties (Dependent)
+        repo
+        name
         has_log
         is_branch
         is_note
         is_remote
         is_tag
-        is_valid_name
         shorthand
+        type
+        oid
     end
     
-%     properties
-%         oid %object
-%         owner %pointer to repo
-%     end
-    
     methods
+        function value = get.repo(obj)
+            value = libgit(3,30,obj.h);
+        end
+        function value = get.name(obj)
+            value = libgit(3,25,obj.h);
+        end
         function value = get.has_log(obj)
-            
+            value = [];
         end
         function value = get.is_branch(obj)
+            value = libgit(3,15,obj.h);
+        end
+        function value = get.is_note(obj)
+            value = [];
+        end
+        function value = get.is_remote(obj)
+            value = libgit(3,17,obj.h);
+        end
+        function value = get.is_tag(obj)
+            value = libgit(3,18,obj.h); 
+        end
+        function value = get.shorthand(obj)
+            value = libgit(3,36,obj.h);
+        end
+        function value = get.oid(obj)
+            value = [];
+            %obj = git.base.oid(oid_raw)
             
+            %Why can't get this from the ref handle?
+            %id = libgit(3,26,repo,ref_name)
         end
     end
     
@@ -49,11 +77,14 @@ classdef reference < handle
 %         function value = get.owner(obj)
 %             value = obj.repo;
 %         end
-        function value = get.shorthand(obj)
-            value = libgit2(3,36,obj.h);
-        end
     end
     
+    
+    methods (Static)
+%         function isValidReferenceName(ref_name)
+%             
+%         end
+    end
     
     %Constructors
     %-------------------------------------------------------------------
@@ -66,22 +97,20 @@ classdef reference < handle
             ref = git.base.reference(h);
         end
     end
-    methods (Static,Hidden)
-        function ref = fromRefPointer(h)
-            ref = git.base.reference(h);
-        end
-    end
     
     methods
         function obj = reference(h)
             %
-            %   obj = git.base.reference(repo,ref_name)
+            %   obj = git.base.reference(h)
             %
             %   Inputs
             %   -------
             %   ref_name : string
             %       e.g. HEAD, refs/heads/master, refs/tags/v0.1.0, 
             
+            if isempty(h) || h == 0
+                error('Ibvalid reference handle')
+            end
             obj.h = h;
         end
     end

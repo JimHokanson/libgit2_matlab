@@ -18,6 +18,8 @@ classdef oid
     methods
         function obj = oid(oid_raw)
             %
+            %   obj = git.base.oid(oid_raw)
+            %
             %Created in reference
             %
             %Where else can we get this from???

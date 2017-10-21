@@ -69,6 +69,17 @@ mxArray* git_oid__to_mx(const git_oid *oid){
     return output; 
 }
 
+mxArray* git_oid_or_null__to_mx(const git_oid *oid){
+    
+    if(!oid){
+        return mxCreateDoubleMatrix(0,0,mxREAL);
+    }else{
+        return git_oid__to_mx(oid);
+    }
+    
+    
+}
+
 mxArray* git_strarray__to_mx(git_strarray *s, int free_git){   
     //     typedef struct git_strarray {
     //          char **strings;
@@ -141,45 +152,46 @@ mxArray* git_branch_iterator__to_mx(git_branch_iterator *out){
 
 mxArray* git_commit__to_mx(git_commit *out){
     //  plhs[0] = git_commit__to_mx(out);
-    
     RETURN_POINTER;
 }
 
 mxArray* git_index__to_mx(git_index *out){   
     //  plhs[0] = git_index__to_mx(out)
-    
     RETURN_POINTER;
 }
 
 mxArray* git_object__to_mx(git_object *out){   
     //  plhs[0] = git_object__to_mx(out)
-    
     RETURN_POINTER;
 }
 
 mxArray* git_reference__to_mx(git_reference *out){   
     //  plhs[0] = git_reference__to_mx(ref)
-    
     RETURN_POINTER;
+}
+
+mxArray* git_remote__to_mx(git_remote *out){
+    //  plhs[0] = git_remote__to_mx(ref)
+    RETURN_POINTER;    
 }
 
 mxArray* git_repository__to_mx(git_repository *out){
     //  plhs[0] = git_repository__to_mx(ref)
-    
+    RETURN_POINTER;    
+}
+
+mxArray* git_revwalk__to_mx(git_revwalk *out){
+    //  plhs[0] = git_revwalk__to_mx(ref)
     RETURN_POINTER;    
 }
 
 mxArray* git_status_list__to_mx(git_status_list *out){
     //  plhs[0] = git_status_list__to_mx(out);
-    //
-    
     RETURN_POINTER;
 }
 
 mxArray* git_tree_list__to_mx(git_tree *out){
     //  plhs[0] = git_tree_list__to_mx(out);
-    //
-    
     RETURN_POINTER;
 }
 
@@ -241,6 +253,19 @@ mxArray* git_signature__to_mx(const git_signature *s){
     mxSetFieldByNumber(output,0,2,git_time__to_mx(s->when));
     
     return output;
+}
+
+mxArray* git_transfer_status__to_mx(const git_transfer_progress * s){
+    
+//     typedef struct git_transfer_progress {
+// 	unsigned int total_objects;
+// 	unsigned int indexed_objects;
+// 	unsigned int received_objects;
+// 	unsigned int local_objects;
+// 	unsigned int total_deltas;
+// 	unsigned int indexed_deltas;
+// 	size_t received_bytes;
+//     } git_transfer_progress;
 }
 
 mxArray* git_diff_file__to_mx(git_diff_file *s){

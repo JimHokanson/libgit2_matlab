@@ -7,32 +7,45 @@ classdef branch_iterator
         h
     end
     
-
+    methods (Static)
+        function value = getLocalBranchNames()
+            value = [];
+        end
+        function value = getRemoteBranchNames()
+            value = [];
+        end
+    end
+    
     methods
-        function obj = branch_iterator(repo,varargin)
+        function obj = branch_iterator(repo,type)
+            %
+            %   obj = git.base.branch_iterator(repo,type)
             %
             %   Inputs
             %   ------
             %   type
-            %   - 0
-            %   - 1
-            %   - 2
+            %       - 0, local
+            %       - 1, remote
+            %       - 2, all (default)
             
+            obj.h = libgit(10,6,repo.h,type);
+        end
+        function [ref,out_type] = getNextBranch(obj)
+            %
+            %   Outputs
+            %   -------
+            %   ref : git.base.reference
+            %       This is [] when no branches are left
+            %   out_type :
+            %       0 - local
+            %       1 - remote
             
-                % case 0:
-                % list_flags = GIT_BRANCH_LOCAL;
-                % break;
-                % case 1:
-                % list_flags = GIT_BRANCH_REMOTE;
-                % break;
-                % case 2:
-                % list_flags = GIT_BRANCH_ALL;
-            
-            in.type = 0;
-            in = sl.in.processVarargin(in,varargin);
-            
-            obj.h = libgit(10,6,repo.h,in.type);
-            
+            [h,out_type] = libgit(10,10,obj.h); %#ok<PROP>
+            if h == 0 %#ok<PROP>
+                ref = [];
+            else
+                ref = git.base.reference(h); %#ok<PROP>
+            end
         end
         function delete(obj)
             libgit(10,5,obj.h);

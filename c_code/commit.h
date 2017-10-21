@@ -4,6 +4,8 @@
 void commit_amend(MEX_DEF_INPUT){
     //1
     //
+    //  libgit(2,1,
+    //
     //Amend an existing commit by replacing only non-NULL values.
     //
     //int git_commit_amend(git_oid *id, const git_commit *commit_to_amend, 
@@ -14,18 +16,28 @@ void commit_amend(MEX_DEF_INPUT){
 }
 
 void commit_author(MEX_DEF_INPUT){
-    //2
+    //2 - DONE
     //
-    //
+    //  libgit(2,2,commit)
     //
     //const git_signature * git_commit_author(const git_commit *commit);
+    
+    //TODO: error checking 
+    
     git_commit* commit = mx_to_git_commit(prhs[2]);
     const git_signature *s = git_commit_author(commit);
     set_signature_out(&plhs[0],s);
 }
 
 void commit_body(MEX_DEF_INPUT){
+    //3 - DONE
+    //
+    //  libgit(2,3,commit)
+    //
     //const char * git_commit_body(git_commit *commit);
+    
+    //TODO: error checking 
+    
     git_commit* commit = mx_to_git_commit(prhs[2]);
     const char *body = git_commit_body(commit);
     plhs[0] = string__to_mx(body);
@@ -396,7 +408,7 @@ void commit_tree(MEX_DEF_INPUT){
     
     git_tree *tree_out;
     
-    int response =  git_commit_tree(&tree_out, const git_commit *commit);
+    int response =  git_commit_tree(&tree_out, commit);
     handle_error(response,"libgit:commit:commit_tree");
 
     plhs[0] = git_tree_list__to_mx(tree_out);
@@ -421,7 +433,7 @@ void commit_tree_id(MEX_DEF_INPUT){
     
     //How is an error indicated?
     
-    plhs[0] = git_oid__to_mx(tree_id)
+    plhs[0] = git_oid__to_mx(tree_id);
 
 }
 

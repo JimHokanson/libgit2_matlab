@@ -305,7 +305,7 @@ void remote_is_valid_name(MEX_DEF_INPUT){
 }
 
 void remote_list(MEX_DEF_INPUT){
-    //21
+    //21 - DONE
     //  
     //  list = mex(1,21,repo)
     
@@ -319,24 +319,24 @@ void remote_list(MEX_DEF_INPUT){
 }
 
 void remote_lookup(MEX_DEF_INPUT){
-    //22
+    //22 - DONE
     //
     //  remote = mex(1,22,repo,remote_name);
     //
     
         
     //int git_remote_lookup(git_remote **out, git_repository *repo, const char *name);
-    int error;
+    
     git_repository *repo = mx_to_git_repo(prhs[2]);
     const char *remote_name = mxArrayToString(prhs[3]);
     
     git_remote *remote = NULL;
-    error = git_remote_lookup(&remote, repo, remote_name);
+    int response = git_remote_lookup(&remote, repo, remote_name);
     
-    handle_error(error,"libgit:remote:remote_lookup");
+    handle_error(response,"libgit:remote:remote_lookup");
     
     //TODO: Change format
-    set_remote_output(&plhs[0],remote);
+    plhs[0] = git_remote__to_mx(remote);
     
     mxFree((void *)remote_name);
 }
@@ -488,6 +488,10 @@ void remote_stats(MEX_DEF_INPUT){
     //
     //const git_transfer_progress * git_remote_stats(git_remote *remote);
 
+    git_remote *remote = mx_to_git_remote(prhs[2]);
+    
+    const git_transfer_progress * git_remote_stats(git_remote *remote);
+    
 }
 
 // void (MEX_DEF_INPUT){

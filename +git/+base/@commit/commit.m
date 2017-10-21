@@ -14,6 +14,7 @@ classdef commit < handle
         encoding
         message
         summary
+        body
         time
         offset_in_min
         
@@ -44,6 +45,9 @@ classdef commit < handle
         function value = get.summary(obj)
             value = libgit(2,27,obj.h);
         end
+        function value = get.body(obj)
+            value = libgit(2,3,obj.h);
+        end
         function value = get.time(obj)
             value = [];
         end
@@ -55,7 +59,8 @@ classdef commit < handle
             value = git.base.signature(temp);
         end
         function value = get.author(obj)
-            value = [];
+            temp = libgit(2,2,obj.h);
+            value = git.base.signature(temp);
         end
         function value = get.tree_id(obj)
             value = libgit(2,31,obj.h);

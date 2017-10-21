@@ -14,15 +14,22 @@
 #include "object.h"
 #include "oid.h"
 #include "reference.h"
+#include "revwalk.h"
 #include "status.h"
+
 
 
 //which install_name_tool
 
-//install_name_tool -change /Users/jim/Documents/repos/matlab_git/libgit2_matlab/libgit2.dylib @executable_path/libgit2.dylib libgit.mexmaci64
+//TODO: Create a mex route
+
+//*********
+//
+//This needs to be run to fix the dylib
+//  install_name_tool -change /Users/jim/Documents/repos/matlab_git/libgit2_matlab/libgit2.dylib @executable_path/libgit2.dylib libgit.mexmaci64
 
 //install_name_tool -id new_name old_name
-//install_name_tool -id libgit2.dylib /Users/jim/Documents/repos/matlab_git/libgit2_matlab/libgit2.dylib
+//install_name_tool -id libgit2.dylib /Users/jim/Documents/repos/matlab_git/libgit2_matlab/c_code/libgit2.dylib
 
 //https://libgit2.github.com/docs/guides/build-and-link/
 //
@@ -462,7 +469,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
             //revparse(MEX_INPUT);
             break;
         case 52:
-            //revwalk(MEX_INPUT);
+            revwalk(MEX_INPUT);
             break;
         case 53:
             //signature(MEX_INPUT);

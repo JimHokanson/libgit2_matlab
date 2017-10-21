@@ -86,36 +86,38 @@ void reference_free(MEX_DEF_INPUT){
 }
 
 void reference_has_log(MEX_DEF_INPUT){
+    //
     //  out = mex(3,14,repo,ref_name)
     //
     //  Check if a reflog exists for the specified reference.
+    //
+    //  Why not pass in the reference???
     //
     //int git_reference_has_log(git_repository *repo, const char *refname);
 
     git_repository *repo = mx_to_git_repo(prhs[2]);
     const char *ref_name = mxArrayToString(prhs[3]);
 
-    int error;
-    error = git_reference_has_log(repo,ref_name);
-    handle_error(error,"libgit:reference:reference_has_log");     
+    int response = git_reference_has_log(repo,ref_name);
+    handle_error(response,"libgit:reference:reference_has_log");     
     
-    plhs[0] = int32__to_mx(error);
+    plhs[0] = int32__to_mx(response);
     mxFree((void *)ref_name);
 
 }
 
 void reference_is_branch(MEX_DEF_INPUT){
-    //  out = mex(3,15,ref)
+    //
+    //  out = libgit(3,15,ref)
     //
     //int git_reference_is_branch(const git_reference *ref);
 
     git_reference *ref = get_reference_input(prhs[2]);
 
-    int error;
-    error = git_reference_is_branch(ref);
-    handle_error(error,"libgit:reference:reference_is_branch");     
+    int response = git_reference_is_branch(ref);
+    handle_error(response,"libgit:reference:reference_is_branch");     
 
-    plhs[0] = int32__to_mx(error);
+    plhs[0] = int32__to_mx(response);
 }
 
 void reference_is_note(MEX_DEF_INPUT){
@@ -125,45 +127,46 @@ void reference_is_note(MEX_DEF_INPUT){
     
     git_reference *ref = get_reference_input(prhs[2]);
 
-    int error;
-    error = git_reference_is_note(ref);
-    handle_error(error,"libgit:reference:reference_is_note");     
+    int response = git_reference_is_note(ref);
+    handle_error(response,"libgit:reference:reference_is_note");     
 
-    plhs[0] = int32__to_mx(error);
+    plhs[0] = int32__to_mx(response);
 
 }
 
 void reference_is_remote(MEX_DEF_INPUT){
-    //  mex(3,17,ref)
+    //
+    //  libgit(3,17,ref)
     //
     //int git_reference_is_remote(const git_reference *ref);
 
     git_reference *ref = get_reference_input(prhs[2]);
 
-    int error;
-    error = git_reference_is_remote(ref);
-    handle_error(error,"libgit:reference:reference_is_remote");     
+    int response = git_reference_is_remote(ref);
+    handle_error(response,"libgit:reference:reference_is_remote");     
 
-    plhs[0] = int32__to_mx(error);
+    plhs[0] = int32__to_mx(response);
 
 }
 
 void reference_is_tag(MEX_DEF_INPUT){
-    //  mex(3,18,ref)
+    //
+    //  libgit(3,18,ref)
     //
     //int git_reference_is_tag(const git_reference *ref);
 
     git_reference *ref = get_reference_input(prhs[2]);
 
-    int error;
-    error = git_reference_is_tag(ref);
-    handle_error(error,"libgit:reference:reference_is_tag");     
+    int response = git_reference_is_tag(ref);
+    handle_error(response,"libgit:reference:reference_is_tag");     
 
-    plhs[0] = int32__to_mx(error);
+    plhs[0] = int32__to_mx(response);
 
 }
 
 void reference_is_valid_name(MEX_DEF_INPUT){
+    //
+    //
     //  mex(3,19,ref_name)
     //
     //int git_reference_is_valid_name(const char *refname);
@@ -224,8 +227,9 @@ void reference_lookup(MEX_DEF_INPUT){
 }
 
 void reference_name(MEX_DEF_INPUT){
+    //DONE
     //
-    //  mex(3,25,ref)
+    //  name = libgit(3,25,ref)
     //
     //  Get the full name of a reference.
     //
@@ -234,13 +238,12 @@ void reference_name(MEX_DEF_INPUT){
     git_reference *ref = get_reference_input(prhs[2]);
     const char *str = git_reference_name(ref);
     plhs[0] = string__to_mx(str);
-
 }
 
 void reference_name_to_id(MEX_DEF_INPUT){
     //Lookup a reference by name and resolve immediately to OID.
     //
-    //  id = mex(3,26,repo,ref_name)
+    //  id = libgit(3,26,repo,ref_name)
     //  
     //  int git_reference_name_to_id(git_oid *out, git_repository *repo, const char *name);
     
@@ -253,8 +256,6 @@ void reference_name_to_id(MEX_DEF_INPUT){
     handle_error(error,"libgit:reference:ref_to_id");
     
     //oid is type: unsigned char [20]
-    //TODO: I think we might need a memcpy ...?
-    
     plhs[0] = git_oid__to_mx(&oid);
     
     mxFree((void *)ref_name);
@@ -269,67 +270,99 @@ void reference_next_name(MEX_DEF_INPUT){
 }
 
 void reference_normalize_name(MEX_DEF_INPUT){
-
+    //29
 }
 
 void reference_owner(MEX_DEF_INPUT){
+    //30 - Get the repository where a reference resides.
+    //
+    //  repo = libgit(3,30,ref)
+    //
+    //git_repository * git_reference_owner(const git_reference *ref);
+
+    git_reference *ref = get_reference_input(prhs[2]);
+    git_repository * repo = git_reference_owner(ref);
+    plhs[0] = git_repository__to_mx(repo);
 
 }
 
 void reference_peel(MEX_DEF_INPUT){
+    //31 - Recursively peel reference until object of the specified type is found.
+    //
+    //The type of the requested object (GIT_OBJ_COMMIT, GIT_OBJ_TAG, GIT_OBJ_TREE, GIT_OBJ_BLOB or GIT_OBJ_ANY).
+    //
+    //int git_reference_peel(git_object **out, git_reference *ref, git_otype type);
 
 }
 
 void reference_remove(MEX_DEF_INPUT){
+    //32 - Delete an existing reference by name
+    //
+    //
+    //int git_reference_remove(git_repository *repo, const char *name);
 
 }
 
 void reference_rename(MEX_DEF_INPUT){
+    //33 - Rename an existing reference.
+    //
+    //int git_reference_rename(git_reference **new_ref, git_reference *ref, const char *new_name, int force, const char *log_message);
 
 }
 
 void reference_resolve(MEX_DEF_INPUT){
+    //34 - Resolve a symbolic reference to a direct reference.
+    //
+    //int git_reference_resolve(git_reference **out, const git_reference *ref);
+
+
 
 }
 
 void reference_set_target(MEX_DEF_INPUT){
-
+    //35
+    //Conditionally create a new reference with the same name as the given 
+    //reference but a different OID target. The reference must be a direct 
+    //reference, otherwise this will fail.
 }
 
 void reference_shorthand(MEX_DEF_INPUT){
+    //DONE
     //
+    //36 - Get the reference's short name
     //
+    //  name = libgit(3,36,ref)
     //
+    ////const char * git_reference_shorthand(const git_reference *ref); 
     
     git_reference *ref = get_reference_input(prhs[2]);
-    
-    //const char * git_reference_shorthand(const git_reference *ref);   
-    
-    const char *shorthand = git_reference_shorthand(ref);
-    
+    const char *shorthand = git_reference_shorthand(ref);  
     plhs[0] = mxCreateString(shorthand);
 }
 
 void reference_symbolic_create(MEX_DEF_INPUT){
-
+    //37
 }
 void reference_symbolic_create_matching(MEX_DEF_INPUT){
-
+    //38
 }
 void reference_symbolic_set_target(MEX_DEF_INPUT){
-
+    //39
 }
 void reference_symbolic_target(MEX_DEF_INPUT){
-
+    //40
 }
 void reference_target(MEX_DEF_INPUT){
-
+    //41
 }
 void reference_target_peel(MEX_DEF_INPUT){
-
+    //42
 }
 void reference_type(MEX_DEF_INPUT){
-
+    //43
+    //Either direct (GIT_REF_OID) or symbolic (GIT_REF_SYMBOLIC)
+    //
+    //git_ref_t git_reference_type(const git_reference *ref);
 }
 
 

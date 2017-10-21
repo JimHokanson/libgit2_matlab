@@ -144,7 +144,7 @@ void repository_head(MEX_DEF_INPUT){
 void repository_head_detached(MEX_DEF_INPUT){
     //12
     //
-    //  detached = mex(0,12,repo);
+    //  is_detached = mex(0,12,repo);
     //
     //Check if a repository's HEAD is detached
     //
@@ -165,12 +165,22 @@ void repository_head_for_worktree(MEX_DEF_INPUT){
     //
     //int git_repository_head_for_worktree(git_reference **out, 
     //          git_repository *repo, const char *name);
+    //
+    //  const char *	name	name of the worktree to retrieve HEAD for
+    
+    git_reference *out;
+    git_repository* repo = mx_to_git_repo(prhs[2]);
+    const char * name = mxArrayToString(prhs[3]);
+    int response = git_repository_head_for_worktree(&out,repo,name);
+    handle_error(response,"libgit:repo:repository_head_for_worktree"); 
+    plhs[0] = git_reference__to_mx(out);
+    
 }
 
 void repository_head_unborn(MEX_DEF_INPUT){
     //14
     //
-    //  unborn = mex(0,14,repo)
+    //  is_unborn = mex(0,14,repo)
     //
     //Check if the current branch is unborn
     //
@@ -210,6 +220,8 @@ void repository_index(MEX_DEF_INPUT){
 void repository_init(MEX_DEF_INPUT){
     //17
     //
+    //  
+    //
     //Creates a new Git repository in the given folder.
     //
     //int git_repository_init(git_repository **out, const char *path, 
@@ -218,6 +230,8 @@ void repository_init(MEX_DEF_INPUT){
 
 void repository_init_ext(MEX_DEF_INPUT){
     //18
+    //
+    //  
     //
     //Create a new Git repository in the given folder with extended controls.
     //
@@ -228,6 +242,8 @@ void repository_init_ext(MEX_DEF_INPUT){
 void repository_init_init_options(MEX_DEF_INPUT){
     //19
     //
+    //
+    //
     //Initializes a git_repository_init_options with default values. 
     //Equivalent to creating an instance with GIT_REPOSITORY_INIT_OPTIONS_INIT.
     //
@@ -237,6 +253,8 @@ void repository_init_init_options(MEX_DEF_INPUT){
 
 void repository_is_bare(MEX_DEF_INPUT){
     //20
+    //
+    //
     //
     //Check if a repository is bare
     //
@@ -260,7 +278,7 @@ void repository_is_empty(MEX_DEF_INPUT){
 void repository_is_shallow(MEX_DEF_INPUT){
     //22
     //
-    //  shallow = mex(0,22,repo);
+    //  is_shallow = mex(0,22,repo);
     //
     //Determine if the repository was a shallow clone
     //
@@ -274,7 +292,7 @@ void repository_is_shallow(MEX_DEF_INPUT){
 void repository_is_worktree(MEX_DEF_INPUT){
     //23
     //
-    //  worktree = mex(0,23,repo)
+    //  is_worktree = mex(0,23,repo)
     //
     //Check if a repository is a linked work tree
     //
@@ -289,6 +307,8 @@ void repository_is_worktree(MEX_DEF_INPUT){
 void repository_item_path(MEX_DEF_INPUT){
     //24
     //
+    //  
+    //
     //Get the location of a specific repository file or directory
     //
     //int git_repository_item_path(git_buf *out, git_repository *repo, 
@@ -297,6 +317,8 @@ void repository_item_path(MEX_DEF_INPUT){
 
 void repository_mergehead_foreach(MEX_DEF_INPUT){
     //25
+    //
+    //  i
     //
     //If a merge is in progress, invoke 'callback' for each commit ID in 
     //the MERGE_HEAD file.
@@ -307,6 +329,8 @@ void repository_mergehead_foreach(MEX_DEF_INPUT){
 
 void repository_message(MEX_DEF_INPUT){
     //26
+    //
+    //  
     //
     //Retrieve git's prepared message
     //
@@ -325,6 +349,8 @@ void repository_message_remove(MEX_DEF_INPUT){
 void repository_new(MEX_DEF_INPUT){
     //28
     //
+    //  
+    //
     //Create a new repository with neither backends nor config object
     //
     //int git_repository_new(git_repository **out);
@@ -333,6 +359,8 @@ void repository_new(MEX_DEF_INPUT){
 
 void repository_odb(MEX_DEF_INPUT){
     //29
+    //
+    //  
     //
     //Get the Object Database for this repository.
     //
@@ -386,12 +414,17 @@ void repository_open_from_worktree(MEX_DEF_INPUT){
 }
 
 void repository_path(MEX_DEF_INPUT){
-    //34
+    //34 - DONE
+    //
+    //  path = mex(0,34,repo);
     //
     //Get the path of this repository
     //
     //const char * git_repository_path(git_repository *repo);
     
+    git_repository* repo = mx_to_git_repo(prhs[2]);
+    const char * path = git_repository_path(repo);
+    plhs[0] = string__to_mx(path);    
 }
 
 void repository_refdb(MEX_DEF_INPUT){
@@ -541,11 +574,17 @@ void repository_submodule_cache_clear(MEX_DEF_INPUT){
 }
 
 void repository_workdir(MEX_DEF_INPUT){
-    //52
+    //52 - DONE
+    //
+    //  workdir = mex(0,52,repo);
     //
     //Get the path of the working directory for this repository
     //
     //const char * git_repository_workdir(git_repository *repo);
+    
+    git_repository* repo = mx_to_git_repo(prhs[2]);
+    const char * path = git_repository_workdir(repo);
+    plhs[0] = string__to_mx(path);    
 }
 
 void repository_wrap_odb(MEX_DEF_INPUT){

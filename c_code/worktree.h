@@ -1,6 +1,12 @@
 #include "mex.h"
+//
+//  Worktrees allow using multiple branches simultaenously (I think)
 
-//https://libgit2.github.com/libgit2/#HEAD/group/config
+//https://libgit2.github.com/libgit2/#HEAD/group/worktree
+
+void (MEX_DEF_INPUT){
+    //
+}
 
 void worktree(MEX_DEF_INPUT)
 {
@@ -8,6 +14,7 @@ void worktree(MEX_DEF_INPUT)
     int sub_type = (int)mxGetScalar(prhs[1]);
     switch (sub_type) {
         case 1:
+            (MEX_INPUT);
             break;
         case 2:
             break;

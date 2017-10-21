@@ -3,6 +3,13 @@ classdef remote < sl.obj.display_class
     %   Class:
     %   git.base.remote
     
+    %{
+        o = repo.getRemote('origin')
+        o.fetch()
+        %TODO: Now do the revwalk
+    
+    %}
+    
     properties (Hidden)
         h
     end
@@ -29,22 +36,34 @@ classdef remote < sl.obj.display_class
         end
     end
     
+    %Constructors
+    %----------------------------------------------------
     methods (Static)
+        %fromReference()
+        %
+        function obj = fromRepo(repo,remote_name)
+            h = libgit(1,22,repo.h,remote_name);
+            obj = git.base.remote(h);
+        end
     end
     
     methods
-        function obj = remote(repo,remote_name)
+        function obj = remote(h)
             %
-            %   obj = git.base.remote(repo,remote_name)
+            %   obj = git.base.remote(h)
             
             %TODO: Build in optional parameters
             %=> particularly things related to fetching
             
-            %obj.h = git.mex.remote.lookup_remote(repo.h,remote_name);
-            obj.h = libgit(1,22,repo.h,remote_name);
-            obj.repo = repo;
-            obj.remote_name = remote_name;
+            obj.h = h;
+            %obj.repo = repo;
+            %obj.remote_name = remote_name;
         end
+    end
+    
+    %Other methods
+    %---------------------------------------------
+    methods
         function options = getFetchOptions(obj)
             options = git.base.fetch_options;
         end

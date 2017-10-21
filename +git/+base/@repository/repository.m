@@ -38,13 +38,10 @@ classdef repository < sl.obj.display_class
         
     end
     
-    %Other methods
-    methods
-        function remote = lookupRemote(obj,remote_name)
-            remote = git.base.remote(obj,remote_name);
-        end
-    end
+
     
+    %Constructor
+    %------------------------------------------
     methods
         function obj = repository(file_path)
             %
@@ -56,7 +53,12 @@ classdef repository < sl.obj.display_class
             obj.h = libgit(0,30,file_path);
         end
     end
+    
+    
     methods
+        function branch = getBranch(obj,branch_name,is_remote)
+            branch = git.base.branch.fromName(obj,branch_name,is_remote);
+        end
         function d = getCommonDir(obj)
             d = libgit(0,2,obj.h);
         end
@@ -64,24 +66,47 @@ classdef repository < sl.obj.display_class
             c = [];
             %c = libgit(0,3,obj.h);
         end
-        function getNamespace(obj)
-            %x 
-            %TODO
+        function namespace = getNamespace(obj)
+            %x Get the currently active namespace for this repository
+            %
+            %   Why is this returning empty????
+            namespace = libgit(0,9,obj.h);
         end
         function list = getRemoteList(obj)
             %x Get list of remotes.
             %
+            %   list = getRemoteList(obj)
+            %
+            %   Example
+            %   --------------------------
+            %   list = repo.getRemoteList()
+            %
+            %   list = {'origin'}
+            
+            
             %   Note: 1 is for remotes
-            list = libgit(1,21,obj.h);
+            list = libgit(1,21,obj.h)';
+        end
+        function remote = getRemote(obj,remote_name)
+            %x Get remote reference
+            %
+            %   remote = getRemote(obj,remote_name)
+            %
+            %   See Also
+            %   --------
+            %   getReferenceList
+            
+            remote = git.base.remote.fromRepo(obj,remote_name);
         end
         function list = getReferenceList(obj)
+            %x Return names of all references that can be found in a repository. 
             %
             %   Output
             %   ------
             %   list : cellstr
             %   
             
-            list = libgit(3,23,obj.h);
+            list = libgit(3,23,obj.h)';
         end
         function ref = getReference(obj,name)
             %git.base.reference
@@ -106,7 +131,7 @@ end
 %05  git_repository_detach_head
 %06  git_repository_discover
 %07  git_repository_fetchhead_foreach
-%08  git_repository_free
+%08  X git_repository_free
 %09  git_repository_get_namespace
 %10  git_repository_hashfile
 %11  git_repository_head

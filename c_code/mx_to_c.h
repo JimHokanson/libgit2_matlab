@@ -12,6 +12,16 @@ unsigned int mx_to_uint32(const mxArray *input){
     return data[0];
 }
 
+const char * mx_to_char(const mxArray *input){
+     //mx_to_char(prhs[2]);
+    //
+     //No logic, for now ...
+     return mxArrayToString(input);
+     //Also be sure to call:
+     //mxFree((void *)string);   
+
+}
+
 git_branch_iterator* mx_to_git_branch_iterator(const mxArray *input){
     //
     //  git_branch_iterator* i = mx_to_git_branch_iterator(prhs[2]);
@@ -21,25 +31,34 @@ git_branch_iterator* mx_to_git_branch_iterator(const mxArray *input){
     return *i;
 }
 
+git_branch_t mx_to_git_branch_type(const mxArray *input){
+    
+    if(!mxIsClass(input,"double")){
+        mexErrMsgIdAndTxt("libgit:mx_to_c:mx_to_git_branch_type","Branch type must be a double");
+    }
+    
+    int branch_type = (int) mxGetScalar(input);
+    git_branch_t return_value = -1;
+    
+    if (branch_type == 0){
+        return_value =  GIT_BRANCH_LOCAL;
+    }else if (branch_type == 1){
+        return_value = GIT_BRANCH_REMOTE;
+    }else{
+        mexErrMsgIdAndTxt("libgit:mx_to_c:mx_to_git_branch_type","Unrecognized branch type option");
+    }
+    
+    return return_value;
+}
+
 git_oid* mx_to_git_oid(const mxArray *input){
     //oid is a byte array
     
-    //size_t mxGetN(const mxArray *pm);
-
     git_oid *data = (git_oid *)mxGetData(input);
     git_oid *temp;
     temp = mxMalloc(sizeof(*temp));
     memcpy(temp,data,sizeof(*temp));
-    
     return temp;
-    
-    //c to mx code
-    //
-    //mxArray *output = mxCreateNumericMatrix(1,sizeof(*oid),mxUINT8_CLASS,mxREAL);
-    //uint8_t *temp = (uint8_t *)mxGetData(output);
-    //memcpy(temp,oid,sizeof(*oid));
-    //return output; 
-    
 }
     
 git_reference* mx_to_git_ref(const mxArray *input){
@@ -52,12 +71,15 @@ git_reference* mx_to_git_ref(const mxArray *input){
 }
 
 git_remote* mx_to_git_remote(const mxArray *input){
-    //
     //  git_remote* remote = mx_to_git_remote(prhs[2]);
-    //
-    
     git_remote **p_remote = (git_remote **)mxGetData(input);
     return *p_remote;  
+}
+
+git_revwalk* mx_to_git_revwalk(const mxArray *input){
+    //  git_revwalk* remote = mx_to_git_revwalk(prhs[2]);
+    git_revwalk **p_rev = (git_revwalk **)mxGetData(input);
+    return *p_rev;  
 }
 
 git_repository* mx_to_git_repo(const mxArray *input){

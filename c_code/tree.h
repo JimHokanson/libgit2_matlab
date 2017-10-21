@@ -1,13 +1,16 @@
 #include "mex.h"
 
-//https://libgit2.github.com/libgit2/#HEAD/group/config
+//tree - directory listing of a commit
 
+//https://libgit2.github.com/libgit2/#HEAD/group/tree
+    
 void tree_create_updated(MEX_DEF_INPUT){
     //1
     //
     //Create a tree based on another one with the specified modifications
     //
-    //int git_tree_create_updated(git_oid *out, git_repository *repo, git_tree *baseline, size_t nupdates, const git_tree_update *updates);
+    //int git_tree_create_updated(git_oid *out, git_repository *repo, 
+    //      git_tree *baseline, size_t nupdates, const git_tree_update *updates);
     
 }
 
