@@ -266,6 +266,30 @@ mxArray* git_transfer_status__to_mx(const git_transfer_progress * s){
 // 	unsigned int indexed_deltas;
 // 	size_t received_bytes;
 //     } git_transfer_progress;
+    
+    
+    const char *fn[7];
+    fn[0] = "total_objects";
+    fn[1] = "indexed_objects";
+    fn[2] = "received_objects";
+    fn[3] = "local_objects";
+    fn[4] = "total_deltas";
+    fn[5] = "indexed_deltas";
+    fn[6] = "received_bytes";
+    
+    mxArray *output;
+    output = mxCreateStructMatrix(1,1,7,fn);
+    
+    mxSetFieldByNumber(output,0,0,uint32__to_mx(s->total_objects));
+    mxSetFieldByNumber(output,0,1,uint32__to_mx(s->indexed_objects));
+    mxSetFieldByNumber(output,0,2,uint32__to_mx(s->received_objects));
+    mxSetFieldByNumber(output,0,3,uint32__to_mx(s->local_objects));
+    mxSetFieldByNumber(output,0,4,uint32__to_mx(s->total_deltas));
+    mxSetFieldByNumber(output,0,5,uint32__to_mx(s->indexed_deltas));
+    mxSetFieldByNumber(output,0,6,sizet__to_mx(s->received_bytes));
+    
+    return output;
+    
 }
 
 mxArray* git_diff_file__to_mx(git_diff_file *s){

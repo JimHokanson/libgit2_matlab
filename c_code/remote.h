@@ -484,13 +484,17 @@ void remote_set_url(MEX_DEF_INPUT){
 void remote_stats(MEX_DEF_INPUT){
     //34
     //
+    //  stats = libgit(1,34,remote)
+    //
     //Get the statistics structure that is filled in by the fetch operation.
     //
     //const git_transfer_progress * git_remote_stats(git_remote *remote);
 
     git_remote *remote = mx_to_git_remote(prhs[2]);
     
-    const git_transfer_progress * git_remote_stats(git_remote *remote);
+    const git_transfer_progress * p = git_remote_stats(remote);
+    
+    plhs[0] = git_transfer_status__to_mx(p);
     
 }
 

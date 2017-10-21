@@ -67,7 +67,7 @@ classdef remote < sl.obj.display_class
         function options = getFetchOptions(obj)
             options = git.base.fetch_options;
         end
-        function fetch(obj,varargin)
+        function varargout = fetch(obj,varargin)
             %
             %
             %   Optional Inputs
@@ -90,6 +90,9 @@ classdef remote < sl.obj.display_class
             
             libgit(1,14,obj.h);
         
+            if nargout
+                varargout{1} = libgit(1,34,obj.h);
+            end
         
         end
         
