@@ -38,8 +38,6 @@ classdef repository < sl.obj.display_class
         
     end
     
-
-    
     %Constructor
     %------------------------------------------
     methods
@@ -49,7 +47,7 @@ classdef repository < sl.obj.display_class
             
             %TODO: Change this
             obj.file_path = file_path;
-            %call git.mex.repo
+            
             obj.h = libgit(0,30,file_path);
         end
     end
