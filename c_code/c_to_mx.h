@@ -87,6 +87,7 @@ mxArray* git_buf__to_mx(git_buf * buf){
     mxArray *out = mxCreateNumericMatrix(1,(int) buf->size,mxINT32_CLASS,mxREAL);
     uint8_t *data = (uint8_t *)mxGetData(out);
     memcpy(data,buf->ptr,buf->size);
+    return out;
 }
 
 mxArray* git_off_t__to_mx(git_off_t t){

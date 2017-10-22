@@ -8,6 +8,19 @@ classdef branch < handle
     %   git.base.branch_iterator
     
     
+    %   Design note
+    %   -----------
+    %   A branch is a reference. Rather than inheriting from reference I'm
+    %   copying code. Ideally we would have the following:
+    %
+    %       ref_base
+    %        /     \
+    %     branch   ref_main 
+    
+    
+    %Status: 
+    
+    
     %{
         repo = git.base.repository(file_path);
         ref_list = repo.getReferenceList;
@@ -17,12 +30,12 @@ classdef branch < handle
     
     properties
         h
-        ends
+    end
     
     properties (Dependent)
 %         is_remote
         is_head 
-%         name
+        branch_name
     end
     
     methods
@@ -32,9 +45,9 @@ classdef branch < handle
         function value = get.is_head(obj)
            value = libgit(10,4,obj.h); 
         end
-%         function value = get.name(obj)
-%            value = libgit(10,9,obj.h); 
-%         end
+        function value = get.branch_name(obj)
+           value = libgit(10,9,obj.h); 
+        end
     end
     
     %Static methods
@@ -64,16 +77,9 @@ classdef branch < handle
             repo_h = ref.getRepoHandle();
             I = strfind(ref.name,'/');
             
-            %ref_name = libgit(10,9,ref.h);
+            branch_name = libgit(10,9,ref.h);
             
-            %obj = [];
-            
-            if isempty(I)
-                ref_name = ref.name;
-            else
-                ref_name = ref.name(I(end)+1:end);
-            end
-            obj = git.base.branch.fromName(repo_h,ref_name,ref.is_remote);
+            obj = git.base.branch.fromName(repo_h,branch_name,ref.is_remote);
         end
         function obj = fromName(repo,branch_name,is_remote)
             %
@@ -107,6 +113,9 @@ classdef branch < handle
             %   obj = git.base.branch(h);
             
             obj.h = h;
+        end
+        function delete(obj)
+            libgit(3,13,obj.h);
         end
     end
 end

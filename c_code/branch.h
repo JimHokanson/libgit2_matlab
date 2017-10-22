@@ -184,8 +184,7 @@ void branch_name(MEX_DEF_INPUT){
 
     const git_reference * ref = mx_to_git_ref(prhs[2]);
     const char * out;
-    int response = git_branch_is_head(&out,ref);
-    mexPrintf("out: %s\n",out);
+    int response = git_branch_name(&out,ref);
     handle_error(response,"libgit:branch:branch_name"); 
     plhs[0] = string__to_mx(out);
 }
