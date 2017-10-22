@@ -24,15 +24,19 @@
 void repository_commondir(MEX_DEF_INPUT){
     //2 - DONE
     //
-    //  dir = mex(0,2,repo)
+    //  dir = libgit(0,2,repo)
     //
     //Get the path of the shared common directory for this repository
     //const char * git_repository_commondir(git_repository *repo);
     
-    //TODO: Error checking ...
+    if (nrhs != 2){
+        mexErrMsgIdAndTxt("libgit:repo:repository_commondir","3 inputs required");
+    }
     
     git_repository *repo = mx_to_git_repo(prhs[2]);
-    plhs[0] = mxCreateString(git_repository_commondir(repo));
+    const char * out;
+    out = git_repository_commondir(repo);
+    plhs[0] = string__to_mx(out);
 }
 
 void repository_config(MEX_DEF_INPUT){
@@ -46,19 +50,28 @@ void repository_config(MEX_DEF_INPUT){
 }
 
 void repository_config_snapshot(MEX_DEF_INPUT){
-    //4
+    //4 - Get a snapshot of the repository's configuration
     //
-    //Get a snapshot of the repository's configuration
+    //
     //
     //int git_repository_config_snapshot(git_config **out, git_repository *repo);
 }
 
 void repository_detach_head(MEX_DEF_INPUT){
-    //5
+    //5 - Detach the HEAD.
+    //DONE
     //
-	//Detach the HEAD.
+    //  libgit(0,5,repo)
     //
     //int git_repository_detach_head(git_repository *repo);
+    
+    if (nrhs != 2){
+        mexErrMsgIdAndTxt("libgit:repo:repository_detach_head","3 inputs required");
+    }
+    
+    git_repository *repo = mx_to_git_repo(prhs[2]);
+    int response = git_repository_detach_head(repo);
+  	handle_error(response,"libgit:repo:repository_detach_head"); 
 }
 
 
@@ -110,7 +123,7 @@ void repository_get_namespace(MEX_DEF_INPUT){
     
     git_repository* repo = mx_to_git_repo(prhs[2]);
     const char *name = git_repository_get_namespace(repo);
-    plhs[0] = mxCreateString(name);
+    plhs[0] = string__to_mx(name);
 }
 
 void repository_hashfile(MEX_DEF_INPUT){
@@ -358,28 +371,27 @@ void repository_new(MEX_DEF_INPUT){
 }
 
 void repository_odb(MEX_DEF_INPUT){
-    //29
+    //29 - Get the Object Database for this repository.
     //
-    //  
-    //
-    //Get the Object Database for this repository.
     //
     //int git_repository_odb(git_odb **out, git_repository *repo);
 }
 
 void repository_open(MEX_DEF_INPUT){
-    //30
+    //30 - Open a git repository.
     //
-    //  Open a git repository.
+    //  
     //
     //  repo = mex(0,30,file_path)
     
     //TODO: Verify file_path as char
-    int error;
-    git_repository *repo = NULL;
+    if (nrhs != 3){
+        mexErrMsgIdAndTxt("libgit:repo:repository_open","3 inputs required");
+    }
     
-    const char *file_path = mxArrayToString(prhs[2]);
-    error = git_repository_open(&repo,file_path);
+    git_repository *repo;
+    const char *file_path = mx_to_char(prhs[2]);
+    int error = git_repository_open(&repo,file_path);
     handle_error(error,"libgit:repo:repository_open");
 
     mxFree((void *)file_path);   
@@ -414,11 +426,12 @@ void repository_open_from_worktree(MEX_DEF_INPUT){
 }
 
 void repository_path(MEX_DEF_INPUT){
-    //34 - DONE
+    //34 - Get the path of this repository
+    //DONE
     //
-    //  path = mex(0,34,repo);
+    //  path = libgit(0,34,repo);
     //
-    //Get the path of this repository
+    //
     //
     //const char * git_repository_path(git_repository *repo);
     

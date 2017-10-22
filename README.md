@@ -1,13 +1,14 @@
 # libgit2_matlab
 
-libgit2_matlab is a Matlab interface to the libgit2 library. It is in the very very early stages of development.
+libgit2_matlab is a Matlab interface to the libgit2 library. It is in the very early stages of development.
 
 My immediate goal is to facilitate reporting of the status of a local repository relative to a remote, and to allow automatic updating of the local copy based on the remote.
 
 #Status
 
-The extent of my implemented code is as follows. It doesn't accomplish much right now. Note that I've only compiled the code for Mac OS so far.
+The extent of my implemented code is as follows. It doesn't accomplish much right now. 
 
+TODO: This is out of date
 ```
 file_path = '/path/to/repo';
 repo = git.base.repository(file_path);
@@ -30,7 +31,7 @@ See also: https://git-scm.com/book/en/v2/Appendix-B%3A-Embedding-Git-in-your-App
 
 https://git-scm.com/
 
-The git shell is the reference implementation for git. Unfortunately, the interface is via the command line. Inputs to the shell are meant to be done interactively, and outputs are meant to be read by a human. Although it is possible to interface with git via the shell, any programmatic understanding of the output would require parsing of free-form text and hoping that nothing changes.
+The git shell is the reference implementation for git. Unfortunately, the interface is via the command line. Inputs to the shell are meant to be done interactively, and outputs are meant to be read by a human. Although it is possible to interface with git via the shell, any programmatic understanding of the output would require parsing of free-form text and hoping that nothing changes. Interestingly this is actually what is done in the new form (late 2016) of the GitHub Desktop.
 
 ## JGit
 

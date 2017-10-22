@@ -8,8 +8,26 @@ classdef branch_iterator
     end
     
     methods (Static)
-        function value = getLocalBranchNames()
-            value = [];
+        function value = getLocalBranchNames(repo)
+            %
+            %
+            %   value = git.base.branch_iterator.getLocalBranchNames(repo)
+            
+            iter = git.base.branch_iterator(repo,0);
+            
+            value = cell(20,1);
+            I = 0;
+            done = false;
+            while ~done
+                ref = iter.getNextBranch;
+                if isempty(ref)
+                    done = true;
+                else
+                    I = I + 1;
+                    value{I} = ref.name;
+                end
+            end
+            value(I+1:end) = [];
         end
         function value = getRemoteBranchNames()
             value = [];

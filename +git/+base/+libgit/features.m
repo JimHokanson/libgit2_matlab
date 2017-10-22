@@ -2,6 +2,10 @@ classdef features < handle
     %
     %   Class:
     %   git.base.libgit.features
+    %
+    %   See Also
+    %   --------
+    %   git.base.libgit.version
     
     properties
         threads

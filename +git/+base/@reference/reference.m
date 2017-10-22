@@ -8,7 +8,7 @@ classdef reference < handle
     %{
     repo = git.base.repository(file_path);
     ref_list = repo.getReferenceList;
-    ref = git.base.reference.fromRepoAndName(repo,ref_list{3});
+    ref = repo.getReference(ref_list{1})
     %}
     
     properties (Hidden)
@@ -20,7 +20,6 @@ classdef reference < handle
     end
     
     properties (Dependent)
-        repo
         name
         has_log
         is_branch
@@ -33,9 +32,7 @@ classdef reference < handle
     end
     
     methods
-        function value = get.repo(obj)
-            value = libgit(3,30,obj.h);
-        end
+
         function value = get.name(obj)
             value = libgit(3,25,obj.h);
         end
@@ -58,10 +55,8 @@ classdef reference < handle
             value = libgit(3,36,obj.h);
         end
         function value = get.oid(obj)
-            
             oid_raw = libgit(3,41,obj.h);
             value = git.base.oid(oid_raw);
-           
         end
     end
     
@@ -112,10 +107,31 @@ classdef reference < handle
             end
             obj.h = h;
         end
-    end
-    methods
         function delete(obj)
             libgit(3,13,obj.h);
+        end
+    end
+    
+    methods
+        function repo = getParentRepo(obj)
+            
+            repo_h = obj.getRepoHandle();
+            %We need to first implement constructor counting
+            repo = git.base.repository.fromHandle(repo_h);
+        end
+        function branch = getAsBranch(obj)
+            %1) Check that it is a branch
+            %2) Need the repo to be resolved properly
+            if ~obj.is_branch
+                error('The reference does not point to a branch')
+            end
+            branch = git.base.branch.fromReference(obj);
+        end
+    end
+    
+    methods (Hidden)
+        function repo_h = getRepoHandle(obj)
+            repo_h = libgit(3,30,obj.h);
         end
     end
     %-------------------------------------------------------------------

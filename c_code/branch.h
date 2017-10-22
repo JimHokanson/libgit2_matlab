@@ -1,6 +1,8 @@
 #include "mex.h"
 #include "libgit_utils.h"
 
+//  git.base.branch
+//
 //https://libgit2.github.com/libgit2/#HEAD/group/branch
 
 void branch_create(MEX_DEF_INPUT){
@@ -37,28 +39,24 @@ void branch_delete(MEX_DEF_INPUT){
 }
 
 void branch_is_head(MEX_DEF_INPUT){
-    //4
+    //4 - Determine if the current local branch is pointed at by HEAD.
+    //DONE
     //
     //  head = mex(10,4,branch)
-    //
-    //Determine if the current local branch is pointed at by HEAD.
     //
     //int git_branch_is_head(const git_reference *branch);
     
     git_reference* ref = mx_to_git_ref(prhs[2]);
-    
-    int error = git_branch_is_head(mx_to_git_ref(prhs[2]));
-    handle_error(error,"libgit:branch:branch_is_head"); 
-    plhs[0] = int32__to_mx(error);
-
+    int response = git_branch_is_head(ref);
+    handle_error(response,"libgit:branch:branch_is_head"); 
+    plhs[0] = int32__to_mx(response);
 }
 
 void branch_iterator_free(MEX_DEF_INPUT){
-    //5
+    //5 - Free a branch iterator
+    //DONE
     //
-    //  mex(10,5,iter)
-    //
-    //Free a branch iterator
+    //  libgit(10,5,iter)
     //
     //void git_branch_iterator_free(git_branch_iterator *iter);
     
@@ -68,15 +66,22 @@ void branch_iterator_free(MEX_DEF_INPUT){
 }
 
 void branch_iterator_new(MEX_DEF_INPUT){
-    //6
-    //
+    //6 - Create an iterator which loops over the requested branches.
+    //DONE
     //      0  1   2   3   
-    //  mex(10,6,repo,flags)
+    //  iter = libgit(10,6,repo,flags)
     //
-    //Create an iterator which loops over the requested branches.
+    //  Inputs
+    //  ------
+    //  flags : 
+    //      0 - local branches only
+    //      1 - remote branches only
+    //      2 - both local and remote
     //
     //int git_branch_iterator_new(git_branch_iterator **out, git_repository *repo, git_branch_t list_flags);
-    //
+    
+    
+    
     //https://libgit2.github.com/libgit2/#HEAD/group/branch/git_branch_iterator_new
     //
     //  Filtering flags for the branch listing. Valid values are 
@@ -94,6 +99,7 @@ void branch_iterator_new(MEX_DEF_INPUT){
             mexErrMsgIdAndTxt("libgit:branch:branch_lookup","Type must be a double");
         }
         
+        //TODO: Use mx_to_git_branch_type instead?????
         switch((int)mxGetScalar(prhs[3])){
             case 0:
                 list_flags = GIT_BRANCH_LOCAL;
@@ -105,28 +111,33 @@ void branch_iterator_new(MEX_DEF_INPUT){
                 list_flags = GIT_BRANCH_ALL;
                 break;
             default:
-                mexErrMsgIdAndTxt("branch_iterator_new:unrecognized_option","option not found");
+                mexErrMsgIdAndTxt("libgit:branch_iterator_new:unrecognized_option","option not found");
         }
     }
     
     git_branch_iterator *out;
     git_repository *repo = mx_to_git_repo(prhs[2]);
-    int error = git_branch_iterator_new(&out,repo,list_flags);
-    handle_error(error,"libgit:branch:branch_iterator_new"); 
+    int response = git_branch_iterator_new(&out,repo,list_flags);
+    handle_error(response,"libgit:branch:branch_iterator_new"); 
     plhs[0] = git_branch_iterator__to_mx(out);
     
 }
 
 void branch_lookup(MEX_DEF_INPUT){
-    //7
+    //7 - Lookup a branch by its name in a repository.
+    //DONE
+    //
     //          0  1  2    3          4
     //  libgit2(10,7,repo,branch_name,branch_type);
     //
-    //  0 - local
-    //  1 - remote
+    //  Inputs
+    //  -------
+    //  branch_type :
+    //      0 - local
+    //      1 - remote
     //
+    //  branch_name - refs/heads/master doesn't work - needs to be 'master'
     //
-    //Lookup a branch by its name in a repository.
     //
     //int git_branch_lookup(git_reference **out, git_repository *repo, 
     //      const char *branch_name, git_branch_t branch_type);
@@ -145,6 +156,10 @@ void branch_lookup(MEX_DEF_INPUT){
     git_branch_t branch_type = mx_to_git_branch_type(prhs[4]);
     git_reference *out;
     int response = git_branch_lookup(&out,repo,branch_name,branch_type);
+    
+    //GIT_ENOTFOUND - no matching branch found
+    //GIT_EINVALIDSPEC
+        
     handle_error(response,"libgit:branch:branch_lookup"); 
     plhs[0] = git_reference__to_mx(out);
 
@@ -163,30 +178,35 @@ void branch_move(MEX_DEF_INPUT){
 }
 
 void branch_name(MEX_DEF_INPUT){
-    //9
-    //
-    //Return the name of the given local or remote branch.
+    //9 - Return the name of the given local or remote branch.
     //
     //int git_branch_name(const char **out, const git_reference *ref);
 
+    const git_reference * ref = mx_to_git_ref(prhs[2]);
+    const char * out;
+    int response = git_branch_is_head(&out,ref);
+    mexPrintf("out: %s\n",out);
+    handle_error(response,"libgit:branch:branch_name"); 
+    plhs[0] = string__to_mx(out);
 }
 
 void branch_next(MEX_DEF_INPUT){
-    //10
+    //10 - Retrieve the next branch from the iterator
+    //DONE
     //
     //  [ref,out_type] = mex(10,10,iter)
     //
-    //Retrieve the next branch from the iterator
+    //
     //
     //int git_branch_next(git_reference **out, git_branch_t *out_type, git_branch_iterator *iter);  
     //
     //0 on success, GIT_ITEROVER if there are no more branches or an error code.
     //
-    //  ?? - don't we already know outtype - I guess not if we do all
+    //  
     //out_type => 
-    //GIT_BRANCH_LOCAL
-    //GIT_BRANCH_REMOTE
-    //GIT_BRANCH_ALL
+    //  GIT_BRANCH_LOCAL
+    //  GIT_BRANCH_REMOTE
+    //  GIT_BRANCH_ALL
     
     if (!(nlhs == 1 || nlhs == 2)){
         mexErrMsgIdAndTxt("libgit:branch:branch_next","1 or 2 outputs needed");
@@ -200,8 +220,9 @@ void branch_next(MEX_DEF_INPUT){
     if (response == GIT_ITEROVER){
         plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
         if (nlhs == 2){
-           plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL); 
+           plhs[1] = mxCreateDoubleMatrix(0,0,mxREAL); 
         }
+        return;
     }
     
     handle_error(response,"libgit:branch:branch_next"); 

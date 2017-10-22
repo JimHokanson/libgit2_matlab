@@ -21,6 +21,13 @@ mxArray* string__to_mx(const char *s){
     return mxCreateString(s);
 }
 
+mxArray* uint64__to_mx(uint64_t v){
+    mxArray *out = mxCreateNumericMatrix(1,1,mxUINT64_CLASS,mxREAL);
+    uint64_t *data = (uint64_t *)mxGetData(out);
+    *data = v;
+    return out;
+}
+
 mxArray* int64__to_mx(int64_t v){
     mxArray *out = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
     int64_t *data = (int64_t *)mxGetData(out);
@@ -43,7 +50,11 @@ mxArray* int32__to_mx(int v){
 }
 
 mxArray* sizet__to_mx(size_t v2){
-    return uint32__to_mx((uint32_t)v2);
+    return uint64__to_mx((uint64_t)v2);
+}
+
+mxArray* ssizet__to_mx(ssize_t v2){
+    return int64__to_mx((int64_t)v2);
 }
 
 mxArray* uint16__to_mx(uint16_t v){
@@ -54,6 +65,30 @@ mxArray* uint16__to_mx(uint16_t v){
 }
 
 //=========================================================================
+mxArray* git_buf__to_mx(git_buf * buf){
+   //https://libgit2.github.com/libgit2/#HEAD/type/git_buf 
+//         A git_buf may also be used for the caller to pass in a reference to a
+//     block of memory they hold. In this case, libgit2 will not resize or
+//     free the memory, but will read from it as needed.
+// 
+// A git_buf is a public structure with three fields:
+// 
+// ptr points to the start of the allocated memory. If it is NULL, then the
+// git_buf is considered empty and libgit2 will feel free to overwrite it
+// with new data.
+// 
+// size holds the size (in bytes) of the data that is actually used.
+// 
+// asize holds the known total amount of allocated memory if the ptr was
+// allocated by libgit2. It may be larger than size. If ptr was not
+// allocated by libgit2 and should not be resized and/or freed, then asize
+// will be set to zero.
+    
+    mxArray *out = mxCreateNumericMatrix(1,(int) buf->size,mxINT32_CLASS,mxREAL);
+    uint8_t *data = (uint8_t *)mxGetData(out);
+    memcpy(data,buf->ptr,buf->size);
+}
+
 mxArray* git_off_t__to_mx(git_off_t t){
     return int64__to_mx(t);
 }
@@ -86,7 +121,7 @@ mxArray* git_strarray__to_mx(git_strarray *s, int free_git){
     //          size_t count;
     //     } git_strarray;
     
-    mxArray *output = mxCreateCellMatrix(1,s->count);
+    mxArray *output = mxCreateCellMatrix(1,(int)s->count);
     for (size_t i = 0; i < s->count; i++){
        mxSetCell(output,i,mxCreateString(s->strings[i]));
     }

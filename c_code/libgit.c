@@ -72,6 +72,14 @@ void shutdown() {
 }
 
 void get_libgit_features(MEX_DEF_INPUT){
+    //0 - Retrieve libgit features
+    //DONE
+    //
+    //  libgit(4,0)
+    //
+    //  git.base.libgit.features
+    
+    
     int features = git_libgit2_features();
     plhs[0] = mxCreateLogicalMatrix(1,3);
     bool *data = (bool *)mxGetData(plhs[0]);
@@ -83,7 +91,15 @@ void get_libgit_features(MEX_DEF_INPUT){
     //GIT_FEATURE_SSH 
 }
 
+
 void get_libgit_option(MEX_DEF_INPUT){
+    //1 - Set or query a library global option
+    //In Progress
+    //
+    //  libgit(4,1,opt_number)
+    //
+    
+    
    //https://libgit2.github.com/libgit2/#HEAD/group/libgit2/git_libgit2_opts
     
     //01  GIT_OPT_GET_MWINDOW_SIZE
@@ -91,18 +107,37 @@ void get_libgit_option(MEX_DEF_INPUT){
     //03  GIT_OPT_GET_SEARCH_PATH
     //04  GIT_OPT_GET_CACHED_MEMORY
     //05  GIT_OPT_GET_TEMPLATE_PATH
+
+    //TODO: It might be better to call generic functions rather
+    //than declaring all types here
+    size_t value1;
+    ssize_t value2, value3;
+    git_buf buf;
+    
+    
     int option = (int)mxGetScalar(prhs[2]);
     switch (option){
         case 1:
+            //libgit(4,1,1)
+            //
             //opts(GIT_OPT_GET_MWINDOW_SIZE, size_t *):
             //> Get the maximum mmap window size
+            
+            git_libgit2_opts(GIT_OPT_GET_MWINDOW_SIZE, &value1);
+            plhs[0] = sizet__to_mx(value1);
             break;
         case 2:
+            //libgit(4,1,2)
+            //
             //opts(GIT_OPT_GET_MWINDOW_MAPPED_LIMIT, size_t *):
             //> Get the maximum memory that will be mapped in 
             //total by the library
+            git_libgit2_opts(GIT_OPT_GET_MWINDOW_MAPPED_LIMIT, &value1);
+            plhs[0] = sizet__to_mx(value1);
             break;
         case 3:
+            //libgit(4,1,3,level)
+            //
             //opts(GIT_OPT_GET_SEARCH_PATH, int level, git_buf *buf)
             //> Get the search path for a given level of config data.  
             //"level" must be one of 
@@ -112,11 +147,30 @@ void get_libgit_option(MEX_DEF_INPUT){
             //      `GIT_CONFIG_LEVEL_PROGRAMDATA`.   
             //  
             //> The search path is written to the `out` buffer.
+            //
+            //opts(GIT_OPT_GET_SEARCH_PATH, int level, git_buf *buf)
+            
+// // // //             //TODO: Get level ...
+// // // //             
+// // // //             git_libgit2_opts(GIT_OPT_GET_SEARCH_PATH, &buf);
+// // // //             
+// // // //             //TODO: This would be better as creating a string
+// // // //             //but we would need to create a string of specified
+// // // //             //length because buffer is not necessarily null-terminated
+// // // //             plhs[0] = git_buf__to_mx(buf);
             break;
         case 4:
+            //[current,allowed] = libgit(4,1,4)
+            //
             //opts(GIT_OPT_GET_CACHED_MEMORY, ssize_t *current, ssize_t *allowed)
             //> Get the current bytes in cache and the maximum that would be      
             //  allowed in the cache.
+            
+         	git_libgit2_opts(GIT_OPT_GET_CACHED_MEMORY, &value2, &value3);
+            plhs[0] = ssizet__to_mx(value2);
+            plhs[1] = ssizet__to_mx(value3);
+            break;
+            
             break;
         case 5:
             //opts(GIT_OPT_GET_TEMPLATE_PATH, git_buf *out)
@@ -129,6 +183,9 @@ void get_libgit_option(MEX_DEF_INPUT){
 }
 
 void set_libgit_option(MEX_DEF_INPUT){
+
+    
+    
    //https://libgit2.github.com/libgit2/#HEAD/group/libgit2/git_libgit2_opts 
     
     //01  GIT_OPT_GET_MWINDOW_SIZE
@@ -147,14 +204,19 @@ void set_libgit_option(MEX_DEF_INPUT){
     int option = (int)mxGetScalar(prhs[2]);
     switch (option){
         case 1:
+            //opts(GIT_OPT_GET_MWINDOW_SIZE, size_t *):
             break;
         case 2:
+            //opts(GIT_OPT_GET_MWINDOW_MAPPED_LIMIT, size_t *):
             break;
         case 3:
+            //opts(GIT_OPT_GET_SEARCH_PATH, int level, git_buf *buf)
             break;
         case 4:
+            //opts(GIT_OPT_SET_CACHE_OBJECT_LIMIT, git_otype type, size_t size)
             break;
         case 5:
+            //
             break;
         case 6:
             break;
@@ -173,15 +235,149 @@ void set_libgit_option(MEX_DEF_INPUT){
         default:
             mexErrMsgIdAndTxt("libgit:input_3","libgit.h, option not recognized");
     }
+    
+    
+    
+
+//     * opts(GIT_OPT_GET_MWINDOW_SIZE, size_t *):
+// 
+//     > Get the maximum mmap window size
+// 
+// * opts(GIT_OPT_SET_MWINDOW_SIZE, size_t):
+// 
+//     > Set the maximum mmap window size
+// 
+// * opts(GIT_OPT_GET_MWINDOW_MAPPED_LIMIT, size_t *):
+// 
+//     > Get the maximum memory that will be mapped in total by the library
+// 
+// * opts(GIT_OPT_SET_MWINDOW_MAPPED_LIMIT, size_t):
+// 
+//     >Set the maximum amount of memory that can be mapped at any time
+//     by the library
+// 
+// * opts(GIT_OPT_GET_SEARCH_PATH, int level, git_buf *buf)
+// 
+//     > Get the search path for a given level of config data.  "level" must
+//     > be one of `GIT_CONFIG_LEVEL_SYSTEM`, `GIT_CONFIG_LEVEL_GLOBAL`,
+//     > `GIT_CONFIG_LEVEL_XDG`, or `GIT_CONFIG_LEVEL_PROGRAMDATA`.        >
+//     The search path is written to the `out` buffer.
+// 
+// * opts(GIT_OPT_SET_SEARCH_PATH, int level, const char *path)
+// 
+//     > Set the search path for a level of config data.  The search path
+//     > applied to shared attributes and ignore files, too.       >       >
+//     - `path` lists directories delimited by GIT_PATH_LIST_SEPARATOR.
+//     >   Pass NULL to reset to the default (generally based on environment
+//     >   variables).  Use magic path `$PATH` to include the old value
+//     >   of the path (if you want to prepend or append, for instance).
+//     >       > - `level` must be `GIT_CONFIG_LEVEL_SYSTEM`,      >
+//     `GIT_CONFIG_LEVEL_GLOBAL`, `GIT_CONFIG_LEVEL_XDG`, or       >
+//     `GIT_CONFIG_LEVEL_PROGRAMDATA`.
+// 
+// * opts(GIT_OPT_SET_CACHE_OBJECT_LIMIT, git_otype type, size_t size)
+// 
+//     > Set the maximum data size for the given type of object to be      >
+//     considered eligible for caching in memory.  Setting to value to
+//     > zero means that that type of object will not be cached.       >
+//     Defaults to 0 for GIT_OBJ_BLOB (i.e. won't cache blobs) and 4k
+//     > for GIT_OBJ_COMMIT, GIT_OBJ_TREE, and GIT_OBJ_TAG.
+// 
+// * opts(GIT_OPT_SET_CACHE_MAX_SIZE, ssize_t max_storage_bytes)
+// 
+//     > Set the maximum total data size that will be cached in memory     >
+//     across all repositories before libgit2 starts evicting objects
+//     > from the cache.  This is a soft limit, in that the library might
+//     > briefly exceed it, but will start aggressively evicting objects
+//     > from cache when that happens.  The default cache size is 256MB.
+// 
+// * opts(GIT_OPT_ENABLE_CACHING, int enabled)
+// 
+//     > Enable or disable caching completely.     >       > Because caches
+//     are repository-specific, disabling the cache       > cannot
+//     immediately clear all cached objects, but each cache will      > be
+//     cleared on the next attempt to update anything in it.
+// 
+// * opts(GIT_OPT_GET_CACHED_MEMORY, ssize_t *current, ssize_t *allowed)
+// 
+//     > Get the current bytes in cache and the maximum that would be      >
+//     allowed in the cache.
+// 
+// * opts(GIT_OPT_GET_TEMPLATE_PATH, git_buf *out)
+// 
+//     > Get the default template path.        > The path is written to the
+//     `out` buffer.
+// 
+// * opts(GIT_OPT_SET_TEMPLATE_PATH, const char *path)
+// 
+//     > Set the default template path.        >       > - `path` directory
+//     of template.
+// 
+// * opts(GIT_OPT_SET_SSL_CERT_LOCATIONS, const char *file, const char
+// *path)
+// 
+//     > Set the SSL certificate-authority locations.      >       > -
+//     `file` is the location of a file containing several     >
+//     certificates concatenated together.     > - `path` is the location of
+//     a directory holding several       >   certificates, one per file.
+//     >       > Either parameter may be `NULL`, but not both.
+// 
+// * opts(GIT_OPT_SET_USER_AGENT, const char *user_agent)
+// 
+//     > Set the value of the User-Agent header.  This value will be       >
+//     appended to "git/1.0", for compatibility with other git clients.
+//     >       > - `user_agent` is the value that will be delivered as the
+//     >   User-Agent header on HTTP requests.
+// 
+// * opts(GIT_OPT_SET_WINDOWS_SHAREMODE, unsigned long value)
+// 
+//     > Set the share mode used when opening files on Windows.        > For
+//     more information, see the documentation for CreateFile.       > The
+//     default is: FILE_SHARE_READ | FILE_SHARE_WRITE.  This is      >
+//     ignored and unused on non-Windows platforms.
+// 
+// * opts(GIT_OPT_GET_WINDOWS_SHAREMODE, unsigned long *value)
+// 
+//     > Get the share mode used when opening files on Windows.
+// 
+// * opts(GIT_OPT_ENABLE_STRICT_OBJECT_CREATION, int enabled)
+// 
+//     > Enable strict input validation when creating new objects      > to
+//     ensure that all inputs to the new objects are valid.  For      >
+//     example, when this is enabled, the parent(s) and tree inputs      >
+//     will be validated when creating a new commit.  This defaults      >
+//     to enabled.
+// 
+// * opts(GIT_OPT_ENABLE_STRICT_SYMBOLIC_REF_CREATION, int enabled)
+// 
+//     > Validate the target of a symbolic ref when creating it.  For      >
+//     example, `foobar` is not a valid ref, therefore `foobar` is       >
+//     not a valid target for a symbolic ref by default, whereas     >
+//     `refs/heads/foobar` is.  Disabling this bypasses validation       >
+//     so that an arbitrary strings such as `foobar` can be used     > for a
+//     symbolic ref target.  This defaults to enabled.
+// 
+// * opts(GIT_OPT_SET_SSL_CIPHERS, const char *ciphers)
+
+    
 }
 
 void get_libgit_version(MEX_DEF_INPUT){
+    //3 - Get libgit version info
+    //DONE
+    //
+    //  libgit(4,3)
+    //
+    //  void git_libgit2_version(int *major, int *minor, int *rev);
+    
     int major;
     int minor;
     int rev;
-    //void git_libgit2_version(int *major, int *minor, int *rev);
+    
     git_libgit2_version(&major, &minor, &rev);
+    
     plhs[0] = mxCreateNumericMatrix(1,3,mxINT32_CLASS,0);
+    
     int *data = (int *)mxGetData(plhs[0]);
     *data = major;
     *(data+1) = minor;
@@ -212,6 +408,8 @@ void libgit(MEX_DEF_INPUT){
             mexErrMsgIdAndTxt("libgit:input_2","libgit.h, input sub-type not recognized");
     }
 }
+
+//
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 {

@@ -548,7 +548,7 @@ void get_fetch_options(MEX_DEF_INPUT){
 
 void remote(MEX_DEF_INPUT)
 {
-    int error;
+    
     int sub_type = (int)mxGetScalar(prhs[1]);
     
     switch (sub_type) {

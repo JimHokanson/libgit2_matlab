@@ -3,6 +3,12 @@
 #ifndef LIBGIT_UTILS_H
 #define LIBGIT_UTILS_H
 
+//https://stackoverflow.com/questions/22265610/why-ssize-t-in-visual-studio-2010-is-defined-as-unsigned
+#if defined(_MSC_VER)
+#include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+#endif
+
 #ifdef _WIN32
 #include "windows/git2.h"
 #else
@@ -40,14 +46,6 @@ git_oid* get_oid_input(const mxArray *input){
     return (git_oid *)mxGetData(input);
     
 }
-
-//Output Handling
-//----------------------------------------------
-//TODO: Make this a macro
-
-//SET_POINTER_OUTPUT(set_repo_output,git_repository)
-//SET_POINTER_OUTPUT(set_remote_output,git_remote)
-
 
 
 
@@ -94,6 +92,7 @@ void handle_error(int error,const char *caller){
         mexErrMsgIdAndTxt(caller,"Reported error: %d\n",error);
     }
     
+    //https://github.com/libgit2/libgit2/blob/13c1bf0718363960c1867f35c9ce3ebc7bf74729/include/git2/errors.h
 }
 
 #endif

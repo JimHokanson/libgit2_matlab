@@ -33,9 +33,26 @@ classdef repository < sl.obj.display_class
         file_path
     end
     
+    methods
+        function value = get.file_path(obj)
+           value = libgit(0,34,obj.h); 
+        end
+    end
+    
     %Repo creation methods
     methods (Static)
-        
+        function obj = fromHandle(h)
+            %
+            %   obj = git.base.repository.fromHandle(h);
+
+            %Ideally we could get a handle copy method or track refences
+            %but if we pass this to another instance of the object we
+            %get 2 delete requests for 1 underlying handle and this causes
+            %Matlab to crash
+            
+            file_path = libgit(0,34,h);
+            obj = git.base.repository(file_path);
+        end
     end
     
     %Constructor
@@ -44,16 +61,22 @@ classdef repository < sl.obj.display_class
         function obj = repository(file_path)
             %
             %   obj = git.base.repository(file_path)
+            %
             
-            %TODO: Change this
-            obj.file_path = file_path;
-            
-            obj.h = libgit(0,30,file_path);
+            %if ischar(file_path_or_h)
+                obj.h = libgit(0,30,file_path);
+            %else
+            %    obj.h = file_path_or_h;
+            %end
+           
         end
     end
     
     
     methods
+        function detatchHead(obj)
+            libgit(0,5,obj.h)
+        end
         function branch = getBranch(obj,branch_name,is_remote)
             branch = git.base.branch.fromName(obj,branch_name,is_remote);
         end

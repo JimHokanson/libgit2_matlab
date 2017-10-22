@@ -14,8 +14,12 @@ unsigned int mx_to_uint32(const mxArray *input){
 
 const char * mx_to_char(const mxArray *input){
      //mx_to_char(prhs[2]);
-    //
-     //No logic, for now ...
+
+    if(!mxIsClass(input,"char")){
+        mexErrMsgIdAndTxt("libgit:mx_to_c:mx_to_char","Input is not a string as expected");
+    }
+    
+    
      return mxArrayToString(input);
      //Also be sure to call:
      //mxFree((void *)string);   
@@ -41,7 +45,7 @@ git_branch_t mx_to_git_branch_type(const mxArray *input){
     git_branch_t return_value = -1;
     
     if (branch_type == 0){
-        return_value =  GIT_BRANCH_LOCAL;
+        return_value = GIT_BRANCH_LOCAL;
     }else if (branch_type == 1){
         return_value = GIT_BRANCH_REMOTE;
     }else{

@@ -3,17 +3,31 @@ classdef options
     %   Class:
     %   git.base.libgit.options
     
-    properties
+    properties (Dependent)
+        max_mmap_window_size
+        max_memory_library
+        n_bytes_in_cache
+        max_bytes_in_cache
+        
+        %TODO: I'm getting 8 GB for n_bytes_in_cache and 1 for max_bytes_in_cache
+        %
+        %   What does this mean?
     end
     
     methods
-        function get_mwindow_size()
+        function value = get.max_mmap_window_size(obj)
+            value = libgit(4,1,1);
         end
-        function set_mwindow_size()
+%         function set.max_mmap_window_size(obj,value)
+%         end
+        function value = get.max_memory_library(obj)
+            value = libgit(4,1,2);
         end
-        function get_mwindow_mapped_limit()
+        function value = get.n_bytes_in_cache(obj)
+            [value,~] = libgit(4,1,4);
         end
-        function set_mwindow_mapped_limit()
+        function value = get.max_bytes_in_cache(obj)
+            [~,value] = libgit(4,1,4);
         end
     end
     
