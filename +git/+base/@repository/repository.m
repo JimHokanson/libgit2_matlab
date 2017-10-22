@@ -79,7 +79,7 @@ classdef repository < sl.obj.display_class
             %   --------------------------
             %   list = repo.getRemoteList()
             %
-            %   list = {'origin'}
+            %   list => {'origin'}
             
             
             %   Note: 1 is for remotes
@@ -92,7 +92,12 @@ classdef repository < sl.obj.display_class
             %
             %   See Also
             %   --------
+            %   getRemoteList
             %   getReferenceList
+            
+            if nargin == 0
+                remote_name = 'origin';
+            end
             
             remote = git.base.remote.fromRepo(obj,remote_name);
         end
