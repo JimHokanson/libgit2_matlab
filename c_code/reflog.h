@@ -3,55 +3,101 @@
 //https://libgit2.github.com/libgit2/#HEAD/group/config
 
 void reflog_append(MEX_DEF_INPUT){
-    //1
+    //1 - Add a new entry to the in-memory reflog.
+    //
+    //  int git_reflog_append(git_reflog *reflog, const git_oid *id, 
+    //              const git_signature *committer, const char *msg);
 }
 
 void reflog_delete(MEX_DEF_INPUT){
-    //2
+    //2 - Delete the reflog for the given reference
+    //
+    //  int git_reflog_delete(git_repository *repo, const char *name);
+
 }
 
 void reflog_drop(MEX_DEF_INPUT){
-    //3
+    //3 - Remove an entry from the reflog by its index
+    //
+    //  int git_reflog_drop(git_reflog *reflog, size_t idx, int rewrite_previous_entry);
+
 }
 
 void reflog_entry_byindex(MEX_DEF_INPUT){
-    //4
+    //4 - Lookup an entry by its index
+    //
+    //  const git_reflog_entry * git_reflog_entry_byindex(const git_reflog *reflog, 
+    //                      size_t idx);
 }
 
 void reflog_entry_committer(MEX_DEF_INPUT){
-    //5
+    //5 - Get the committer of this entry
+    //
+    //  const git_signature * git_reflog_entry_committer(const git_reflog_entry *entry);
+
+
 }
 
 void reflog_entry_id_new(MEX_DEF_INPUT){
-    //6
+    //6 - Get the new oid
+    //
+    //  const git_oid * git_reflog_entry_id_new(const git_reflog_entry *entry);
+
+
 }
 
 void reflog_entry_id_old(MEX_DEF_INPUT){
-    //7
+    //7 - Get the old oid
+    //
+    //  const git_oid * git_reflog_entry_id_old(const git_reflog_entry *entry);
+
+
 }
 
 void reflog_entry_message(MEX_DEF_INPUT){
-    //8
+    //8 - Get the log message
+    //
+    //  const char * git_reflog_entry_message(const git_reflog_entry *entry);
+
+
 }
 
 void reflog_entrycount(MEX_DEF_INPUT){
-    //9
+    //9 - Get the number of log entries in a reflog
+    //
+    //  size_t git_reflog_entrycount(git_reflog *reflog); 
+
 }
 
 void reflog_free(MEX_DEF_INPUT){
-    //10
+    //10 - Free the reflog
+    //
+    //  void git_reflog_free(git_reflog *reflog);
+
+
 }
 
 void reflog_read(MEX_DEF_INPUT){
-    //11
+    //11 - Read the reflog for the given reference
+    //
+    //  int git_reflog_read(git_reflog **out, git_repository *repo, const char *name);
+
+
 }
 
 void reflog_rename(MEX_DEF_INPUT){
-    //12
+    //12 - Rename a reflog
+    //
+    //  int git_reflog_rename(git_repository *repo, const char *old_name, const char *name);
+
 }
 
 void reflog_write(MEX_DEF_INPUT){
-    //13
+    //13 - Write an existing in-memory reflog object back to disk using an atomic file lock.
+    //
+    //  int git_reflog_write(git_reflog *reflog);
+
+
 }
 
 

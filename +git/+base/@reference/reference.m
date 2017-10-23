@@ -20,7 +20,8 @@ classdef reference < handle
     end
     
     properties (Dependent)
-        name
+        ref_name
+        ref_short_name
         has_log
         is_branch
         is_note
@@ -32,18 +33,20 @@ classdef reference < handle
     end
     
     methods
-
-        function value = get.name(obj)
+        function value = get.ref_name(obj)
             value = libgit(3,25,obj.h);
         end
+      	function value = get.ref_short_name(obj)
+            value = libgit(3,36,obj.h);
+        end
         function value = get.has_log(obj)
-            value = [];
+            value = libgit(3,14,obj.getRepoHandle,obj.ref_name);
         end
         function value = get.is_branch(obj)
             value = libgit(3,15,obj.h);
         end
         function value = get.is_note(obj)
-            value = [];
+            value = libgit(3,16,obj.h);
         end
         function value = get.is_remote(obj)
             value = libgit(3,17,obj.h);
@@ -53,6 +56,14 @@ classdef reference < handle
         end
         function value = get.shorthand(obj)
             value = libgit(3,36,obj.h);
+        end
+        function value = get.type(obj)
+            temp = libgit(3,43,obj.h);
+            if temp == 0
+                value = 'direct';
+            else
+                value = 'symbolic';
+            end
         end
         function value = get.oid(obj)
             oid_raw = libgit(3,41,obj.h);
@@ -83,6 +94,9 @@ classdef reference < handle
     %Constructors
     %-------------------------------------------------------------------
     methods (Static)
+%         function ref = fromRepoAndShortname(repo,short_name)
+%             
+%         end
         function ref = fromRepoAndName(repo,ref_name)
             %
             %   ref = git.base.reference.fromRepoAndName(repo,ref_name)

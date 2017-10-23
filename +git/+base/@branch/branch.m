@@ -28,20 +28,20 @@ classdef branch < handle
         b = ref.getAsBranch;
     %}
     
-    properties
+    properties (Hidden)
         h
     end
     
     properties (Dependent)
-%         is_remote
+        is_remote
         is_head 
         branch_name
     end
     
     methods
-%         function value = get.is_remote(obj)
-%             
-%         end
+        function value = get.is_remote(obj)
+           value = libgit(3,17,obj.h); 
+        end
         function value = get.is_head(obj)
            value = libgit(10,4,obj.h); 
         end
@@ -75,8 +75,6 @@ classdef branch < handle
             %   obj = git.base.branch.fromReference(ref)
             
             repo_h = ref.getRepoHandle();
-            I = strfind(ref.name,'/');
-            
             branch_name = libgit(10,9,ref.h);
             
             obj = git.base.branch.fromName(repo_h,branch_name,ref.is_remote);
