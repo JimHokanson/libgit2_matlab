@@ -28,8 +28,10 @@ classdef reference < handle
         is_remote
         is_tag
         shorthand
+        
         type
-        oid
+        %  - 'direct'
+        %  - 'symbolic'
     end
     
     methods
@@ -65,27 +67,12 @@ classdef reference < handle
                 value = 'symbolic';
             end
         end
-        function value = get.oid(obj)
-            oid_raw = libgit(3,41,obj.h);
-            value = git.base.oid(oid_raw);
-        end
     end
-    
-    
-
-    methods
-%         function value = get.oid(obj)
-%             temp = libgit(3,26,obj.repo.h,obj.ref_name);
-%             %This may change
-%             value = git.base.oid(temp);
-%         end
-%         function value = get.owner(obj)
-%             value = obj.repo;
-%         end
-    end
-    
     
     methods (Static)
+        function list = getReferenceList(repo)
+            list = libgit(3,23,repo.h)';
+        end
 %         function isValidReferenceName(ref_name)
 %             
 %         end
@@ -94,9 +81,9 @@ classdef reference < handle
     %Constructors
     %-------------------------------------------------------------------
     methods (Static)
-%         function ref = fromRepoAndShortname(repo,short_name)
-%             
-%         end
+        function ref = fromRepoAndShortname(repo,short_name)
+            
+        end
         function ref = fromRepoAndName(repo,ref_name)
             %
             %   ref = git.base.reference.fromRepoAndName(repo,ref_name)
@@ -134,12 +121,23 @@ classdef reference < handle
             repo = git.base.repository.fromHandle(repo_h);
         end
         function branch = getAsBranch(obj)
+            %x Converts the reference to a branch object
+            %
+            %   branch = getAsBranch(obj)
+            %
+            %   
+            
+            
             %1) Check that it is a branch
             %2) Need the repo to be resolved properly
             if ~obj.is_branch
                 error('The reference does not point to a branch')
             end
             branch = git.base.branch.fromReference(obj);
+        end
+        function oid = getOID(obj)
+            oid_raw = libgit(3,41,obj.h);
+            oid = git.base.oid(oid_raw);
         end
     end
     

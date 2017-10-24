@@ -87,6 +87,9 @@ classdef repository < sl.obj.display_class
             c = [];
             %c = libgit(0,3,obj.h);
         end
+        function branch = getCurrentLocalBranch()
+            
+        end
         function namespace = getNamespace(obj)
             %x Get the currently active namespace for this repository
             %
@@ -113,6 +116,8 @@ classdef repository < sl.obj.display_class
             %
             %   remote = getRemote(obj,remote_name)
             %
+            %   
+            %
             %   See Also
             %   --------
             %   getRemoteList
@@ -127,15 +132,39 @@ classdef repository < sl.obj.display_class
         function list = getReferenceList(obj)
             %x Return names of all references that can be found in a repository. 
             %
-            %   Output
-            %   ------
+            %   list = getReferenceList(obj)
+            %
+            %   Outputs
+            %   -------
             %   list : cellstr
-            %   
+            %
+            %   Example
+            %   -------
+            %   list = repo.getReferenceList()
+            %
+            %   list => 
+            %   'refs/heads/master'
+            %   'refs/remotes/origin/HEAD'
+            %   'refs/remotes/origin/master'
             
             list = libgit(3,23,obj.h)';
         end
         function ref = getReference(obj,name)
-            %git.base.reference
+            %
+            %   ref = getReference(obj,name)
+            %
+            %   Inputs
+            %   ------
+            %   name : string
+            %       Reference name
+            %
+            %   Outputs
+            %   -------
+            %   ref : git.base.reference
+            %   
+            %   Example
+            %   -------
+            %   
             
             ref = git.base.reference.fromRepoAndName(obj,name);
         end

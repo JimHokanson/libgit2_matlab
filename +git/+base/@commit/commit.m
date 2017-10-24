@@ -10,7 +10,6 @@ classdef commit < handle
     end
     
     properties (Dependent)
-        oid
         encoding
         message
         summary
@@ -29,10 +28,6 @@ classdef commit < handle
     end
     
     methods
-        function value = get.oid(obj)
-            temp = libgit(2,15,obj.h);
-            value = git.base.oid(temp);
-        end
         function value = get.encoding(obj)
             value = libgit(2,19,obj.h);
             if isempty(value)
@@ -86,6 +81,13 @@ classdef commit < handle
         function tree = getTree(obj)
             tree_h = libgit(2,30,obj.h);
             tree = git.base.tree(tree_h);
+        end
+        function oid = getOID(obj)
+            oid_raw = libgit(2,15,obj.h);
+            oid = git.base.oid(oid_raw);
+        end
+        function getParent(obj)
+            
         end
     end
     methods

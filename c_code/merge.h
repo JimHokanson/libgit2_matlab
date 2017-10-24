@@ -2,6 +2,8 @@
 
 //https://libgit2.github.com/libgit2/#HEAD/group/config
 
+//29 - merge
+
 void merge(MEX_DEF_INPUT){
     //1 - Merges the given commit(s) into HEAD, writing the results into 
     //the working directory. Any changes are staged for commit and any 
@@ -22,9 +24,15 @@ void merge_analysis(MEX_DEF_INPUT){
     //2 - Analyzes the given branch(es) and determines the opportunities 
     //  for merging them into the HEAD of the repository.
     //
+    //  libgit(29,2,repo,...
+    //
     //  int git_merge_analysis(git_merge_analysis_t *analysis_out, 
     //          git_merge_preference_t *preference_out, git_repository *repo, 
     //          const git_annotated_commit **their_heads, size_t their_heads_len);
+    
+    
+  	git_repository *repo = mx_to_git_repo(prhs[2]);
+
 
 }
 

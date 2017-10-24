@@ -234,11 +234,11 @@ void reference_iterator_new(MEX_DEF_INPUT){
 }
 
 void reference_list(MEX_DEF_INPUT){
-    //23
+    //23 - Fill a list with all the references that can be found in a repository.
     //
     //  list = mex(3,23,repo)
     //
-    //Fill a list with all the references that can be found in a repository.
+    //
     //
     //int git_reference_list(git_strarray *array, git_repository *repo);
 
@@ -252,6 +252,7 @@ void reference_list(MEX_DEF_INPUT){
 
 void reference_lookup(MEX_DEF_INPUT){
     //24
+    //DONE
     //
     //  Calling form:
     //  ref = mex(1,24,repo,ref_name);
@@ -269,12 +270,10 @@ void reference_lookup(MEX_DEF_INPUT){
 }
 
 void reference_name(MEX_DEF_INPUT){
-    //25
+    //25 - Get the full name of a reference.
     //DONE
     //
     //  name = libgit(3,25,ref)
-    //
-    //  Get the full name of a reference.
     //
     //  const char * git_reference_name(const git_reference *ref);
 
@@ -284,18 +283,16 @@ void reference_name(MEX_DEF_INPUT){
 }
 
 void reference_name_to_id(MEX_DEF_INPUT){
-    //26
+    //26 - Lookup a reference by name and resolve immediately to OID.
     //
-    //Lookup a reference by name and resolve immediately to OID.
-    //
-    //  id = libgit(3,26,repo,ref_name)
+    //  got_oid = libgit(3,26,repo,ref_name)
     //  
-    //  int git_reference_name_to_id(git_oid *out, git_repository *repo, const char *name);
+    //  int git_reference_name_to_id(git_oid *out, git_repository *repo, 
+    //          const char *name);
     
     git_repository *repo = mx_to_git_repo(prhs[2]);
     const char *ref_name = mxArrayToString(prhs[3]);
     
-    //int git_reference_name_to_id(git_oid *out, git_repository *repo, const char *name);
     git_oid oid;
     int error = git_reference_name_to_id(&oid,repo,ref_name);
     handle_error(error,"libgit:reference:ref_to_id");

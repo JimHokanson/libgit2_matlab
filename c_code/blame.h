@@ -3,22 +3,25 @@
 //https://libgit2.github.com/libgit2/#HEAD/group/blame
 
 void blame_buffer(MEX_DEF_INPUT){
-    //1
-    //
-    //Get blame data for a file that has been modified in memory. The 
+    //1 - Get blame data for a file that has been modified in memory. The 
     //reference parameter is a pre-calculated blame for the in-odb history 
     //of the file. This means that once a file blame is completed //
     //(which can be expensive), updating the buffer blame is very fast.
     //
-    //int git_blame_buffer(git_blame **out, git_blame *reference, const char *buffer, size_t buffer_len);
+    //
+    //      libgit(8,1,...)  
+    //
+    //int git_blame_buffer(git_blame **out, git_blame *reference, 
+    //      const char *buffer, size_t buffer_len);
 }
 
 void blame_file(MEX_DEF_INPUT){
-    //2
+    //2 - Get the blame for a single file.
     //
-    //Get the blame for a single file.
-    //
-    //int git_blame_file(git_blame **out, git_repository *repo, const char *path, git_blame_options *options);
+    //int git_blame_file(git_blame **out, git_repository *repo, 
+    //      const char *path, git_blame_options *options);
+    
+    
 }
 
 void blame_free(MEX_DEF_INPUT){
@@ -56,11 +59,14 @@ void blame_get_hunk_count(MEX_DEF_INPUT){
 }
 
 void blame_init_options(MEX_DEF_INPUT){
-    //6
-    //
-    //Initializes a git_blame_options with default values. 
+    //6 - Initializes a git_blame_options with default values. 
     //Equivalent to creating an instance with GIT_BLAME_OPTIONS_INIT.
+    //
+    //  libgit(8,6,...)
+    //
     //int git_blame_init_options(git_blame_options *opts, unsigned int version);
+    //
+    //
     
 }
 

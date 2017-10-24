@@ -2,29 +2,30 @@
 
 //https://libgit2.github.com/libgit2/#HEAD/group/blob
 
+//9
+
 void blob_create_frombuffer(MEX_DEF_INPUT){
     //1
     //
     //Write an in-memory buffer to the ODB as a blob
     //
-    //int git_blob_create_frombuffer(git_oid *id, git_repository *repo, const void *buffer, size_t len);
+    //int git_blob_create_frombuffer(git_oid *id, git_repository *repo, 
+    //          const void *buffer, size_t len);
 }
 
 void blob_create_fromdisk(MEX_DEF_INPUT){
-    //2
-    //
-    //Read a file from the filesystem and write its content to the Object Database as a loose blob
+    //2 - Read a file from the filesystem and write its content to the 
+    //Object Database as a loose blob
     //
     //int git_blob_create_fromdisk(git_oid *id, git_repository *repo, const char *path);
 
 }
 
 void blob_create_fromstream(MEX_DEF_INPUT){
-    //3
+    //3 - Create a stream to write a new blob into the object db
     //
-    //Create a stream to write a new blob into the object db
-    //
-    //int git_blob_create_fromstream(git_writestream **out, git_repository *repo, const char *hintpath);
+    //int git_blob_create_fromstream(git_writestream **out, git_repository *repo, 
+    //          const char *hintpath);
 
 }
 

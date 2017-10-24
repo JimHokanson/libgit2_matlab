@@ -1,12 +1,14 @@
 #include <stdint.h>
 #include "libgit_utils.h"
 
+//2
+
 void commit_amend(MEX_DEF_INPUT){
-    //1
+    //1 - Amend an existing commit by replacing only non-NULL values.
     //
-    //  libgit(2,1,
+    //  libgit(2,1,...
     //
-    //Amend an existing commit by replacing only non-NULL values.
+    //
     //
     //int git_commit_amend(git_oid *id, const git_commit *commit_to_amend, 
     //      const char *update_ref, const git_signature *author, 
@@ -26,7 +28,7 @@ void commit_author(MEX_DEF_INPUT){
     
     git_commit* commit = mx_to_git_commit(prhs[2]);
     const git_signature *s = git_commit_author(commit);
-    set_signature_out(&plhs[0],s);
+    plhs[0] = git_signature__to_mx(s);
 }
 
 void commit_body(MEX_DEF_INPUT){
@@ -78,7 +80,11 @@ void commit_create_buffer(MEX_DEF_INPUT){
 void commit_create_from_callback(MEX_DEF_INPUT){
     //7
     //
-    //int git_commit_create_from_callback(git_oid *id, git_repository *repo, const char *update_ref, const git_signature *author, const git_signature *committer, const char *message_encoding, const char *message, const git_oid *tree, git_commit_parent_callback parent_cb, void *parent_payload);
+    //int git_commit_create_from_callback(git_oid *id, git_repository *repo, 
+    //      const char *update_ref, const git_signature *author, 
+    //      const git_signature *committer, const char *message_encoding, 
+    //      const char *message, const git_oid *tree, 
+    //      git_commit_parent_callback parent_cb, void *parent_payload);
 }
 
 void commit_create_from_ids(MEX_DEF_INPUT){
@@ -86,7 +92,11 @@ void commit_create_from_ids(MEX_DEF_INPUT){
     //
     //Create new commit in the repository from a list of git_oid values.
     //
-    //int git_commit_create_from_ids(git_oid *id, git_repository *repo, const char *update_ref, const git_signature *author, const git_signature *committer, const char *message_encoding, const char *message, const git_oid *tree, size_t parent_count, const git_oid *[] parents);
+    //int git_commit_create_from_ids(git_oid *id, git_repository *repo, 
+    //  const char *update_ref, const git_signature *author, 
+    //  const git_signature *committer, const char *message_encoding, 
+    //  const char *message, const git_oid *tree, size_t parent_count, 
+    //  const git_oid *[] parents);
 
 }
 
@@ -111,7 +121,8 @@ void commit_extract_signature(MEX_DEF_INPUT){
     //
     //Extract the signature from a commit
     //
-    //int git_commit_extract_signature(git_buf *signature, git_buf *signed_data, git_repository *repo, git_oid *commit_id, const char *field);
+    //int git_commit_extract_signature(git_buf *signature, git_buf *signed_data, 
+    //      git_repository *repo, git_oid *commit_id, const char *field);
 
 }
 
@@ -132,7 +143,8 @@ void commit_header_field(MEX_DEF_INPUT){
     //
     //Get an arbitrary header field
     //
-    //int git_commit_header_field(git_buf *out, const git_commit *commit, const char *field);
+    //int git_commit_header_field(git_buf *out, const git_commit *commit, 
+    //  const char *field);
 
 }
 
@@ -153,7 +165,8 @@ void commit_lookup(MEX_DEF_INPUT){
     //  Calling form:
     //  commit = mex(2,22,repo,oid);
     //  
-    //int git_commit_lookup(git_commit **commit, git_repository *repo, const git_oid *id);
+    //int git_commit_lookup(git_commit **commit, git_repository *repo, 
+    //      const git_oid *id);
     
     git_repository *repo = mx_to_git_repo(prhs[2]);
     const git_oid *oid = get_oid_input(prhs[3]);
@@ -164,11 +177,11 @@ void commit_lookup(MEX_DEF_INPUT){
 }
 
 void commit_lookup_prefix(MEX_DEF_INPUT){
-    //17
+    //17 - Lookup a commit object from a repository, given a prefix of its 
+    //identifier (short id).
     //
-    //Lookup a commit object from a repository, given a prefix of its identifier (short id).
-    //
-    //int git_commit_lookup_prefix(git_commit **commit, git_repository *repo, const git_oid *id, size_t len);
+    //int git_commit_lookup_prefix(git_commit **commit, git_repository *repo, 
+    //      const git_oid *id, size_t len);
     //
     //  size_t len - length of the short identifier ...
     //
@@ -176,16 +189,15 @@ void commit_lookup_prefix(MEX_DEF_INPUT){
 }
 
 void commit_message(MEX_DEF_INPUT){
-    //18
-    //
-    //Get the full message of a commit.
+    //18 - Get the full message of a commit.
     //
     //  message = mex(2,18,commit);
     //
     //const char * git_commit_message(const git_commit *commit);
     
     if (nrhs != 3){
-        mexErrMsgIdAndTxt("libgit:commit:commit_message","Incorrect # of inputs, 3 expected");
+        mexErrMsgIdAndTxt("libgit:commit:commit_message",
+                "Incorrect # of inputs, 3 expected");
     }
     
     git_commit* commit = mx_to_git_commit(prhs[2]);
@@ -198,7 +210,8 @@ void commit_message_encoding(MEX_DEF_INPUT){
     //
     //  encoding = mex(2,19,commit);
     //
-    //Get the encoding for the message of a commit, as a string representing a standard encoding name.
+    //Get the encoding for the message of a commit, as a string 
+    //representing a standard encoding name.
     //
     //  If null, then UTF-8
     //
@@ -235,14 +248,16 @@ void commit_nth_gen_ancestor(MEX_DEF_INPUT){
     //int git_commit_nth_gen_ancestor(git_commit **ancestor, const git_commit *commit, unsigned int n);
     
     if (nrhs != 4){
-        mexErrMsgIdAndTxt("libgit:commit:nth_gen_ancestor","Incorrect # of inputs, 4 expected");
+        mexErrMsgIdAndTxt("libgit:commit:nth_gen_ancestor",
+                "Incorrect # of inputs, 4 expected");
     }
     
     git_commit* commit = mx_to_git_commit(prhs[2]);
-    git_commit* ancestor = NULL;
+    git_commit* ancestor;
     
     if (!mxIsClass(prhs[3],"double")){
-    	mexErrMsgIdAndTxt("libgit:commit:nth_gen_ancestor","4th input must be of type double");
+    	mexErrMsgIdAndTxt("libgit:commit:nth_gen_ancestor",
+                "4th input must be of type double");
     }
     
     double n = mxGetScalar(prhs[3]);
@@ -259,7 +274,8 @@ void commit_owner(MEX_DEF_INPUT){
     //git_repository * git_commit_owner(const git_commit *commit);
 
     if (nrhs != 4){
-        mexErrMsgIdAndTxt("libgit:commit:commit_owner","Incorrect # of inputs, 4 expected");
+        mexErrMsgIdAndTxt("libgit:commit:commit_owner",
+                "Incorrect # of inputs, 4 expected");
     }
     
     git_commit* commit = mx_to_git_commit(prhs[2]);
@@ -276,9 +292,10 @@ void commit_parent(MEX_DEF_INPUT){
     //  commit = mex(2,23,commit,n)
     //
     //
-    //int git_commit_parent(git_commit **out, const git_commit *commit, unsigned int n);
+    //  int git_commit_parent(git_commit **out, const git_commit *commit, 
+    //      unsigned int n);
     //
-    // n - from 0 to parentcount
+    //  n - from 0 to parentcount
     
     
     if (nrhs != 4){
