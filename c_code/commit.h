@@ -289,13 +289,15 @@ void commit_owner(MEX_DEF_INPUT){
 void commit_parent(MEX_DEF_INPUT){
     //23 - Get the specified parent of the commit.
     //
-    //  commit = mex(2,23,commit,n)
+    //  commit = libgit(2,23,commit,n)
     //
     //
     //  int git_commit_parent(git_commit **out, const git_commit *commit, 
     //      unsigned int n);
     //
     //  n - from 0 to parentcount
+    //
+    //  Isn't 0 non-functional?
     
     
     if (nrhs != 4){

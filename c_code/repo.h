@@ -22,11 +22,11 @@
 // }
 
 void repository_commondir(MEX_DEF_INPUT){
-    //2 - DONE
+    //2 - Get the path of the shared common directory for this repository
+    //DONE
     //
     //  dir = libgit(0,2,repo)
     //
-    //Get the path of the shared common directory for this repository
     //const char * git_repository_commondir(git_repository *repo);
     
     if (nrhs != 2){
@@ -40,13 +40,21 @@ void repository_commondir(MEX_DEF_INPUT){
 }
 
 void repository_config(MEX_DEF_INPUT){
-    //3
+    //3 - Get the configuration file for this repository.
     //
     //  config = mex(0,3,repo)
     //
-    //Get the configuration file for this repository.
-    //
     //int git_repository_config(git_config **out, git_repository *repo);
+    
+    if (nrhs != 2){
+        mexErrMsgIdAndTxt("libgit:repo:repository_config","3 inputs required");
+    }
+    
+    git_repository *repo = mx_to_git_repo(prhs[2]);
+    git_config *out;
+    int response = git_repository_config(&out, repo);
+    handle_error(response,"libgit:repo:repository_config");
+    plhs[0] = git_config__to_mx(out);
 }
 
 void repository_config_snapshot(MEX_DEF_INPUT){

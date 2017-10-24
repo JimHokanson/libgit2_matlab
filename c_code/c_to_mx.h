@@ -191,6 +191,16 @@ mxArray* git_commit__to_mx(git_commit *out){
     RETURN_POINTER;
 }
 
+mxArray* git_config__to_mx(git_config *out){
+    //  plhs[0] = git_config__to_mx(out);
+    RETURN_POINTER;
+}
+
+mxArray* git_config_iterator__to_mx(git_config_iterator *out){
+    //  plhs[0] = git_config_iterator__to_mx(out);
+    RETURN_POINTER;
+}
+
 mxArray* git_index__to_mx(git_index *out){   
     //  plhs[0] = git_index__to_mx(out)
     RETURN_POINTER;

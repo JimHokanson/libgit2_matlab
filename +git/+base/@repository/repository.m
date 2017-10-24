@@ -84,14 +84,17 @@ classdef repository < sl.obj.display_class
             d = libgit(0,2,obj.h);
         end
         function c = getConfig(obj)
-            c = [];
-            %c = libgit(0,3,obj.h);
+            c_h = libgit(0,3,obj.h);
+            c = git.base.config(c_h);
         end
-        function branch = getCurrentLocalBranch()
-            
+        function branch = getCurrentLocalBranch(obj)
+            branch = [];
+            %How is this best done?
         end
         function namespace = getNamespace(obj)
             %x Get the currently active namespace for this repository
+            %
+            %   namespace = getNamespace(obj)
             %
             %   Why is this returning empty????
             namespace = libgit(0,9,obj.h);

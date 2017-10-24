@@ -86,8 +86,10 @@ classdef commit < handle
             oid_raw = libgit(2,15,obj.h);
             oid = git.base.oid(oid_raw);
         end
-        function getParent(obj)
-            
+        function getParentCommit(obj,n)
+            %
+            %   
+            commit_h = libgit(2,23,obj.h,n);
         end
     end
     methods

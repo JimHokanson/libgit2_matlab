@@ -2,24 +2,50 @@
 
 //https://libgit2.github.com/libgit2/#HEAD/group/config
 
+//15
+
 void config_add_backend(MEX_DEF_INPUT){
-    //1
+    //1 - Add a generic config file instance to an existing config
+    //
+    //int git_config_add_backend(git_config *cfg, git_config_backend *file, 
+    //      git_config_level_t level, int force);
+
 }
 
 void config_add_file_ondisk(MEX_DEF_INPUT){
-    //2
+    //2 - Add an on-disk config file instance to an existing config
+    //
+    //int git_config_add_file_ondisk(git_config *cfg, const char *path, 
+    //      git_config_level_t level, int force);
+
 }
 
 void config_backend_foreach_match(MEX_DEF_INPUT){
-    //3
+    //3 - Perform an operation on each config variable in given config 
+    //  backend matching a regular expression.
+    //
+    //int git_config_backend_foreach_match(git_config_backend *backend, 
+    //      const char *regexp, git_config_foreach_cb callback, void *payload);
+
 }
 
 void config_delete_entry(MEX_DEF_INPUT){
-    //4
+    //4 - Delete a config variable from the config file with the highest 
+    //level (usually the local one).
+    //
+    //int git_config_delete_entry(git_config *cfg, const char *name);
+
+
+
 }
 
 void config_delete_multivar(MEX_DEF_INPUT){
-    //5
+    //5 - Deletes one or several entries from a multivar in the local 
+    //  config file.
+    //
+    //int git_config_delete_multivar(git_config *cfg, const char *name, 
+    //      const char *regexp);
+
 }
 
 void config_entry_free(MEX_DEF_INPUT){
@@ -51,7 +77,15 @@ void config_foreach_match(MEX_DEF_INPUT){
 }
 
 void config_free(MEX_DEF_INPUT){
-    //13
+    //13 - Free the configuration and its associated memory and files
+    //
+    //  libgit(15,13,cfg)
+    //
+    //void git_config_free(git_config *cfg);
+    
+    git_config * cfg = mx_to_git_ref(prhs[2]);
+    git_config_free(cfg);
+
 }
 
 void config_get_bool(MEX_DEF_INPUT){
@@ -79,7 +113,12 @@ void config_get_multivar_foreach(MEX_DEF_INPUT){
 }
 
 void config_get_path(MEX_DEF_INPUT){
-    //20
+    //20 - Get the value of a path config variable.
+    //
+    //int git_config_get_path(git_buf *out, const git_config *cfg, 
+    //      const char *name);
+
+
 }
 
 void config_get_string(MEX_DEF_INPUT){
@@ -95,15 +134,38 @@ void config_init_backend(MEX_DEF_INPUT){
 }
 
 void config_iterator_free(MEX_DEF_INPUT){
-    //24
+    //24 - Free a config iterator
+    //  
+    //  libgit(15,24,iter)
+    //
+    //void git_config_iterator_free(git_config_iterator *iter);
+
+    git_config_iterator * iter = mx_to_git_config_iterator(prhs[2]);
+    git_config_iterator_free(iter);
+
 }
 
 void config_iterator_glob_new(MEX_DEF_INPUT){
-    //25
+    //25 - Iterate over all the config variables whose name matches a pattern
+    //
+    //int git_config_iterator_glob_new(git_config_iterator **out, 
+    //      const git_config *cfg, const char *regexp);
+
 }
 
 void config_iterator_new(MEX_DEF_INPUT){
-    //26
+    //26 - Iterate over all the config variables
+    //
+    //  iter = libgit(15,26,cfg)
+    //
+    //int git_config_iterator_new(git_config_iterator **out, 
+    //      const git_config *cfg);
+
+    git_config * cfg = mx_to_git_ref(prhs[2]);
+    git_config_iterator *out
+    int response = git_config_iterator_new(&out,cfg);
+    handle_error(response,"libgit:config:config_iterator_new");
+    plhs[0] = git_config_iterator__to_mx(out);
 }
 
 void config_lock(MEX_DEF_INPUT){
@@ -123,7 +185,12 @@ void config_new(MEX_DEF_INPUT){
 }
 
 void config_next(MEX_DEF_INPUT){
-    //31
+    //31 - Return the current entry and advance the iterator
+    //
+    //int git_config_next(git_config_entry **entry, git_config_iterator *iter);
+  
+
+    
 }
 
 void config_open_default(MEX_DEF_INPUT){

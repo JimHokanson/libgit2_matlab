@@ -55,6 +55,24 @@ git_branch_t mx_to_git_branch_type(const mxArray *input){
     return return_value;
 }
 
+git_config * mx_to_git_config(const mxArray *input){
+    //
+    //  git_config* cfg = mx_to_git_config(prhs[2]);
+    //
+    
+    git_config **p_cfg = (git_config **)mxGetData(input);
+    return *p_cfg;
+}
+
+git_config_iterator * mx_to_git_config_iterator(const mxArray *input){
+    //
+    //  git_config_iterator * oter = mx_to_git_config_iterator(prhs[2]);
+    //
+    
+    git_config_iterator **p_iter = (git_config_iterator **)mxGetData(input);
+    return *p_iter;
+}
+
 git_oid* mx_to_git_oid(const mxArray *input){
     //oid is a byte array
     
