@@ -99,6 +99,9 @@ classdef repository < sl.obj.display_class
             %   Why is this returning empty????
             namespace = libgit(0,9,obj.h);
         end
+        function index = getIndex(obj)
+            index = git.base.index();
+        end
         function list = getRemoteList(obj)
             %x Get list of remotes.
             %

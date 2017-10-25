@@ -73,6 +73,15 @@ git_config_iterator * mx_to_git_config_iterator(const mxArray *input){
     return *p_iter;
 }
 
+git_index * mx_to_git_index(const mxArray *input){
+    //
+    //  git_index * index = mx_to_git_index(prhs[2]);
+    //
+    
+    git_index **p_index = (git_index **)mxGetData(input);
+    return *p_index;    
+}
+
 git_oid* mx_to_git_oid(const mxArray *input){
     //oid is a byte array
     

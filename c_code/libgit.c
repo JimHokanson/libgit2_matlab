@@ -8,9 +8,10 @@
 #endif
 
 #include "branch.h"
+#include "commit.h"
+#include "index.h"
 #include "repo.h"
 #include "remote.h"
-#include "commit.h"
 #include "object.h"
 #include "oid.h"
 #include "reference.h"
@@ -586,7 +587,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
             //ignore(MEX_INPUT);
             break;
         case 25:
-            //index(MEX_INPUT);
+            index2(MEX_INPUT);
             break;
         case 26:
             //indexer(MEX_INPUT);

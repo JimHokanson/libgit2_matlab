@@ -15,7 +15,7 @@ classdef config_iterator
             obj.h = h;
         end
         function delete(obj)
-            libgit(15,24,obj.h)
+            libgit(15,24,obj.h);
         end
     end
     

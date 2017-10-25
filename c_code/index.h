@@ -2,20 +2,23 @@
 
 //https://libgit2.github.com/libgit2/#HEAD/group/index
 
+//https://stackoverflow.com/questions/3689838/whats-the-difference-between-head-working-tree-and-index-in-git
+
+//25
+
+
 void index_add(MEX_DEF_INPUT){
-    //1
+    //1 - Add or update an index entry from an in-memory struct
     //
-    //Add or update an index entry from an in-memory struct
+    //  libgit(25,1,...
     //
-    //int git_index_add(git_index *index, const git_index_entry *source_entry);
+    //  int git_index_add(git_index *index, const git_index_entry *source_entry);
 
 
 }
 
 void index_add_all(MEX_DEF_INPUT){
-    //2
-    //
-    //Add or update index entries matching files in the working directory.
+    //2 - Add or update index entries matching files in the working directory.
     //
     //int git_index_add_all(git_index *index, const git_strarray *pathspec, 
     //      unsigned int flags, git_index_matched_path_cb callback, void *payload);
@@ -23,9 +26,9 @@ void index_add_all(MEX_DEF_INPUT){
 }
 
 void index_add_bypath(MEX_DEF_INPUT){
-    //3
+    //3 - Add or update an index entry from a file on disk
     //
-    //Add or update an index entry from a file on disk
+    //  libgit(25,3,...
     //
     //int git_index_add_bypath(git_index *index, const char *path);
     
@@ -33,9 +36,9 @@ void index_add_bypath(MEX_DEF_INPUT){
 }
 
 void index_add_frombuffer(MEX_DEF_INPUT){
-    //4
+    //4 - Add or update an index entry from a buffer in memory
     //
-    //Add or update an index entry from a buffer in memory
+    //  libgit(25,4,...
     //
     //int git_index_add_frombuffer(git_index *index, const git_index_entry *entry, 
     //      const void *buffer, size_t len);
@@ -44,9 +47,9 @@ void index_add_frombuffer(MEX_DEF_INPUT){
 }
 
 void index_caps(MEX_DEF_INPUT){
-    //5
+    //5 - Read index capabilities flags.
     //
-    //Read index capabilities flags.
+    //  libgit(25,5,...
     //
     //int git_index_caps(const git_index *index);
 
@@ -54,87 +57,146 @@ void index_caps(MEX_DEF_INPUT){
 }
 
 void index_checksum(MEX_DEF_INPUT){
-    //6
+    //6 - Get the checksum of the index
     //
-    //Get the checksum of the index
+    //  libgit(25,6,...
     //
     //const git_oid * git_index_checksum(git_index *index);
 
 }
 
 void index_clear(MEX_DEF_INPUT){
-    //7
-    //
-    //Clear the contents (all the entries) of an index object.
+    //7 - Clear the contents (all the entries) of an index object.
     //
     //int git_index_clear(git_index *index);
     
 }
 
 void index_conflict_add(MEX_DEF_INPUT){
-    //8
-    //
-    //Add or update index entries to represent a conflict. Any staged entries that exist at the given paths will be removed.
+    //8 - Add or update index entries to represent a conflict. Any staged 
+    //    entries that exist at the given paths will be removed.
     //
     //int git_index_conflict_add(git_index *index, const git_index_entry *ancestor_entry, 
     //      const git_index_entry *our_entry, const git_index_entry *their_entry);
 }
 
 void index_conflict_cleanup(MEX_DEF_INPUT){
-    //9
-    //
-    //Remove all conflicts in the index (entries with a stage greater than 0).
+    //9 - Remove all conflicts in the index (entries with a stage greater than 0).
     //
     //int git_index_conflict_cleanup(git_index *index);
 
 }
 
 void index_conflict_get(MEX_DEF_INPUT){
-    //10
+    //10 - Get the index entries that represent a conflict of a single file.
+    //
+    //  int git_index_conflict_get(const git_index_entry **ancestor_out, 
+    //      const git_index_entry **our_out, const git_index_entry **their_out, 
+    //      git_index *index, const char *path);
+
 }
 
 void index_conflict_iterator_free(MEX_DEF_INPUT){
-    //11
+    //11 - Frees a git_index_conflict_iterator.
+    //
+    //  void git_index_conflict_iterator_free(git_index_conflict_iterator *iterator);
+
 }
 
 void index_conflict_iterator_new(MEX_DEF_INPUT){
-    //12
+    //12 - Returns the current conflict (ancestor, ours and theirs entry) 
+    //    and advance the iterator internally to the next value.
+    //
+    //  int git_index_conflict_next(const git_index_entry **ancestor_out, 
+    //          const git_index_entry **our_out, const git_index_entry **their_out, 
+    //          git_index_conflict_iterator *iterator);
+
+
 }
 
 void index_conflict_next(MEX_DEF_INPUT){
-    //13
+    //13 - Returns the current conflict (ancestor, ours and theirs entry) 
+    //  and advance the iterator internally to the next value.
+    //
+    //  int git_index_conflict_next(const git_index_entry **ancestor_out, 
+    //      const git_index_entry **our_out, const git_index_entry **their_out, 
+    //      git_index_conflict_iterator *iterator);
+
 }
 
 void index_conflict_remove(MEX_DEF_INPUT){
-    //14
+    //14 - Removes the index entries that represent a conflict of a single file.
+    //
+    //  int git_index_conflict_remove(git_index *index, const char *path);
+
+
 }
 
 void index_entry_is_conflict(MEX_DEF_INPUT){
-    //15
+    //15 - Return whether the given index entry is a conflict (has a high 
+    //      stage entry). This is simply shorthand for git_index_entry_stage > 0.
+    //
+    //  int git_index_entry_is_conflict(const git_index_entry *entry);
+
 }
 
 void index_entry_stage(MEX_DEF_INPUT){
-    //16
+    //16 - Return the stage number from a git index entry
+    //
+    //  int git_index_entry_stage(const git_index_entry *entry);
+
+
 }
 
 void index_entrycount(MEX_DEF_INPUT){
-    //17
+    //17 - Get the count of entries currently in the index
+    //
+    //  libgit(25,17,index)
+    //
+    //  size_t git_index_entrycount(const git_index *index);
+
+	git_index * index = mx_to_git_index(prhs[2]);
+    size_t count = git_index_entrycount(index);
+    plhs[0] = sizet__to_mx(count);
+
 }
 
 void index_find(MEX_DEF_INPUT){
-    //18
+    //18 - Find the first position of any entries which point to given 
+    //  path in the Git index.
+    //
+    //int git_index_find(size_t *at_pos, git_index *index, const char *path);
+
+
+
 }
 
 void index_find_prefix(MEX_DEF_INPUT){
-    //19
+    //19 - Find the first position of any entries matching a prefix. To 
+    //  find the first position of a path inside a given folder, suffix 
+    //  the prefix with a '/'.
+    //
+    //  int git_index_find_prefix(size_t *at_pos, git_index *index, 
+    //      const char *prefix);
+
 }
 
 void index_free(MEX_DEF_INPUT){
-    //20
+    //20 - Free an existing index object.
+    //
+    //  libgit(25,20,index)
+    
+    git_index * index = mx_to_git_index(prhs[2]);
+    git_index_free(index);
 }
 
 void index_get_byindex(MEX_DEF_INPUT){
-    //21
+    //21 - Get a pointer to one of the entries in the index
+    //
+    //  const git_index_entry * git_index_get_byindex(git_index *index, size_t n);
+
+
+    
 }
 
 void index_get_bypath(MEX_DEF_INPUT){
@@ -146,11 +208,16 @@ void index_has_conflicts(MEX_DEF_INPUT){
 }
 
 void index_new(MEX_DEF_INPUT){
-    //24
+    //24 - Create an in-memory index object.
     //
-    //Create an in-memory index object.
+    //  libgit(25,24)
     //
     //int git_index_new(git_index **out);
+    
+    git_index *out;
+    int response = git_index_new(&out);
+   	handle_error(response,"libgit:index:index_new");    
+    plhs[0] = git_index__to_mx(out);
 
 }
 
@@ -219,7 +286,7 @@ void index_write_tree_to(MEX_DEF_INPUT){
 }
 
 
-void config(MEX_DEF_INPUT)
+void index2(MEX_DEF_INPUT)
 {
         
     int sub_type = (int)mxGetScalar(prhs[1]);

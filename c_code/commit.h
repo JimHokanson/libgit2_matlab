@@ -51,7 +51,7 @@ void commit_committer(MEX_DEF_INPUT){
     //const git_signature * git_commit_committer(const git_commit *commit);
     git_commit* commit = mx_to_git_commit(prhs[2]);
     const git_signature *s = git_commit_committer(commit);
-    set_signature_out(&plhs[0],s);
+    plhs[0] = git_signature__to_mx(s);
 }
 
 void commit_create(MEX_DEF_INPUT){

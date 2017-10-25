@@ -48,33 +48,6 @@ git_oid* get_oid_input(const mxArray *input){
 }
 
 
-
-//TODO: Move into c_to_mx
-void set_signature_out(mxArray **output, const git_signature *s){
-    //
-    //  set_signature_out(&plhs[0],signature);
-    //
-    
-// char *	name - full name of the author
-// char *	email - email of the author
-// git_time	when - time when the action happened
-    
-    
-    //TODO: There might be a memory leak with the signature
-    
-    const char *fn[3];
-    fn[0] = "name";
-    fn[1] = "email";
-    fn[2] = "when";
-    
-    *output = mxCreateStructMatrix(1,1,3,fn);
-    
-    mxSetFieldByNumber(*output,0,0,mxCreateString(s->name));
-    mxSetFieldByNumber(*output,0,1,mxCreateString(s->email));
-    mxSetFieldByNumber(*output,0,2,git_time__to_mx(s->when));
-    
-}
-
 //-------------------------------------------------------------------------
 
 

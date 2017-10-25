@@ -5,9 +5,9 @@
 //9
 
 void blob_create_frombuffer(MEX_DEF_INPUT){
-    //1
+    //1 - Write an in-memory buffer to the ODB as a blob
     //
-    //Write an in-memory buffer to the ODB as a blob
+    //  libgit(9,1,...)
     //
     //int git_blob_create_frombuffer(git_oid *id, git_repository *repo, 
     //          const void *buffer, size_t len);
@@ -17,58 +17,60 @@ void blob_create_fromdisk(MEX_DEF_INPUT){
     //2 - Read a file from the filesystem and write its content to the 
     //Object Database as a loose blob
     //
-    //int git_blob_create_fromdisk(git_oid *id, git_repository *repo, const char *path);
+    //int git_blob_create_fromdisk(git_oid *id, git_repository *repo, 
+    //      const char *path);
 
 }
 
 void blob_create_fromstream(MEX_DEF_INPUT){
     //3 - Create a stream to write a new blob into the object db
     //
-    //int git_blob_create_fromstream(git_writestream **out, git_repository *repo, 
-    //          const char *hintpath);
+    //int git_blob_create_fromstream(git_writestream **out, 
+    //          git_repository *repo, const char *hintpath);
 
 }
 
 void blob_create_fromstream_commit(MEX_DEF_INPUT){
-    //4
+    //4 - Close the stream and write the blob to the object db
     //
-    //Close the stream and write the blob to the object db
+    //  libgit(9,4,...)
     //
-    //int git_blob_create_fromstream_commit(git_oid *out, git_writestream *stream);
+    //  int git_blob_create_fromstream_commit(git_oid *out, 
+    //          git_writestream *stream);
 
 }
 
 void blob_create_fromworkdir(MEX_DEF_INPUT){
-    //5
+    //5 - Read a file from the working folder of a repository and 
+    //    write it to the Object Database as a loose blob
     //
-    //Read a file from the working folder of a repository and write it to the Object Database as a loose blob
-    //
-    //int git_blob_create_fromworkdir(git_oid *id, git_repository *repo, const char *relative_path);
+    //  int git_blob_create_fromworkdir(git_oid *id, git_repository *repo, 
+    //          const char *relative_path);
 
 }
 
 void git_blob_dup(MEX_DEF_INPUT){
-    //6
+    //6 - Create an in-memory copy of a blob. The copy must be explicitly 
+    //    free'd or it will leak.
     //
-    //Create an in-memory copy of a blob. The copy must be explicitly free'd or it will leak.
-    //
-    //int git_blob_dup(git_blob **out, git_blob *source);
+    //  int git_blob_dup(git_blob **out, git_blob *source);
 
 }
 
 void blob_filtered_content(MEX_DEF_INPUT){
-    //7
+    //7 - Get a buffer with the filtered content of a blob.
     //
-    //Get a buffer with the filtered content of a blob.
+    //  libgit(9,7,...)
     //
-    //int git_blob_filtered_content(git_buf *out, git_blob *blob, const char *as_path, int check_for_binary_data);
+    //  int git_blob_filtered_content(git_buf *out, git_blob *blob, 
+    //          const char *as_path, int check_for_binary_data);
 
 }
 
 void blob_free(MEX_DEF_INPUT){
-    //8
+    //8 - Close an open blob
     //
-    //Close an open blob
+    //   libgit(9,8,...)
     //
     //void git_blob_free(git_blob *blob);
 
@@ -76,18 +78,16 @@ void blob_free(MEX_DEF_INPUT){
 }
 
 void blob_id(MEX_DEF_INPUT){
-    //9
-    //
-    //Get the id of a blob.
+    //9 - Get the id of a blob.
     //
     //const git_oid * git_blob_id(const git_blob *blob);
 
 }
 
 void blob_is_binary(MEX_DEF_INPUT){
-    //10
+    //10 - Determine if the blob content is most certainly binary or not.
     //
-    //Determine if the blob content is most certainly binary or not.
+    //  libgit(9,10,...)
     //
     //int git_blob_is_binary(const git_blob *blob);
 
@@ -95,28 +95,29 @@ void blob_is_binary(MEX_DEF_INPUT){
 }
 
 void blob_lookup(MEX_DEF_INPUT){
-    //11
+    //11 - Lookup a blob object from a repository.
     //
-    //Lookup a blob object from a repository.
+    //  libgit(9,11,...)
     //
-    //int git_blob_lookup(git_blob **blob, git_repository *repo, const git_oid *id);
+    //int git_blob_lookup(git_blob **blob, git_repository *repo, 
+    //      const git_oid *id);
 
 
 }
 
 void blob_lookup_prefix(MEX_DEF_INPUT){
-    //12
+    //12 - Lookup a blob object from a repository, given a prefix of 
+    //     its identifier (short id).
     //
-    //Lookup a blob object from a repository, given a prefix of its identifier (short id).
-    //
-    //int git_blob_lookup_prefix(git_blob **blob, git_repository *repo, const git_oid *id, size_t len);
+    //  int git_blob_lookup_prefix(git_blob **blob, git_repository *repo, 
+    //          const git_oid *id, size_t len);
 
 }
 
 void blob_owner(MEX_DEF_INPUT){
-    //13
+    //13 - Get the repository that contains the blob.
     //
-    //Get the repository that contains the blob.
+    //  libgit(9,13,...)
     //
     //git_repository * git_blob_owner(const git_blob *blob);
 
@@ -124,18 +125,16 @@ void blob_owner(MEX_DEF_INPUT){
 }
 
 void blob_rawcontent(MEX_DEF_INPUT){
-    //14
+    //14 - Get a read-only buffer with the raw content of a blob.
     //
-    //Get a read-only buffer with the raw content of a blob.
+    //  libgit(9,14,...)
     //
     //const void * git_blob_rawcontent(const git_blob *blob);
 
 }
 
 void blob_rawsize(MEX_DEF_INPUT){
-    //15
-    //
-    //Get the size in bytes of the contents of a blob
+    //15 - Get the size in bytes of the contents of a blob
     //
     //git_off_t git_blob_rawsize(const git_blob *blob);
 
