@@ -64,6 +64,10 @@ mxArray* uint16__to_mx(uint16_t v){
     return out;
 }
 
+mxArray* enum__to_mx(int64_t v){
+    return int64__to_mx(v);
+}
+
 //=========================================================================
 mxArray* git_buf__to_mx(git_buf * buf){
    //https://libgit2.github.com/libgit2/#HEAD/type/git_buf 
@@ -90,12 +94,29 @@ mxArray* git_buf__to_mx(git_buf * buf){
     return out;
 }
 
+mxArray* git_filemode_t__to_mx(git_filemode_t t){
+
+    return enum__to_mx(t);
+    
+//     /** Valid modes for index and tree entries. */
+// typedef enum {
+// 	GIT_FILEMODE_UNREADABLE          = 0000000,
+// 	GIT_FILEMODE_TREE                = 0040000,
+// 	GIT_FILEMODE_BLOB                = 0100644,
+// 	GIT_FILEMODE_BLOB_EXECUTABLE     = 0100755,
+// 	GIT_FILEMODE_LINK                = 0120000,
+// 	GIT_FILEMODE_COMMIT              = 0160000,
+// } git_filemode_t;
+}
+
 mxArray* git_off_t__to_mx(git_off_t t){
     return int64__to_mx(t);
 }
 
 mxArray* git_oid__to_mx(const git_oid *oid){
     //  oid is a byte array
+    //
+    //  plhs[0] = git_oid__to_mx(oid);
     
     //TODO: Check for null
    
@@ -233,6 +254,16 @@ mxArray* git_revwalk__to_mx(git_revwalk *out){
 
 mxArray* git_status_list__to_mx(git_status_list *out){
     //  plhs[0] = git_status_list__to_mx(out);
+    RETURN_POINTER;
+}
+
+mxArray* git_tree__to_mx(git_tree *out){
+    //  plhs[0] = git_tree__to_mx(out);
+    RETURN_POINTER;
+}
+
+mxArray* git_tree_entry_to_mx(git_tree *out){
+    //  plhs[0] = git_tree_entry_to_mx(out);
     RETURN_POINTER;
 }
 

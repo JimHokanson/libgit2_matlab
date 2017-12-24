@@ -2,16 +2,14 @@
 #include <stdint.h>
 #include "libgit_utils.h"
 
+//  mxArray *lhs,*rhs[2];
 
-//For callbacks to mark parameters as unused
-#ifdef UNUSED
-#elif defined(__GNUC__)
-# define UNUSED(x) UNUSED_ ## x __attribute__((unused))
-#elif defined(__LCLINT__)
-# define UNUSED(x) /*@unused@*/ x
-#else
-# define UNUSED(x) x
-#endif
+//!mxIsClass( prhs[0] , "function_handle")
+
+// rhs[0] = const_cast<mxArray *>(prhs[0]); 
+//   A = *mxGetPr(prhs[1]);
+//   rhs[1] = mxCreateDoubleScalar(A);
+//   mexCallMATLAB(1,&lhs,2,rhs,"feval");
 
 //TODO: Can we make credentials p
 

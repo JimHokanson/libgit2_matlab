@@ -135,6 +135,28 @@ git_status_list* mx_to_status_list(const mxArray *input){
     return *p_list;
 }
 
+git_tree* mx_to_git_tree(const mxArray *input){
+    //
+    //   git_tree* list = mx_to_tree(prhs[2]);
+    //
+    
+    //TODO: Add pointer check (not 0)
+    
+    git_tree **p= (git_tree **)mxGetData(input);
+    return *p;
+}
+
+git_tree_entry* mx_to_git_tree_entry(const mxArray *input){
+    //
+    //   git_tree_entry* list = mx_to_tree_entry(prhs[2]);
+    //
+    
+    //TODO: Add pointer check (not 0)
+    
+    git_tree_entry **p = (git_tree_entry **)mxGetData(input);
+    return *p;
+}
+
 git_strarray mx_to_git_strarray(const mxArray *input){
     
 //     typedef struct git_strarray {
@@ -183,6 +205,7 @@ git_commit* mx_to_git_commit(const mxArray *input){
     git_commit **p_ref = (git_commit **)mxGetData(input);
     return *p_ref;
 }
+
 
 
 

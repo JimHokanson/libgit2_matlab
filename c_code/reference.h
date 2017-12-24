@@ -89,7 +89,8 @@ void reference_foreach(MEX_DEF_INPUT){
 }
 
 void reference_foreach_glob(MEX_DEF_INPUT){
-    //11 - Perform a callback on each reference in the repository whose name matches the given pattern.
+    //11 - Perform a callback on each reference in the repository whose 
+    //     name matches the given pattern.
     //
     //  mex(3,11)
 
@@ -139,6 +140,7 @@ void reference_has_log(MEX_DEF_INPUT){
 
 void reference_is_branch(MEX_DEF_INPUT){
     //15
+    //DONE
     //
     //  out = libgit(3,15,ref)
     //
@@ -154,6 +156,7 @@ void reference_is_branch(MEX_DEF_INPUT){
 
 void reference_is_note(MEX_DEF_INPUT){
     //16
+    //DONE
     //
     //  is_note = libgit(3,16,ref)
     //
@@ -170,6 +173,7 @@ void reference_is_note(MEX_DEF_INPUT){
 
 void reference_is_remote(MEX_DEF_INPUT){
     //17
+    //DONE
     //
     //  libgit(3,17,ref)
     //
@@ -186,6 +190,7 @@ void reference_is_remote(MEX_DEF_INPUT){
 
 void reference_is_tag(MEX_DEF_INPUT){
     //18
+    //DONE
     //
     //  libgit(3,18,ref)
     //
@@ -203,17 +208,22 @@ void reference_is_tag(MEX_DEF_INPUT){
 void reference_is_valid_name(MEX_DEF_INPUT){
     //19
     //
-    //  mex(3,19,ref_name)
+    //  is_valid = libgit(3,19,ref_name)
+    //
+    //  Top-level names must contain only capital letters and underscores, 
+    //  and must begin and end with a letter. (e.g. "HEAD", "ORIG_HEAD"). 
+    //  2. Names prefixed with "refs/" can be almost anything. 
+    //  You must avoid the characters '~', '^', ':', '\', '?', '[', and '*', 
+    //  and the sequences ".." and "@{" which have special meaning to revparse.
     //
     //int git_reference_is_valid_name(const char *refname);
 
     const char *ref_name = mxArrayToString(prhs[3]);
 
-    int error;
-    error = git_reference_is_valid_name(ref_name);
-    handle_error(error,"libgit:reference:reference_is_valid_name");  
+    int response = git_reference_is_valid_name(ref_name);
+    handle_error(response,"libgit:reference:reference_is_valid_name");  
     
-    plhs[0] = int32__to_mx(error);
+    plhs[0] = int32__to_mx(response);
     mxFree((void *)ref_name);
 }
 
@@ -329,11 +339,15 @@ void reference_owner(MEX_DEF_INPUT){
 }
 
 void reference_peel(MEX_DEF_INPUT){
-    //31 - Recursively peel reference until object of the specified type is found.
+    //31 - Recursively peel reference until object of the specified type 
+    //     is found.
     //
-    //The type of the requested object (GIT_OBJ_COMMIT, GIT_OBJ_TAG, GIT_OBJ_TREE, GIT_OBJ_BLOB or GIT_OBJ_ANY).
+    //  The type of the requested object 
+    //  (GIT_OBJ_COMMIT, GIT_OBJ_TAG, GIT_OBJ_TREE, 
+    //  GIT_OBJ_BLOB or GIT_OBJ_ANY).
     //
-    //int git_reference_peel(git_object **out, git_reference *ref, git_otype type);
+    //  int git_reference_peel(git_object **out, git_reference *ref, 
+    //      git_otype type);
 
 }
 
@@ -356,10 +370,16 @@ void reference_rename(MEX_DEF_INPUT){
 void reference_resolve(MEX_DEF_INPUT){
     //34 - Resolve a symbolic reference to a direct reference.
     //
-    //int git_reference_resolve(git_reference **out, const git_reference *ref);
+    //  ref = libgit(3,34,ref)
+    //
+    //  int git_reference_resolve(git_reference **out, 
+    //      const git_reference *ref);
 
-
-
+    git_reference *ref = get_reference_input(prhs[2]);
+    git_reference *out;
+    int response = git_reference_resolve(&out,ref);  
+ 	handle_error(response,"libgit:reference:reference_resolve");  
+    plhs[0] = git_reference__to_mx(out);
 }
 
 void reference_set_target(MEX_DEF_INPUT){

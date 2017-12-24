@@ -15,10 +15,22 @@ typedef SSIZE_T ssize_t;
 #include "mac_os/git2.h"
 #endif
 
+//For callbacks to mark parameters as unused
+#ifdef UNUSED
+#elif defined(__GNUC__)
+# define UNUSED(x) UNUSED_ ## x __attribute__((unused))
+#elif defined(__LCLINT__)
+# define UNUSED(x) /*@unused@*/ x
+#else
+# define UNUSED(x) x
+#endif
+
+
 #include <stdint.h>
 #include <string.h>
 #include "c_to_mx.h"
 #include "mx_to_c.h"
+
 
 
 #define MEX_INPUT nlhs, plhs, nrhs, prhs

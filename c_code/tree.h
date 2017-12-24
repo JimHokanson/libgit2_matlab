@@ -3,126 +3,153 @@
 //tree - directory listing of a commit
 
 //https://libgit2.github.com/libgit2/#HEAD/group/tree
+
+//64
     
 void tree_create_updated(MEX_DEF_INPUT){
-    //1
-    //
-    //Create a tree based on another one with the specified modifications
+    //1 - Create a tree based on another one with the specified modifications
     //
     //int git_tree_create_updated(git_oid *out, git_repository *repo, 
-    //      git_tree *baseline, size_t nupdates, const git_tree_update *updates);
+    //          git_tree *baseline, size_t nupdates, const git_tree_update *updates);
     
 }
 
 void tree_dup(MEX_DEF_INPUT){
-    //2
+    //2 - Create an in-memory copy of a tree. The copy must be explicitly 
+    //  free'd or it will leak.
     //
-    //Create an in-memory copy of a tree. The copy must be explicitly free'd or it will leak.
+    //  tree2 = libgit(64,2,tree1);
     //
     //int git_tree_dup(git_tree **out, git_tree *source);
     
-    
+    git_tree * source = mx_to_git_tree(prhs[2]);
+    git_tree * out;
+    int response = git_tree_dup(&out, source);
+    handle_error(response,"libgit:tree:tree_dup");  
+    plhs[0] = git_tree__to_mx(out);
 }
 
 void tree_entry_byid(MEX_DEF_INPUT){
-    //3
+    //3 - Lookup a tree entry by SHA value.
     //
-    //Lookup a tree entry by SHA value.
+    //  tree_entry = libgit(64,3,tree,entry_id)
     //
-    //const git_tree_entry * git_tree_entry_byid(const git_tree *tree, const git_oid *id);
+    //const git_tree_entry * git_tree_entry_byid(const git_tree *tree, 
+    //      const git_oid *id);
+    
+    const git_tree *tree = mx_to_git_tree(prhs[2]);
+    const git_oid *id = mx_to_git_oid(3);
+    const git_tree_entry * out = git_tree_entry_byid(tree, id);
+    plhs[0] = git_tree_entry_to_mx(out);
     
 }
 
 void tree_entry_byindex(MEX_DEF_INPUT){
-    //4
+    //4 - Lookup a tree entry by its position in the tree
     //
-    //Lookup a tree entry by its position in the tree
-    //
-    //const git_tree_entry * git_tree_entry_byindex(const git_tree *tree, size_t idx);
+    //const git_tree_entry * git_tree_entry_byindex(const git_tree *tree, 
+    //      size_t idx);
+    
+    
+    //const git_tree * tree = mx_to_git_tree(prhs[2]);
+    
+    //plhs[0] = git_tree_entry_to_mx(out);
     
 }
 
 void tree_entry_byname(MEX_DEF_INPUT){
-    //5
+    //5 - Lookup a tree entry by its filename
     //
-    //Lookup a tree entry by its filename
-    //
-    //const git_tree_entry * git_tree_entry_byname(const git_tree *tree, const char *filename);
+    //const git_tree_entry * git_tree_entry_byname(const git_tree *tree, 
+    //      const char *filename);
+    
+    
+    //const git_tree * tree = mx_to_git_tree(prhs[2]);
+    
+    //plhs[0] = git_tree_entry_to_mx(out);
     
 }
 
 void tree_entry_bypath(MEX_DEF_INPUT){
-    //6
+    //6 - Retrieve a tree entry contained in a tree or in any of its 
+    //      subtrees, given its relative path.
     //
-    //Retrieve a tree entry contained in a tree or in any of its subtrees, given its relative path.
-    //
-    //int git_tree_entry_bypath(git_tree_entry **out, const git_tree *root, const char *path);
+    //int git_tree_entry_bypath(git_tree_entry **out, const git_tree *root, 
+    //      const char *path);
+    
+    
+    //const git_tree * root = mx_to_git_tree(prhs[2]);
+    
+    //plhs[0] = git_tree_entry_to_mx(out);
     
 }
 
 void tree_entry_cmp(MEX_DEF_INPUT){
-    //7
-    //
-    //Compare two tree entries
+    //7 - Compare two tree entries
     //
     //int git_tree_entry_cmp(const git_tree_entry *e1, const git_tree_entry *e2);
+    
+    
     
 }
 
 void tree_entry_dup(MEX_DEF_INPUT){
-    //8
-    //
-    //Duplicate a tree entry
+    //8 - Duplicate a tree entry
     //
     //int git_tree_entry_dup(git_tree_entry **dest, const git_tree_entry *source);
+    
+    
+    //plhs[0] = git_tree_entry_to_mx(out);
     
 }
 
 void tree_entry_filemode(MEX_DEF_INPUT){
-    //9
+    //9 - Get the UNIX file attributes of a tree entry
     //
-    //Get the UNIX file attributes of a tree entry
+    //  filemode = libgit(64,9,entry);
     //
     //git_filemode_t git_tree_entry_filemode(const git_tree_entry *entry);
     
-    
+    git_tree_entry * entry = mx_to_tree_entry(prhs[2]);
+    git_filemode_t out = git_tree_entry_filemode(entry);
 }
 
 void tree_entry_filemode_raw(MEX_DEF_INPUT){
-    //10
-    //
-    //Get the raw UNIX file attributes of a tree entry
+    //10 - Get the raw UNIX file attributes of a tree entry
     //
     //git_filemode_t git_tree_entry_filemode_raw(const git_tree_entry *entry);
     
-    
+    git_tree_entry * entry = mx_to_tree_entry(prhs[2]);
+    git_filemode_t out = git_tree_entry_filemode_raw(entry);
 }
 
 void tree_entry_free(MEX_DEF_INPUT){
-    //11
+    //11 - Free a user-owned tree entry
+    //MEX DONE
     //
-    //Free a user-owned tree entry
+    //   tree2 = libgit(64,11,entry);
     //
     //void git_tree_entry_free(git_tree_entry *entry);
     
+    git_tree_entry * entry = mx_to_tree_entry(prhs[2]);
+    git_tree_entry_free(entry);
 }
 
 void tree_entry_id(MEX_DEF_INPUT){
-    //12
-    //
-    //Get the id of the object pointed by the entry
+    //12 - Get the id of the object pointed by the entry
     //
     //const git_oid * git_tree_entry_id(const git_tree_entry *entry);
     
 }
 
 void tree_entry_name(MEX_DEF_INPUT){
-    //13
-    //
-    //Get the filename of a tree entry
-    //
+    //13 - Get the filename of a tree entry
+    //MEX DONE
     //const char * git_tree_entry_name(const git_tree_entry *entry);
     
+    git_tree_entry * entry = mx_to_tree_entry(prhs[2]);
+    const char * name = git_tree_entry_name(entry);
+    plhs[0] = string__to_mx(name);
 }
 
 void tree_entry_to_object(MEX_DEF_INPUT){
@@ -130,7 +157,8 @@ void tree_entry_to_object(MEX_DEF_INPUT){
     //
     //Convert a tree entry to the git_object it points to.
     //
-    //int git_tree_entry_to_object(git_object **object_out, git_repository *repo, const git_tree_entry *entry);
+    //int git_tree_entry_to_object(git_object **object_out, 
+    //          git_repository *repo, const git_tree_entry *entry);
     
 }
 
@@ -145,42 +173,56 @@ void tree_entry_type(MEX_DEF_INPUT){
 }
 
 void tree_entrycount(MEX_DEF_INPUT){
-    //16
+    //16 - Get the number of entries listed in a tree
+    //MEX_DONE
     //
-    //Get the number of entries listed in a tree
+    //  count = libgit(64,16,tree);
     //
     //size_t git_tree_entrycount(const git_tree *tree);
     
+    const git_tree * tree = mx_to_git_tree(prhs[2]);
+    size_t count = git_tree_entrycount(tree);
+    plhs[0] = sizet__to_mx(count);
 }
 
 void tree_free(MEX_DEF_INPUT){
-    //17
+    //17 - Close an open tree
+    //MEX_DONE
     //
-    //Close an open tree
+    //  libgit(64,17,tree);
     //
     //void git_tree_free(git_tree *tree);
     
-    
+    git_tree * tree = mx_to_git_tree(prhs[2]);
+    git_tree_free(tree); 
 }
 
 void tree_id(MEX_DEF_INPUT){
-    //18
+    //18 - Get the id of a tree.
+    //MEX_DONE
     //
-    //Get the id of a tree.
+    //  id = libgit(64,18,tree);
     //
     //const git_oid * git_tree_id(const git_tree *tree);
     
-    
+    git_tree * tree = mx_to_git_tree(prhs[2]);
+    const git_oid * out = git_tree_id(tree);
+    plhs[0] = git_oid__to_mx(out);
 }
 
 void tree_lookup(MEX_DEF_INPUT){
-    //19
+    //19 - Lookup a tree object from the repository.
     //
-    //Lookup a tree object from the repository.
+    //  tree = libgit(64,19,repo,id);
     //
     //int git_tree_lookup(git_tree **out, git_repository *repo, const git_oid *id);
     
-    
+    git_repository * repo = mx_to_git_repo(prhs[2]);
+    const git_oid * id = mx_to_git_oid(prhs[3]);
+    git_tree * out;
+    int response = git_tree_lookup(&out, repo, id);
+    handle_error(response,"libgit:tree:tree_lookup");  
+    plhs[0] = git_tree__to_mx(out);
 }
 
 void tree_lookup_prefix(MEX_DEF_INPUT){

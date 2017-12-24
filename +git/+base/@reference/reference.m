@@ -73,9 +73,13 @@ classdef reference < handle
         function list = getReferenceList(repo)
             list = libgit(3,23,repo.h)';
         end
-%         function isValidReferenceName(ref_name)
-%             
-%         end
+        function is_valid = isValidReferenceName(ref_name)
+            %
+            %   This appears to be testing for general validity, not 
+            %   for whether or not the given ref is in the repo
+            
+            is_valid = libgit(3,19,ref_name);
+        end
     end
     
     %Constructors
@@ -138,6 +142,10 @@ classdef reference < handle
         function oid = getOID(obj)
             oid_raw = libgit(3,41,obj.h);
             oid = git.base.oid(oid_raw);
+        end
+        function ref = getDirectRef(obj)
+            ref_h = libgit(3,34,obj.h);
+            ref = git.base.reference(ref_h);
         end
     end
     
